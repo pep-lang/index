@@ -1,0 +1,3 @@
+source = "github:pep-lang/pepper-yaml"
+description = "YAML 1.2: read and write, comment-keeping round trips, and struct conversion"
+keywords = ["yaml", "parser", "config", "serialize"]

@@ -1,0 +1,3 @@
+source = "github:pep-lang/pepper-csv"
+description = "CSV (RFC 4180): streaming reader, writer, and struct conversion"
+keywords = ["csv", "tsv", "parser", "serialize"]

@@ -1,0 +1,3 @@
+source = "github:pep-lang/pepper-jwt"
+description = "JSON Web Tokens: sign and verify JWS compact tokens (HS256, EdDSA) and validate their claims"
+keywords = ["jwt", "jws", "token", "auth"]

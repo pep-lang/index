@@ -1,0 +1,3 @@
+source = "github:pep-lang/pepper-term"
+description = "Interactive terminals: raw mode, key and mouse input, bracketed paste, the clipboard, line editing with history, cursor control and colors"
+keywords = ["terminal", "tty", "console", "cli", "color"]

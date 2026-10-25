@@ -1,0 +1,3 @@
+source = "github:pep-lang/pepper-sqlite"
+description = "SQLite bindings: prepared statements, typed rows, struct decoding and transactions"
+keywords = ["sqlite", "database", "sql"]

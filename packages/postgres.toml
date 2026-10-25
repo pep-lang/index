@@ -1,0 +1,3 @@
+source = "github:pep-lang/pepper-postgres"
+description = "An async PostgreSQL client: wire protocol v3 in pure Pepper, TLS, SCRAM-SHA-256, parameterized queries, typed rows, transactions, LISTEN/NOTIFY and a pool"
+keywords = ["postgres", "postgresql", "database", "sql", "async"]

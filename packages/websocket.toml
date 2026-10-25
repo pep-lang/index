@@ -1,0 +1,3 @@
+source = "github:pep-lang/pepper-websocket"
+description = "WebSocket (RFC 6455): client and server over TCP and TLS"
+keywords = ["websocket", "network", "http"]

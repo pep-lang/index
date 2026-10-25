@@ -1,0 +1,3 @@
+source = "github:pep-lang/pepper-lsp"
+description = "A Language Server Protocol framework: write a language server for any language in Pepper"
+keywords = ["lsp", "language-server", "editor", "json-rpc"]

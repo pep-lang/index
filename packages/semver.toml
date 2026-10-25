@@ -1,0 +1,3 @@
+source = "github:pep-lang/pepper-semver"
+description = "Semantic Versioning 2.0.0: parse, compare and order versions, and match them against ranges"
+keywords = ["semver", "version", "range"]

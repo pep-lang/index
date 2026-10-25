@@ -1,0 +1,3 @@
+source = "github:pep-lang/pepper-diff"
+description = "Myers and patience diff, unified-diff output, and patch apply"
+keywords = ["diff", "patch", "text"]

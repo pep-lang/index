@@ -1,0 +1,3 @@
+source = "github:pep-lang/pepper-unicode"
+description = "Unicode normalization, grapheme and word segmentation, display width and case folding"
+keywords = ["unicode", "text", "normalization", "grapheme"]

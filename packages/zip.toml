@@ -1,0 +1,3 @@
+source = "github:pep-lang/pepper-zip"
+description = "Zip archives: list, read, extract safely, and write, with DEFLATE and ZIP64"
+keywords = ["zip", "archive", "compression"]

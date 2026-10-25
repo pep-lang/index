@@ -1,0 +1,3 @@
+source = "github:pep-lang/pepper-llvm"
+description = "LLVM 20 C API bindings: build IR, optimize it, emit object files, JIT"
+keywords = ["llvm", "compiler", "codegen", "jit"]

@@ -1,0 +1,3 @@
+source = "github:pep-lang/pepper-crypto"
+description = "Authenticated encryption (ChaCha20-Poly1305, AES-256-GCM), Ed25519 signatures, X25519 key exchange, HKDF and Argon2id password hashing, on libsodium"
+keywords = ["crypto", "encryption", "signature", "password", "libsodium"]

@@ -1,0 +1,3 @@
+source = "github:pep-lang/pepper-web"
+description = "A web framework over http.Server: routing, middleware, cookies, forms and static files"
+keywords = ["web", "http", "server", "routing"]

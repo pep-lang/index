@@ -1,0 +1,3 @@
+source = "github:pep-lang/pepper-msgpack"
+description = "MessagePack and CBOR (RFC 8949): binary encodings driven by serialize attributes"
+keywords = ["msgpack", "cbor", "binary", "serialize"]

@@ -1,0 +1,3 @@
+source = "github:pep-lang/pepper-markdown"
+description = "CommonMark and GFM Markdown: HTML rendering, a tree and an event walk, in pure Pepper"
+keywords = ["markdown", "commonmark", "gfm", "html"]
