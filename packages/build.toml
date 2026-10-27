@@ -1,0 +1,3 @@
+source = "github:pep-lang/pepper-build"
+description = "Helpers for build scripts: compile C for the target, find libraries with pkg-config, and emit pep: lines"
+keywords = ["build", "build-script", "c", "pkg-config", "native"]
