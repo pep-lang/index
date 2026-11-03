@@ -69,8 +69,11 @@ jobs:
         env:
           PEPPER_VERSION: 0.13.0-dev
         run: |
-          curl -fsSL https://raw.githubusercontent.com/pep-lang/pepper/main/scripts/install.sh \
-            | sh -s -- --version "$PEPPER_VERSION" --no-modify-path < /dev/null
+          # A file, not a pipe: a piped script cannot also read /dev/null,
+          # which keeps it from asking; the site needs neither clang nor
+          # OpenSSL.
+          curl -fsSL -o "$RUNNER_TEMP/install.sh" https://raw.githubusercontent.com/pep-lang/pepper/main/scripts/install.sh
+          sh "$RUNNER_TEMP/install.sh" --version "$PEPPER_VERSION" --no-modify-path --no-prerequisites < /dev/null
           echo "$HOME/.pepper/bin" >> "$GITHUB_PATH"
 
       - name: Build the docs
