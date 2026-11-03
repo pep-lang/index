@@ -27,3 +27,7 @@ Once merged, every `pepper package search` sees it within an hour.
 ## License
 
 The index is dedicated to the public domain under [CC0 1.0](https://creativecommons.org/publicdomain/zero/1.0/), so any tool may use it.
+
+## Package docs
+
+Each package's reference is built into one site, at `https://pepper-lang.dev/index/<host domain>/<owner>/<name>/` (`github.com/pep-lang/pepper-semver/`). The `docs` workflow builds it every night and on each push: `scripts/build-docs.sh` checks out each package's newest version tag and runs `pepper doc package --site`, which only parses the package, so none of its code runs. Whatever the package writes is shown as text, never as HTML. `pepper package info` links each indexed package's docs.
