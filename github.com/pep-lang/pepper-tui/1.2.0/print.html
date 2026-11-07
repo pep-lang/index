@@ -1,0 +1,2697 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>tui</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">tui</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <!-- Generated from pep.toml by `pep-doc package`. Do not edit. -->
+<h1 id="tui-120"><a class="header" href="#tui-120">tui 1.2.0</a></h1>
+<p>Full-screen terminal apps in the style of Ratatui: widgets, layout and diffed rendering over pepper-term</p>
+<h2 id="pages"><a class="header" href="#pages">Pages</a></h2>
+<ul>
+<li><a href="module.html">tui</a>: Full-screen terminal apps in the style of Ratatui: immediate-mode drawing, layout by constraints, styled text, and widgets, over pepper-term.</li>
+<li><a href="barchart.html">barchart.pep</a>: <code>BarChart</code>: labeled vertical bars.</li>
+<li><a href="block.html">block.pep</a>: <code>Block</code>: a border with a title around another widget, and the area inside it.</li>
+<li><a href="buffer.html">buffer.pep</a>: The screen as data​: a <code>Buffer</code> of <code>Cell</code>s, which widgets draw into and which <code>Terminal</code> compares with the last frame's to write only what changed.</li>
+<li><a href="events.html">events.pep</a>: Input events: key presses, mouse reports and pastes from pepper-term's <code>InputReader</code>, and resizes of the terminal.</li>
+<li><a href="gauge.html">gauge.pep</a>: <code>Gauge</code>: a bar filled to a ratio, with a label.</li>
+<li><a href="geometry.html">geometry.pep</a>: Rectangles of cells: <code>Rect</code>, the area a widget draws in.</li>
+<li><a href="layout.html">layout.pep</a>: Layout: <code>Layout</code> splits a <code>Rect</code> into a row or a column of smaller ones, sized by <code>Constraint</code>s.</li>
+<li><a href="list.html">list.pep</a>: <code>List</code>: items one under another, one of them selected, scrolled to keep the selection in view; <code>ListState</code> holds the selection and the scroll.</li>
+<li><a href="paragraph.html">paragraph.pep</a>: <code>Paragraph</code>: text in an area, cut at its edge or wrapped at word boundaries, and scrolled.</li>
+<li><a href="restore.html">restore.pep</a>: Leaving the full-screen state however the program ends, private to the module: at exit, and on the signals that end it, a panic's SIGABRT included.</li>
+<li><a href="scrollbar.html">scrollbar.pep</a>: <code>Scrollbar</code>: a track along one edge of an area, with a thumb showing where the view is; <code>ScrollbarState</code> says how long the content is and where the view sits.</li>
+<li><a href="sparkline.html">sparkline.pep</a>: <code>Sparkline</code>: a row of tiny bars, one column per value.</li>
+<li><a href="style.html">style.pep</a>: Styles that layer: a <code>Style</code> sets only some of a cell's colors and modifiers, and <code>patch</code> lays one style over another, so a widget's style, a line's and a span's combine as Ratatui's do.</li>
+<li><a href="table.html">table.pep</a>: <code>Table</code>: rows of cells in columns sized by constraints, with a header and a selected row, scrolled like a <code>List</code>.</li>
+<li><a href="tabs.html">tabs.pep</a>: <code>Tabs</code>: a row of titles with one selected.</li>
+<li><a href="terminal.html">terminal.pep</a>: Drawing a frame at a time: <code>Terminal</code> keeps the last frame's <code>Buffer</code>, has the app draw the next one into a <code>Frame</code>, and sends its backend only the cells that changed.</li>
+<li><a href="text.html">text.pep</a>: Styled text: a <code>Span</code> is a run of text in one style, a <code>Line</code> a row of spans, and a <code>Text</code> a stack of lines.</li>
+<li><a href="text_input.html">text_input.pep</a>: <code>TextInput</code>: an editable field of text, on one row or wrapped over many, with a cursor, a selection and pastes; <code>TextInputState</code> holds the text and the cursor from frame to frame.</li>
+<li><a href="widget.html">widget.pep</a>: The widget traits: a <code>Widget</code> draws itself into a buffer, and a <code>StatefulWidget</code> draws with state the app keeps between frames, such as a list's selection.</li>
+<li><a href="width.html">width.pep</a>: Display width: how many terminal columns a character or a string takes.</li>
+</ul>
+<h2 id="dependencies"><a class="header" href="#dependencies">Dependencies</a></h2>
+<ul>
+<li><a href="https://pepper-lang.dev/index/github.com/pep-lang/pepper-term/"><code>term</code></a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from module.pep by `pep-doc package`. Do not edit. -->
+<h1 id="tui"><a class="header" href="#tui">tui</a></h1>
+<p>Full-screen terminal apps in the style of Ratatui: immediate-mode
+drawing, layout by constraints, styled text, and widgets, over
+pepper-term.</p>
+<p>Bring it in with <code>import tui</code>.</p>
+<ul>
+<li><code>init</code>, <code>restore</code>, <code>Terminal</code>, <code>Frame</code>: draw a frame at a time;
+only the cells that changed are written</li>
+<li><code>Backend</code>, <code>TermBackend</code>, <code>TestBackend</code>: where frames go</li>
+<li><code>Buffer</code>, <code>Cell</code>, <code>CellUpdate</code>, <code>Rect</code>: the screen as data</li>
+<li><code>Layout</code>, <code>Constraint</code>, <code>Direction</code>: split an area</li>
+<li><code>Style</code>, <code>BOLD</code> and the other modifiers, <code>Span</code>, <code>Line</code>, <code>Text</code>,
+<code>Alignment</code>, <code>char_width</code>, <code>display_width</code>: styled text</li>
+<li><code>Widget</code>, <code>StatefulWidget</code>, and the widgets <code>Block</code>, <code>Paragraph</code>,
+<code>List</code>, <code>Table</code>, <code>TextInput</code>, <code>Tabs</code>, <code>Gauge</code>, <code>Sparkline</code>,
+<code>BarChart</code> and <code>Scrollbar</code></li>
+<li><code>Events</code>, <code>Event</code>: keys, the mouse (with <code>init(mouse = true)</code>),
+pastes (with <code>init(paste = true)</code>) and resizes; <code>Terminal.area_of</code>
+and the widgets' <code>handle_mouse</code> for hit testing</li>
+<li><code>Terminal.copy</code> and the widgets' <code>selected_text</code>: the clipboard</li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import tui;
+import [Event, Paragraph] from tui;
+
+main(): int {
+    var terminal = tui.init();
+    var events = tui.Events();
+    while (true) {
+        terminal.draw((frame) =&gt; {
+            frame.render_widget(Paragraph("Hello! Press q to quit."), frame.area);
+        });
+        var event = events.next();
+        if (event.is_empty()) {
+            break;
+        }
+        if (event.value() is Key(key)) {
+            if (key.text == "q") {
+                break;
+            }
+        }
+    }
+    tui.restore();
+    return 0;
+}
+</code></pre>
+<p>Source: <code>module.pep</code></p>
+<h2 id="re-exports"><a class="header" href="#re-exports">Re-exports</a></h2>
+<ul>
+<li>Everything <a href="barchart.html"><code>barchart.pep</code></a> exports.</li>
+<li>Everything <a href="block.html"><code>block.pep</code></a> exports.</li>
+<li>Everything <a href="buffer.html"><code>buffer.pep</code></a> exports.</li>
+<li>Everything <a href="events.html"><code>events.pep</code></a> exports.</li>
+<li>Everything <a href="gauge.html"><code>gauge.pep</code></a> exports.</li>
+<li>Everything <a href="geometry.html"><code>geometry.pep</code></a> exports.</li>
+<li>Everything <a href="layout.html"><code>layout.pep</code></a> exports.</li>
+<li>Everything <a href="list.html"><code>list.pep</code></a> exports.</li>
+<li>Everything <a href="paragraph.html"><code>paragraph.pep</code></a> exports.</li>
+<li>Everything <a href="scrollbar.html"><code>scrollbar.pep</code></a> exports.</li>
+<li>Everything <a href="sparkline.html"><code>sparkline.pep</code></a> exports.</li>
+<li>Everything <a href="style.html"><code>style.pep</code></a> exports.</li>
+<li>Everything <a href="table.html"><code>table.pep</code></a> exports.</li>
+<li>Everything <a href="tabs.html"><code>tabs.pep</code></a> exports.</li>
+<li>Everything <a href="terminal.html"><code>terminal.pep</code></a> exports.</li>
+<li>Everything <a href="text.html"><code>text.pep</code></a> exports.</li>
+<li>Everything <a href="text_input.html"><code>text_input.pep</code></a> exports.</li>
+<li>Everything <a href="widget.html"><code>widget.pep</code></a> exports.</li>
+<li>Everything <a href="width.html"><code>width.pep</code></a> exports.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from barchart.pep by `pep-doc package`. Do not edit. -->
+<h1 id="barchartpep"><a class="header" href="#barchartpep">barchart.pep</a></h1>
+<p><code>BarChart</code>: labeled vertical bars.</p>
+<p>Source: <code>barchart.pep</code></p>
+<h2 id="barchart"><a class="header" href="#barchart">BarChart</a></h2>
+<pre><code class="language-pepper">struct BarChart
+</code></pre>
+<p>Vertical bars, one per <code>(label, value)</code> pair, from the left: each as tall
+as its value against <code>max</code>, drawn in eighths of a cell, with its value
+on its bottom row when it fits and its label under it.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import tui;
+import [BarChart] from tui;
+
+var chart = BarChart([("Mon", 3), ("Tue", 7)], bar_width = 3);
+</code></pre>
+<h3 id="fields"><a class="header" href="#fields">Fields</a></h3>
+<h4 id="data"><a class="header" href="#data">data</a></h4>
+<pre><code class="language-pepper">var data: Array&lt;(String, ulong)&gt;
+</code></pre>
+<p>The bars: a label and a value each.</p>
+<h4 id="bar_width"><a class="header" href="#bar_width">bar_width</a></h4>
+<pre><code class="language-pepper">var bar_width: int
+</code></pre>
+<p>The columns each bar takes.</p>
+<h4 id="bar_gap"><a class="header" href="#bar_gap">bar_gap</a></h4>
+<pre><code class="language-pepper">var bar_gap: int
+</code></pre>
+<p>The columns between bars.</p>
+<h4 id="max"><a class="header" href="#max">max</a></h4>
+<pre><code class="language-pepper">var max: ulong
+</code></pre>
+<p>The value of a full-height bar; 0 for the largest value.</p>
+<h4 id="block"><a class="header" href="#block">block</a></h4>
+<pre><code class="language-pepper">var block: Block
+</code></pre>
+<p>The block around the chart; borderless by default.</p>
+<h4 id="style"><a class="header" href="#style">style</a></h4>
+<pre><code class="language-pepper">var style: Style
+</code></pre>
+<p>The style of the whole area.</p>
+<h4 id="bar_style"><a class="header" href="#bar_style">bar_style</a></h4>
+<pre><code class="language-pepper">var bar_style: Style
+</code></pre>
+<p>The style of the bars.</p>
+<h4 id="value_style"><a class="header" href="#value_style">value_style</a></h4>
+<pre><code class="language-pepper">var value_style: Style
+</code></pre>
+<p>The style of the values, laid over the bar's.</p>
+<h4 id="label_style"><a class="header" href="#label_style">label_style</a></h4>
+<pre><code class="language-pepper">var label_style: Style
+</code></pre>
+<p>The style of the labels.</p>
+<h3 id="constructor"><a class="header" href="#constructor">Constructor</a></h3>
+<h4 id="barchart-1"><a class="header" href="#barchart-1">BarChart()</a></h4>
+<pre><code class="language-pepper">construct( data: Array&lt;(String, ulong)&gt;, bar_width: int = 1, bar_gap: int = 1, max: ulong = 0, block: Block = Block(borders = BORDER_NONE), style: Style = Style(), bar_style: Style = Style(), value_style: Style = Style(reverse = true), label_style: Style = Style() )
+</code></pre>
+<p>Makes a bar chart.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>data</code> — the bars: a label and a value each</li>
+<li><code>bar_width</code> — the columns each bar takes</li>
+<li><code>bar_gap</code> — the columns between bars</li>
+<li><code>max</code> — the value of a full-height bar; 0 for the largest value</li>
+<li><code>block</code> — the block around the chart</li>
+<li><code>style</code> — the style of the whole area</li>
+<li><code>bar_style</code> — the style of the bars</li>
+<li><code>value_style</code> — the style of the values</li>
+<li><code>label_style</code> — the style of the labels</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from block.pep by `pep-doc package`. Do not edit. -->
+<h1 id="blockpep"><a class="header" href="#blockpep">block.pep</a></h1>
+<p><code>Block</code>: a border with a title around another widget, and the area
+inside it.</p>
+<p>Source: <code>block.pep</code></p>
+<h2 id="border_none"><a class="header" href="#border_none">BORDER_NONE</a></h2>
+<pre><code class="language-pepper">const BORDER_NONE = 0
+</code></pre>
+<p>No border, for <code>Block.borders</code>.</p>
+<h2 id="border_top"><a class="header" href="#border_top">BORDER_TOP</a></h2>
+<pre><code class="language-pepper">const BORDER_TOP = 1
+</code></pre>
+<p>The top border.</p>
+<h2 id="border_right"><a class="header" href="#border_right">BORDER_RIGHT</a></h2>
+<pre><code class="language-pepper">const BORDER_RIGHT = 2
+</code></pre>
+<p>The right border.</p>
+<h2 id="border_bottom"><a class="header" href="#border_bottom">BORDER_BOTTOM</a></h2>
+<pre><code class="language-pepper">const BORDER_BOTTOM = 4
+</code></pre>
+<p>The bottom border.</p>
+<h2 id="border_left"><a class="header" href="#border_left">BORDER_LEFT</a></h2>
+<pre><code class="language-pepper">const BORDER_LEFT = 8
+</code></pre>
+<p>The left border.</p>
+<h2 id="border_all"><a class="header" href="#border_all">BORDER_ALL</a></h2>
+<pre><code class="language-pepper">const BORDER_ALL = 15
+</code></pre>
+<p>All four borders.</p>
+<h2 id="bordertype"><a class="header" href="#bordertype">BorderType</a></h2>
+<pre><code class="language-pepper">enum BorderType
+</code></pre>
+<p>The lines a border is drawn with.</p>
+<h3 id="cases"><a class="header" href="#cases">Cases</a></h3>
+<h4 id="plain"><a class="header" href="#plain">Plain</a></h4>
+<pre><code class="language-pepper">Plain
+</code></pre>
+<p>Thin lines with square corners: ┌─┐.</p>
+<h4 id="rounded"><a class="header" href="#rounded">Rounded</a></h4>
+<pre><code class="language-pepper">Rounded
+</code></pre>
+<p>Thin lines with round corners: ╭─╮.</p>
+<h4 id="double"><a class="header" href="#double">Double</a></h4>
+<pre><code class="language-pepper">Double
+</code></pre>
+<p>Double lines: ╔═╗.</p>
+<h4 id="thick"><a class="header" href="#thick">Thick</a></h4>
+<pre><code class="language-pepper">Thick
+</code></pre>
+<p>Thick lines: ┏━┓.</p>
+<h2 id="block-1"><a class="header" href="#block-1">Block</a></h2>
+<pre><code class="language-pepper">struct Block
+</code></pre>
+<p>A border with a title, drawn around an area; other widgets take one to
+draw themselves inside it.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import tui;
+import [Block, BorderType] from tui;
+
+var block = Block(title = "Files", border_type = BorderType.Rounded);
+# ╭Files───╮
+# │        │
+# ╰────────╯
+</code></pre>
+<h3 id="fields-1"><a class="header" href="#fields-1">Fields</a></h3>
+<h4 id="title"><a class="header" href="#title">title</a></h4>
+<pre><code class="language-pepper">var title: Line
+</code></pre>
+<p>The title, drawn on the top border; an empty line for none.</p>
+<h4 id="title_alignment"><a class="header" href="#title_alignment">title_alignment</a></h4>
+<pre><code class="language-pepper">var title_alignment: Alignment
+</code></pre>
+<p>Where the title sits on the top border.</p>
+<h4 id="borders"><a class="header" href="#borders">borders</a></h4>
+<pre><code class="language-pepper">var borders: int
+</code></pre>
+<p>Which borders to draw: <code>BORDER_TOP</code>, <code>BORDER_RIGHT</code>,
+<code>BORDER_BOTTOM</code> and <code>BORDER_LEFT</code> or-ed together, or <code>BORDER_ALL</code>.</p>
+<h4 id="border_type"><a class="header" href="#border_type">border_type</a></h4>
+<pre><code class="language-pepper">var border_type: BorderType
+</code></pre>
+<p>The lines the borders are drawn with.</p>
+<h4 id="border_style"><a class="header" href="#border_style">border_style</a></h4>
+<pre><code class="language-pepper">var border_style: Style
+</code></pre>
+<p>The style of the borders, laid over <code>style</code>.</p>
+<h4 id="style-1"><a class="header" href="#style-1">style</a></h4>
+<pre><code class="language-pepper">var style: Style
+</code></pre>
+<p>The style of the whole area, borders and inside.</p>
+<h4 id="padding"><a class="header" href="#padding">padding</a></h4>
+<pre><code class="language-pepper">var padding: int
+</code></pre>
+<p>Cells left empty inside the borders, on every side.</p>
+<h3 id="constructor-1"><a class="header" href="#constructor-1">Constructor</a></h3>
+<h4 id="block-2"><a class="header" href="#block-2">Block()</a></h4>
+<pre><code class="language-pepper">construct( title: Line = Line(Array&lt;Span&gt;()), borders: int = BORDER_ALL, border_type: BorderType = BorderType.Plain, title_alignment: Alignment = Alignment.Left, style: Style = Style(), border_style: Style = Style(), padding: int = 0 )
+</code></pre>
+<h3 id="methods"><a class="header" href="#methods">Methods</a></h3>
+<h4 id="inner"><a class="header" href="#inner">inner</a></h4>
+<pre><code class="language-pepper">inner(area: Rect): Rect
+</code></pre>
+<p>Returns the area inside the borders and the padding.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>area</code> — the block's area</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the inner area, empty when nothing fits</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from buffer.pep by `pep-doc package`. Do not edit. -->
+<h1 id="bufferpep"><a class="header" href="#bufferpep">buffer.pep</a></h1>
+<p>The screen as data​: a <code>Buffer</code> of <code>Cell</code>s, which widgets draw into and
+which <code>Terminal</code> compares with the last frame's to write only what
+changed.</p>
+<p>Source: <code>buffer.pep</code></p>
+<h2 id="cell"><a class="header" href="#cell">Cell</a></h2>
+<pre><code class="language-pepper">[Value] struct Cell
+</code></pre>
+<p>One character cell: the text it shows and its style.</p>
+<p>A wide character's cell is followed by a cell whose symbol is "", which
+the wide character covers.</p>
+<h3 id="fields-2"><a class="header" href="#fields-2">Fields</a></h3>
+<h4 id="symbol"><a class="header" href="#symbol">symbol</a></h4>
+<pre><code class="language-pepper">var symbol: String
+</code></pre>
+<p>What the cell shows: one character, plus any zero-width ones after
+it; "" for the second column of a wide character.</p>
+<h4 id="style-2"><a class="header" href="#style-2">style</a></h4>
+<pre><code class="language-pepper">var style: Style
+</code></pre>
+<p>Its style.</p>
+<h3 id="constructor-2"><a class="header" href="#constructor-2">Constructor</a></h3>
+<h4 id="cell-1"><a class="header" href="#cell-1">Cell()</a></h4>
+<pre><code class="language-pepper">construct(symbol: String = " ", style: Style = Style())
+</code></pre>
+<p>Makes a cell.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>symbol</code> — what it shows</li>
+<li><code>style</code> — its style</li>
+</ul>
+<h2 id="buffer"><a class="header" href="#buffer">Buffer</a></h2>
+<pre><code class="language-pepper">struct Buffer
+</code></pre>
+<p>A rectangle of cells, row by row. Writes outside its area are dropped,
+so widgets clip without checking.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import tui;
+
+var buffer = tui.Buffer(tui.Rect(0, 0, 5, 1));
+buffer.set_string(1, 0, "hi", tui.Style());
+assert(buffer.to_lines()[0] == " hi  ", "drawn at column 1");
+</code></pre>
+<h3 id="fields-3"><a class="header" href="#fields-3">Fields</a></h3>
+<h4 id="area"><a class="header" href="#area">area</a></h4>
+<pre><code class="language-pepper">var area: Rect
+</code></pre>
+<p>The area the buffer covers.</p>
+<h4 id="content"><a class="header" href="#content">content</a></h4>
+<pre><code class="language-pepper">var content: Cell[]
+</code></pre>
+<p>The cells, row by row from the top left.</p>
+<h3 id="constructor-3"><a class="header" href="#constructor-3">Constructor</a></h3>
+<h4 id="buffer-1"><a class="header" href="#buffer-1">Buffer()</a></h4>
+<pre><code class="language-pepper">construct(area: Rect)
+</code></pre>
+<p>Makes a buffer of blank cells.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>area</code> — the area it covers</li>
+</ul>
+<h3 id="methods-1"><a class="header" href="#methods-1">Methods</a></h3>
+<h4 id="get"><a class="header" href="#get">get</a></h4>
+<pre><code class="language-pepper">get(x: int, y: int): Cell
+</code></pre>
+<p>Returns the cell at <code>x</code> and <code>y</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>x</code> — the column</li>
+<li><code>y</code> — the row</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the cell</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the cell is outside the area</li>
+</ul>
+<h4 id="set"><a class="header" href="#set">set</a></h4>
+<pre><code class="language-pepper">set(x: int, y: int, cell: Cell)
+</code></pre>
+<p>Sets the cell at <code>x</code> and <code>y</code>; does nothing outside the area.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>x</code> — the column</li>
+<li><code>y</code> — the row</li>
+<li><code>cell</code> — the new cell</li>
+</ul>
+<h4 id="reset"><a class="header" href="#reset">reset</a></h4>
+<pre><code class="language-pepper">reset()
+</code></pre>
+<p>Makes every cell blank.</p>
+<h4 id="set_style"><a class="header" href="#set_style">set_style</a></h4>
+<pre><code class="language-pepper">set_style(rect: Rect, style: Style)
+</code></pre>
+<p>Lays <code>style</code> over the style of every cell in <code>rect</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>rect</code> — the cells to style</li>
+<li><code>style</code> — the style to lay over them</li>
+</ul>
+<h4 id="set_string"><a class="header" href="#set_string">set_string</a></h4>
+<pre><code class="language-pepper">set_string(x: int, y: int, value: String, style: Style, max_width: int = 1000000): int
+</code></pre>
+<p>Writes <code>value</code> from <code>x</code> along row <code>y</code>, a character a cell (two for a
+wide one), laying <code>style</code> over each cell's, and stops before
+<code>max_width</code> columns or the edge. Control characters are skipped, and
+zero-width characters join the cell before them.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>x</code> — the first column</li>
+<li><code>y</code> — the row</li>
+<li><code>value</code> — the text</li>
+<li><code>style</code> — the style to lay over the cells</li>
+<li><code>max_width</code> — the most columns to take</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the column after the last one written</li>
+</ul>
+<h4 id="set_line"><a class="header" href="#set_line">set_line</a></h4>
+<pre><code class="language-pepper">set_line(x: int, y: int, line: Line, max_width: int): int
+</code></pre>
+<p>Writes <code>line</code> from <code>x</code> along row <code>y</code>, each span in the line's style
+with its own laid over it, and stops before <code>max_width</code> columns.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>x</code> — the first column</li>
+<li><code>y</code> — the row</li>
+<li><code>line</code> — the line</li>
+<li><code>max_width</code> — the most columns to take</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the column after the last one written</li>
+</ul>
+<h4 id="diff"><a class="header" href="#diff">diff</a></h4>
+<pre><code class="language-pepper">diff(previous: Buffer): CellUpdate[]
+</code></pre>
+<p>Returns the cells that differ from <code>previous</code>, which covers the same
+area, as the updates to bring a screen showing <code>previous</code> to this
+buffer: each cell's column, row and the cell. A wide character's
+covered cell is never an update, and the cells a wide character
+covered in <code>previous</code> are.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>previous</code> — the buffer the screen shows now</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the updates, row by row</li>
+</ul>
+<h4 id="to_lines"><a class="header" href="#to_lines">to_lines</a></h4>
+<pre><code class="language-pepper">to_lines(): String[]
+</code></pre>
+<p>Returns each row's symbols joined, top to bottom, for checking what a
+buffer shows in a test. A wide character's covered cell adds nothing.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the rows</li>
+</ul>
+<h4 id="assert_lines"><a class="header" href="#assert_lines">assert_lines</a></h4>
+<pre><code class="language-pepper">assert_lines(expected: String[])
+</code></pre>
+<p>Panics unless the buffer shows <code>expected</code>, a string per row, as
+<code>to_lines()</code> gives them: a snapshot check for tests, which prints
+both screens when they differ.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>expected</code> — the rows, top to bottom</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the rows differ, at the line of the call</li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import tui;
+
+var buffer = tui.Buffer(tui.Rect(0, 0, 3, 1));
+buffer.set_string(0, 0, "ok", tui.Style());
+buffer.assert_lines(["ok "]);
+</code></pre>
+<h2 id="cellupdate"><a class="header" href="#cellupdate">CellUpdate</a></h2>
+<pre><code class="language-pepper">[Value] struct CellUpdate
+</code></pre>
+<p>One cell to write to the screen: where, and what.</p>
+<h3 id="fields-4"><a class="header" href="#fields-4">Fields</a></h3>
+<h4 id="x"><a class="header" href="#x">x</a></h4>
+<pre><code class="language-pepper">var x: int
+</code></pre>
+<p>The column.</p>
+<h4 id="y"><a class="header" href="#y">y</a></h4>
+<pre><code class="language-pepper">var y: int
+</code></pre>
+<p>The row.</p>
+<h4 id="cell-2"><a class="header" href="#cell-2">cell</a></h4>
+<pre><code class="language-pepper">var cell: Cell
+</code></pre>
+<p>The cell.</p>
+<h3 id="constructor-4"><a class="header" href="#constructor-4">Constructor</a></h3>
+<h4 id="cellupdate-1"><a class="header" href="#cellupdate-1">CellUpdate()</a></h4>
+<pre><code class="language-pepper">construct(x: int, y: int, cell: Cell)
+</code></pre>
+<p>Makes an update.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>x</code> — the column</li>
+<li><code>y</code> — the row</li>
+<li><code>cell</code> — the cell</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from events.pep by `pep-doc package`. Do not edit. -->
+<h1 id="eventspep"><a class="header" href="#eventspep">events.pep</a></h1>
+<p>Input events: key presses, mouse reports and pastes from pepper-term's
+<code>InputReader</code>, and resizes of the terminal.</p>
+<p>Source: <code>events.pep</code></p>
+<h2 id="event"><a class="header" href="#event">Event</a></h2>
+<pre><code class="language-pepper">enum Event
+</code></pre>
+<p>Something that happened: a key pressed, the mouse used, text pasted, or
+the terminal resized.</p>
+<h3 id="cases-1"><a class="header" href="#cases-1">Cases</a></h3>
+<h4 id="key"><a class="header" href="#key">Key</a></h4>
+<pre><code class="language-pepper">Key(key: term.KeyEvent)
+</code></pre>
+<p>A key press.</p>
+<h4 id="mouse"><a class="header" href="#mouse">Mouse</a></h4>
+<pre><code class="language-pepper">Mouse(mouse: term.MouseEvent)
+</code></pre>
+<p>A mouse press, release, drag or wheel turn, which arrives only after
+<code>init(mouse = true)</code>. Its <code>column</code> and <code>row</code> count from 0, as a
+<code>Rect</code>'s do.</p>
+<h4 id="paste"><a class="header" href="#paste">Paste</a></h4>
+<pre><code class="language-pepper">Paste(text: String, truncated: bool)
+</code></pre>
+<p>Text pasted into the terminal, whole, which arrives only after
+<code>init(paste = true)</code> (otherwise a paste arrives as typed keys). Line
+ends are "\n". When the paste was longer than a megabyte, <code>text</code>
+holds its start and <code>truncated</code> is true. <code>TextInputState.handle_event</code>
+puts it in at the cursor.</p>
+<h4 id="resize"><a class="header" href="#resize">Resize</a></h4>
+<pre><code class="language-pepper">Resize(columns: int, rows: int)
+</code></pre>
+<p>The terminal's new size, in columns and rows.</p>
+<h2 id="events"><a class="header" href="#events">Events</a></h2>
+<pre><code class="language-pepper">struct Events
+</code></pre>
+<p>Reads events from standard input and the terminal.</p>
+<p>pepper-term sends no resize notification, so a resize is noticed when
+<code>next</code> is called: before it waits for input, and so after each event.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import tui;
+import [Event] from tui;
+
+var events = tui.Events();
+var event = events.next();
+if (event.is_value() &amp;&amp; event.value() is Key(key)) {
+    print(key.to_string());
+}
+</code></pre>
+<h3 id="constructor-5"><a class="header" href="#constructor-5">Constructor</a></h3>
+<h4 id="events-1"><a class="header" href="#events-1">Events()</a></h4>
+<pre><code class="language-pepper">construct()
+</code></pre>
+<p>Makes a reader, taking the terminal's size now as the starting one.</p>
+<h3 id="methods-2"><a class="header" href="#methods-2">Methods</a></h3>
+<h4 id="next"><a class="header" href="#next">next</a></h4>
+<pre><code class="language-pepper">next(): Event?
+</code></pre>
+<p>Waits for the next event: a resize since the last call, else the
+next key press, mouse report or paste.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the event, or Empty at the end of input</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from gauge.pep by `pep-doc package`. Do not edit. -->
+<h1 id="gaugepep"><a class="header" href="#gaugepep">gauge.pep</a></h1>
+<p><code>Gauge</code>: a bar filled to a ratio, with a label.</p>
+<p>Source: <code>gauge.pep</code></p>
+<h2 id="gauge"><a class="header" href="#gauge">Gauge</a></h2>
+<pre><code class="language-pepper">struct Gauge
+</code></pre>
+<p>A bar filled from the left to <code>ratio</code> of its width, with a label (the
+percentage by default) in the middle row. The label shows reversed where
+the bar is filled, so it stays readable.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import tui;
+import [Gauge, Style] from tui;
+
+var progress = Gauge(0.42);   # filled to 42%, labeled "42%"
+</code></pre>
+<h3 id="fields-5"><a class="header" href="#fields-5">Fields</a></h3>
+<h4 id="ratio"><a class="header" href="#ratio">ratio</a></h4>
+<pre><code class="language-pepper">var ratio: double
+</code></pre>
+<p>How full the bar is, from 0 to 1; values outside are clamped.</p>
+<h4 id="label"><a class="header" href="#label">label</a></h4>
+<pre><code class="language-pepper">var label: String
+</code></pre>
+<p>The label; "" for the percentage.</p>
+<h4 id="block-3"><a class="header" href="#block-3">block</a></h4>
+<pre><code class="language-pepper">var block: Block
+</code></pre>
+<p>The block around the gauge; borderless by default.</p>
+<h4 id="style-3"><a class="header" href="#style-3">style</a></h4>
+<pre><code class="language-pepper">var style: Style
+</code></pre>
+<p>The style of the whole area.</p>
+<h4 id="gauge_style"><a class="header" href="#gauge_style">gauge_style</a></h4>
+<pre><code class="language-pepper">var gauge_style: Style
+</code></pre>
+<p>The style of the filled part.</p>
+<h4 id="use_unicode"><a class="header" href="#use_unicode">use_unicode</a></h4>
+<pre><code class="language-pepper">var use_unicode: bool
+</code></pre>
+<p>Whether to fill the last cell by eighths, with Unicode's partial
+blocks, rather than by whole cells.</p>
+<h3 id="constructor-6"><a class="header" href="#constructor-6">Constructor</a></h3>
+<h4 id="gauge-1"><a class="header" href="#gauge-1">Gauge()</a></h4>
+<pre><code class="language-pepper">construct( ratio: double, label: String = "", block: Block = Block(borders = BORDER_NONE), style: Style = Style(), gauge_style: Style = Style(), use_unicode: bool = false )
+</code></pre>
+<p>Makes a gauge.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>ratio</code> — how full it is, from 0 to 1</li>
+<li><code>label</code> — the label; "" for the percentage</li>
+<li><code>block</code> — the block around the gauge</li>
+<li><code>style</code> — the style of the whole area</li>
+<li><code>gauge_style</code> — the style of the filled part</li>
+<li><code>use_unicode</code> — whether to fill by eighths of a cell</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from geometry.pep by `pep-doc package`. Do not edit. -->
+<h1 id="geometrypep"><a class="header" href="#geometrypep">geometry.pep</a></h1>
+<p>Rectangles of cells: <code>Rect</code>, the area a widget draws in.</p>
+<p>Source: <code>geometry.pep</code></p>
+<h2 id="rect"><a class="header" href="#rect">Rect</a></h2>
+<pre><code class="language-pepper">[Value] struct Rect
+</code></pre>
+<p>A rectangle of cells: its top-left corner, counted from 0 at the top left
+of the screen, and its size. A size below zero counts as zero.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import tui;
+
+var area = tui.Rect(0, 0, 20, 5);
+var inside = area.inner(1, 1);   # Rect(1, 1, 18, 3)
+</code></pre>
+<h3 id="fields-6"><a class="header" href="#fields-6">Fields</a></h3>
+<h4 id="x-1"><a class="header" href="#x-1">x</a></h4>
+<pre><code class="language-pepper">var x: int
+</code></pre>
+<p>The leftmost column.</p>
+<h4 id="y-1"><a class="header" href="#y-1">y</a></h4>
+<pre><code class="language-pepper">var y: int
+</code></pre>
+<p>The top row.</p>
+<h4 id="width"><a class="header" href="#width">width</a></h4>
+<pre><code class="language-pepper">var width: int
+</code></pre>
+<p>The number of columns.</p>
+<h4 id="height"><a class="header" href="#height">height</a></h4>
+<pre><code class="language-pepper">var height: int
+</code></pre>
+<p>The number of rows.</p>
+<h3 id="properties"><a class="header" href="#properties">Properties</a></h3>
+<h4 id="right"><a class="header" href="#right">right</a></h4>
+<pre><code class="language-pepper">var right: int { get; }
+</code></pre>
+<p>The column just past the right edge.</p>
+<h4 id="bottom"><a class="header" href="#bottom">bottom</a></h4>
+<pre><code class="language-pepper">var bottom: int { get; }
+</code></pre>
+<p>The row just past the bottom edge.</p>
+<h3 id="constructor-7"><a class="header" href="#constructor-7">Constructor</a></h3>
+<h4 id="rect-1"><a class="header" href="#rect-1">Rect()</a></h4>
+<pre><code class="language-pepper">construct(x: int = 0, y: int = 0, width: int = 0, height: int = 0)
+</code></pre>
+<p>Makes a rectangle; a negative width or height becomes 0.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>x</code> — the leftmost column</li>
+<li><code>y</code> — the top row</li>
+<li><code>width</code> — the number of columns</li>
+<li><code>height</code> — the number of rows</li>
+</ul>
+<h3 id="methods-3"><a class="header" href="#methods-3">Methods</a></h3>
+<h4 id="area-1"><a class="header" href="#area-1">area</a></h4>
+<pre><code class="language-pepper">area(): int
+</code></pre>
+<p>Returns the number of cells.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li><code>width * height</code></li>
+</ul>
+<h4 id="is_empty"><a class="header" href="#is_empty">is_empty</a></h4>
+<pre><code class="language-pepper">is_empty(): bool
+</code></pre>
+<p>Returns whether the rectangle holds no cells.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>true when the width or the height is 0</li>
+</ul>
+<h4 id="inner-1"><a class="header" href="#inner-1">inner</a></h4>
+<pre><code class="language-pepper">inner(horizontal: int, vertical: int): Rect
+</code></pre>
+<p>Returns the rectangle shrunk by <code>horizontal</code> columns on the left and
+the right and <code>vertical</code> rows at the top and the bottom; empty, not
+negative, when the margins do not fit.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>horizontal</code> — the columns to take from each side</li>
+<li><code>vertical</code> — the rows to take from the top and the bottom</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the smaller rectangle</li>
+</ul>
+<h4 id="intersection"><a class="header" href="#intersection">intersection</a></h4>
+<pre><code class="language-pepper">intersection(other: Rect): Rect
+</code></pre>
+<p>Returns the cells both rectangles hold.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>other</code> — the other rectangle</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the overlap, empty when there is none</li>
+</ul>
+<h4 id="contains"><a class="header" href="#contains">contains</a></h4>
+<pre><code class="language-pepper">contains(column: int, row: int): bool
+</code></pre>
+<p>Returns whether the cell at <code>column</code> and <code>row</code> is inside.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>column</code> — the column</li>
+<li><code>row</code> — the row</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>true when it is inside</li>
+</ul>
+<h4 id="to_string"><a class="header" href="#to_string">to_string</a></h4>
+<pre><code class="language-pepper">to_string(): String
+</code></pre>
+<p>Returns the rectangle as "Rect(x, y, width, height)".</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the text</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from layout.pep by `pep-doc package`. Do not edit. -->
+<h1 id="layoutpep"><a class="header" href="#layoutpep">layout.pep</a></h1>
+<p>Layout: <code>Layout</code> splits a <code>Rect</code> into a row or a column of smaller ones,
+sized by <code>Constraint</code>s.</p>
+<p>Source: <code>layout.pep</code></p>
+<h2 id="direction"><a class="header" href="#direction">Direction</a></h2>
+<pre><code class="language-pepper">enum Direction
+</code></pre>
+<p>Which way a layout lays its parts out.</p>
+<h3 id="cases-2"><a class="header" href="#cases-2">Cases</a></h3>
+<h4 id="horizontal"><a class="header" href="#horizontal">Horizontal</a></h4>
+<pre><code class="language-pepper">Horizontal
+</code></pre>
+<p>Left to right: the parts split the width.</p>
+<h4 id="vertical"><a class="header" href="#vertical">Vertical</a></h4>
+<pre><code class="language-pepper">Vertical
+</code></pre>
+<p>Top to bottom: the parts split the height.</p>
+<h2 id="constraint"><a class="header" href="#constraint">Constraint</a></h2>
+<pre><code class="language-pepper">[Value] enum Constraint
+</code></pre>
+<p>How big one part of a layout wants to be, along the layout's direction.</p>
+<h3 id="cases-3"><a class="header" href="#cases-3">Cases</a></h3>
+<h4 id="length"><a class="header" href="#length">Length</a></h4>
+<pre><code class="language-pepper">Length(size: int)
+</code></pre>
+<p>Exactly <code>size</code> cells.</p>
+<h4 id="min"><a class="header" href="#min">Min</a></h4>
+<pre><code class="language-pepper">Min(size: int)
+</code></pre>
+<p>At least <code>size</code> cells; it takes a share of the space left over when
+no part is a <code>Fill</code>.</p>
+<h4 id="max-1"><a class="header" href="#max-1">Max</a></h4>
+<pre><code class="language-pepper">Max(size: int)
+</code></pre>
+<p>At most <code>size</code> cells.</p>
+<h4 id="percentage"><a class="header" href="#percentage">Percentage</a></h4>
+<pre><code class="language-pepper">Percentage(percent: int)
+</code></pre>
+<p><code>percent</code> percent of the space, rounded down.</p>
+<h4 id="ratio-1"><a class="header" href="#ratio-1">Ratio</a></h4>
+<pre><code class="language-pepper">Ratio(numerator: int, denominator: int)
+</code></pre>
+<p><code>numerator / denominator</code> of the space, rounded down; nothing for a
+denominator of 0.</p>
+<h4 id="fill"><a class="header" href="#fill">Fill</a></h4>
+<pre><code class="language-pepper">Fill(weight: int)
+</code></pre>
+<p>A share of the space left over, by <code>weight</code> against the other
+<code>Fill</code>s.</p>
+<h2 id="layout"><a class="header" href="#layout">Layout</a></h2>
+<pre><code class="language-pepper">struct Layout
+</code></pre>
+<p>Splits a rectangle into parts along one direction, one per constraint.</p>
+<p>The solver is deterministic and never fails: each part first gets what
+its constraint asks for (a <code>Fill</code> nothing, a <code>Min</code> or a <code>Max</code> its size).
+Space left over goes to the <code>Fill</code> parts by weight or, with none, shared
+evenly by the <code>Min</code> parts, and stays empty at the end otherwise. When the
+parts ask for more than there is, every part shrinks in proportion to
+what it asked for, so all of them still fit. Rounding leftovers go to the
+first parts.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import tui;
+import [Constraint, Direction] from tui;
+
+var parts = tui.Layout(Direction.Vertical, [Constraint.Length(1), Constraint.Fill(1)]).split(tui.Rect(0, 0, 10, 5));
+# parts[0] is Rect(0, 0, 10, 1); parts[1] is Rect(0, 1, 10, 4)
+</code></pre>
+<h3 id="fields-7"><a class="header" href="#fields-7">Fields</a></h3>
+<h4 id="direction-1"><a class="header" href="#direction-1">direction</a></h4>
+<pre><code class="language-pepper">var direction: Direction
+</code></pre>
+<p>The direction the parts follow.</p>
+<h4 id="constraints"><a class="header" href="#constraints">constraints</a></h4>
+<pre><code class="language-pepper">var constraints: Constraint[]
+</code></pre>
+<p>One constraint per part.</p>
+<h4 id="horizontal_margin"><a class="header" href="#horizontal_margin">horizontal_margin</a></h4>
+<pre><code class="language-pepper">var horizontal_margin: int
+</code></pre>
+<p>Columns left empty at the left and the right of the area.</p>
+<h4 id="vertical_margin"><a class="header" href="#vertical_margin">vertical_margin</a></h4>
+<pre><code class="language-pepper">var vertical_margin: int
+</code></pre>
+<p>Rows left empty at the top and the bottom of the area.</p>
+<h4 id="spacing"><a class="header" href="#spacing">spacing</a></h4>
+<pre><code class="language-pepper">var spacing: int
+</code></pre>
+<p>Cells left empty between neighboring parts.</p>
+<h3 id="constructor-8"><a class="header" href="#constructor-8">Constructor</a></h3>
+<h4 id="layout-1"><a class="header" href="#layout-1">Layout()</a></h4>
+<pre><code class="language-pepper">construct(direction: Direction, constraints: Constraint[], margin: int = 0, spacing: int = 0)
+</code></pre>
+<p>Makes a layout.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>direction</code> — the direction the parts follow</li>
+<li><code>constraints</code> — one constraint per part</li>
+<li><code>margin</code> — cells left empty on every side of the area</li>
+<li><code>spacing</code> — cells left empty between neighboring parts</li>
+</ul>
+<h3 id="static-methods"><a class="header" href="#static-methods">Static methods</a></h3>
+<h4 id="vertical-1"><a class="header" href="#vertical-1">vertical</a></h4>
+<pre><code class="language-pepper">static vertical(constraints: Constraint[]): Layout
+</code></pre>
+<p>Makes a layout of parts top to bottom.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>constraints</code> — one constraint per part</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the layout</li>
+</ul>
+<h4 id="horizontal-1"><a class="header" href="#horizontal-1">horizontal</a></h4>
+<pre><code class="language-pepper">static horizontal(constraints: Constraint[]): Layout
+</code></pre>
+<p>Makes a layout of parts left to right.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>constraints</code> — one constraint per part</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the layout</li>
+</ul>
+<h3 id="methods-4"><a class="header" href="#methods-4">Methods</a></h3>
+<h4 id="split"><a class="header" href="#split">split</a></h4>
+<pre><code class="language-pepper">split(area: Rect): Rect[]
+</code></pre>
+<p>Splits <code>area</code> into one rectangle per constraint.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>area</code> — the area to split</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the parts, in order; parts that get no space are empty</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from list.pep by `pep-doc package`. Do not edit. -->
+<h1 id="listpep"><a class="header" href="#listpep">list.pep</a></h1>
+<p><code>List</code>: items one under another, one of them selected, scrolled to keep
+the selection in view; <code>ListState</code> holds the selection and the scroll.</p>
+<p>Source: <code>list.pep</code></p>
+<h2 id="liststate"><a class="header" href="#liststate">ListState</a></h2>
+<pre><code class="language-pepper">struct ListState
+</code></pre>
+<p>The state of a <code>List</code> or a <code>Table</code> from frame to frame: which item is
+selected and how far it is scrolled. Drawing moves <code>offset</code> so the
+selected item shows, and keeps <code>selected</code> below the item count.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import tui;
+
+var state = tui.ListState();
+state.select_next();   # selects item 0
+state.select_next();   # item 1
+</code></pre>
+<h3 id="fields-8"><a class="header" href="#fields-8">Fields</a></h3>
+<h4 id="selected"><a class="header" href="#selected">selected</a></h4>
+<pre><code class="language-pepper">var selected: ulong?
+</code></pre>
+<p>The selected item, or Empty for none.</p>
+<h4 id="offset"><a class="header" href="#offset">offset</a></h4>
+<pre><code class="language-pepper">var offset: ulong
+</code></pre>
+<p>The first item shown.</p>
+<h3 id="constructor-9"><a class="header" href="#constructor-9">Constructor</a></h3>
+<h4 id="liststate-1"><a class="header" href="#liststate-1">ListState()</a></h4>
+<pre><code class="language-pepper">construct()
+</code></pre>
+<p>Makes a state with nothing selected and no scroll.</p>
+<h3 id="methods-5"><a class="header" href="#methods-5">Methods</a></h3>
+<h4 id="selected_text"><a class="header" href="#selected_text">selected_text</a></h4>
+<pre><code class="language-pepper">selected_text(): String
+</code></pre>
+<p>Returns the text of the selected item, as the last draw with this
+state found it, without styles, for copying to the clipboard: a
+<code>List</code> item's lines joined by "\n", or a <code>Table</code> row's cells joined
+by a tab.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the text, or "" when nothing was selected at the last draw</li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import tui;
+
+var state = tui.ListState();
+state.select_next();
+# after a frame draws a List with this state:
+var copied = state.selected_text();   # the first item's text
+</code></pre>
+<h4 id="handle_mouse"><a class="header" href="#handle_mouse">handle_mouse</a></h4>
+<pre><code class="language-pepper">handle_mouse(event: term.MouseEvent): bool
+</code></pre>
+<p>Acts on a mouse event as the <code>List</code> or <code>Table</code> last drawn with this
+state places it: a left click on an item selects it, a partly shown
+last item included, and the wheel over the widget moves the
+selection. Clicks on the borders and a table's header select
+nothing (see <code>header_clicked</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>event</code> — the mouse event, as <code>Event.Mouse</code> gives it</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>true when it acted on the event</li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import tui;
+import [Event] from tui;
+
+var state = tui.ListState();
+# in the event loop: if (event is Mouse(mouse)) { state.handle_mouse(mouse); }
+</code></pre>
+<h4 id="header_clicked"><a class="header" href="#header_clicked">header_clicked</a></h4>
+<pre><code class="language-pepper">header_clicked(event: term.MouseEvent): ulong?
+</code></pre>
+<p>Returns which column of a <code>Table</code>'s header a left click landed on,
+as the table last drawn with this state places it. The table does
+nothing with header clicks itself; an app may sort by the column.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>event</code> — the mouse event, as <code>Event.Mouse</code> gives it</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the column, from 0, or Empty when the event is not a left click on a header cell</li>
+</ul>
+<h4 id="select"><a class="header" href="#select">select</a></h4>
+<pre><code class="language-pepper">select(index: ulong?)
+</code></pre>
+<p>Selects <code>index</code>, or nothing for Empty.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>index</code> — the item to select</li>
+</ul>
+<h4 id="select_next"><a class="header" href="#select_next">select_next</a></h4>
+<pre><code class="language-pepper">select_next()
+</code></pre>
+<p>Selects the next item, or the first when none is; drawing keeps it
+at the last item.</p>
+<h4 id="select_previous"><a class="header" href="#select_previous">select_previous</a></h4>
+<pre><code class="language-pepper">select_previous()
+</code></pre>
+<p>Selects the item before, staying at the first; the first when none
+is selected.</p>
+<h2 id="tablestate"><a class="header" href="#tablestate">TableState</a></h2>
+<pre><code class="language-pepper">type TableState = ListState
+</code></pre>
+<p>The state of a <code>Table</code>: the selected row and the scroll.</p>
+<h2 id="list"><a class="header" href="#list">List</a></h2>
+<pre><code class="language-pepper">struct List
+</code></pre>
+<p>Items one under another, each a <code>Text</code> (one or more rows), with the
+selected one highlighted and marked with <code>highlight_symbol</code>.</p>
+<p>As a <code>StatefulWidget&lt;ListState&gt;</code> it draws the selection and scrolls to
+it; as a <code>Widget</code> it draws the items from the top with none selected.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import tui;
+import [Block, List, ListState, Style] from tui;
+
+var list = List(["one", "two", "three"], block = Block(title = "Items"), highlight_symbol = "&gt; ");
+var state = ListState();
+state.select_next();
+# in a frame: frame.render_stateful_widget(list, area, state);
+</code></pre>
+<h3 id="fields-9"><a class="header" href="#fields-9">Fields</a></h3>
+<h4 id="items"><a class="header" href="#items">items</a></h4>
+<pre><code class="language-pepper">var items: Text[]
+</code></pre>
+<p>The items, top to bottom.</p>
+<h4 id="block-4"><a class="header" href="#block-4">block</a></h4>
+<pre><code class="language-pepper">var block: Block
+</code></pre>
+<p>The block around the list; borderless by default.</p>
+<h4 id="style-4"><a class="header" href="#style-4">style</a></h4>
+<pre><code class="language-pepper">var style: Style
+</code></pre>
+<p>The style of the whole area.</p>
+<h4 id="highlight_style"><a class="header" href="#highlight_style">highlight_style</a></h4>
+<pre><code class="language-pepper">var highlight_style: Style
+</code></pre>
+<p>The style laid over the selected item's rows.</p>
+<h4 id="highlight_symbol"><a class="header" href="#highlight_symbol">highlight_symbol</a></h4>
+<pre><code class="language-pepper">var highlight_symbol: String
+</code></pre>
+<p>Drawn before the selected item; the other items are indented by its
+width while an item is selected.</p>
+<h3 id="constructor-10"><a class="header" href="#constructor-10">Constructor</a></h3>
+<h4 id="list-1"><a class="header" href="#list-1">List()</a></h4>
+<pre><code class="language-pepper">construct( items: Text[], block: Block = Block(borders = BORDER_NONE), style: Style = Style(), highlight_style: Style = Style(reverse = true), highlight_symbol: String = "" )
+</code></pre>
+<p>Makes a list.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>items</code> — the items, top to bottom</li>
+<li><code>block</code> — the block around the list</li>
+<li><code>style</code> — the style of the whole area</li>
+<li><code>highlight_style</code> — the style of the selected item</li>
+<li><code>highlight_symbol</code> — the mark before the selected item</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from paragraph.pep by `pep-doc package`. Do not edit. -->
+<h1 id="paragraphpep"><a class="header" href="#paragraphpep">paragraph.pep</a></h1>
+<p><code>Paragraph</code>: text in an area, cut at its edge or wrapped at word
+boundaries, and scrolled.</p>
+<p>Source: <code>paragraph.pep</code></p>
+<h2 id="paragraph"><a class="header" href="#paragraph">Paragraph</a></h2>
+<pre><code class="language-pepper">struct Paragraph
+</code></pre>
+<p>Text drawn in an area: each line on its own row, cut at the right edge
+or, with <code>wrap</code>, wrapped at spaces (a word wider than the area is broken
+across rows). Widths are display widths, so wide characters and emoji
+take two columns.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import tui;
+import [Block, Paragraph] from tui;
+
+var help = Paragraph("Arrows move, q quits.", block = Block(title = "Help"), wrap = true);
+</code></pre>
+<h3 id="fields-10"><a class="header" href="#fields-10">Fields</a></h3>
+<h4 id="text"><a class="header" href="#text">text</a></h4>
+<pre><code class="language-pepper">var text: Text
+</code></pre>
+<p>The text.</p>
+<h4 id="block-5"><a class="header" href="#block-5">block</a></h4>
+<pre><code class="language-pepper">var block: Block
+</code></pre>
+<p>The block around the text; borderless by default.</p>
+<h4 id="style-5"><a class="header" href="#style-5">style</a></h4>
+<pre><code class="language-pepper">var style: Style
+</code></pre>
+<p>The style of the whole area.</p>
+<h4 id="wrap"><a class="header" href="#wrap">wrap</a></h4>
+<pre><code class="language-pepper">var wrap: bool
+</code></pre>
+<p>Whether to wrap lines wider than the area, rather than cut them.</p>
+<h4 id="trim"><a class="header" href="#trim">trim</a></h4>
+<pre><code class="language-pepper">var trim: bool
+</code></pre>
+<p>Whether wrapping drops the spaces that would start a row.</p>
+<h4 id="scroll"><a class="header" href="#scroll">scroll</a></h4>
+<pre><code class="language-pepper">var scroll: int
+</code></pre>
+<p>The rows to skip from the top: the scroll position.</p>
+<h4 id="alignment"><a class="header" href="#alignment">alignment</a></h4>
+<pre><code class="language-pepper">var alignment: Alignment
+</code></pre>
+<p>Where lines sit that do not choose for themselves.</p>
+<h3 id="constructor-11"><a class="header" href="#constructor-11">Constructor</a></h3>
+<h4 id="paragraph-1"><a class="header" href="#paragraph-1">Paragraph()</a></h4>
+<pre><code class="language-pepper">construct( text: Text, block: Block = Block(borders = BORDER_NONE), style: Style = Style(), wrap: bool = false, trim: bool = true, scroll: int = 0, alignment: Alignment = Alignment.Left )
+</code></pre>
+<p>Makes a paragraph.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>text</code> — the text</li>
+<li><code>block</code> — the block around it</li>
+<li><code>style</code> — the style of the whole area</li>
+<li><code>wrap</code> — whether to wrap long lines</li>
+<li><code>trim</code> — whether wrapping drops the spaces that would start a row</li>
+<li><code>scroll</code> — the rows to skip from the top</li>
+<li><code>alignment</code> — where lines sit</li>
+</ul>
+<h3 id="methods-6"><a class="header" href="#methods-6">Methods</a></h3>
+<h4 id="line_count"><a class="header" href="#line_count">line_count</a></h4>
+<pre><code class="language-pepper">line_count(width: int): int
+</code></pre>
+<p>Returns the number of rows the text takes at <code>width</code> columns, with
+this paragraph's wrapping: for a scrollbar's content length.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>width</code> — the width of the area inside the block</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the number of rows</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from restore.pep by `pep-doc package`. Do not edit. -->
+<h1 id="restorepep"><a class="header" href="#restorepep">restore.pep</a></h1>
+<p>Leaving the full-screen state however the program ends, private to the
+module: at exit, and on the signals that end it, a panic's SIGABRT
+included. pepper-term restores raw mode on these paths; this file adds the
+alternate screen and the cursor, and restores raw mode too where its
+handler takes the place of pepper-term's.</p>
+<p>Source: <code>restore.pep</code></p>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from scrollbar.pep by `pep-doc package`. Do not edit. -->
+<h1 id="scrollbarpep"><a class="header" href="#scrollbarpep">scrollbar.pep</a></h1>
+<p><code>Scrollbar</code>: a track along one edge of an area, with a thumb showing
+where the view is; <code>ScrollbarState</code> says how long the content is and
+where the view sits.</p>
+<p>Source: <code>scrollbar.pep</code></p>
+<h2 id="scrollbarorientation"><a class="header" href="#scrollbarorientation">ScrollbarOrientation</a></h2>
+<pre><code class="language-pepper">enum ScrollbarOrientation
+</code></pre>
+<p>Which edge of its area a <code>Scrollbar</code> is drawn along.</p>
+<h3 id="cases-4"><a class="header" href="#cases-4">Cases</a></h3>
+<h4 id="verticalright"><a class="header" href="#verticalright">VerticalRight</a></h4>
+<pre><code class="language-pepper">VerticalRight
+</code></pre>
+<p>Down the right edge.</p>
+<h4 id="verticalleft"><a class="header" href="#verticalleft">VerticalLeft</a></h4>
+<pre><code class="language-pepper">VerticalLeft
+</code></pre>
+<p>Down the left edge.</p>
+<h4 id="horizontalbottom"><a class="header" href="#horizontalbottom">HorizontalBottom</a></h4>
+<pre><code class="language-pepper">HorizontalBottom
+</code></pre>
+<p>Along the bottom edge.</p>
+<h4 id="horizontaltop"><a class="header" href="#horizontaltop">HorizontalTop</a></h4>
+<pre><code class="language-pepper">HorizontalTop
+</code></pre>
+<p>Along the top edge.</p>
+<h2 id="scrollbarstate"><a class="header" href="#scrollbarstate">ScrollbarState</a></h2>
+<pre><code class="language-pepper">struct ScrollbarState
+</code></pre>
+<p>How long the content a <code>Scrollbar</code> scrolls is, and where the view is.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import tui;
+
+var state = tui.ScrollbarState(100);   # 100 rows of content
+state.position = 40;                   # scrolled to row 40
+</code></pre>
+<h3 id="fields-11"><a class="header" href="#fields-11">Fields</a></h3>
+<h4 id="content_length"><a class="header" href="#content_length">content_length</a></h4>
+<pre><code class="language-pepper">var content_length: int
+</code></pre>
+<p>How long the content is, such as its number of rows; 0 draws no
+scrollbar.</p>
+<h4 id="position"><a class="header" href="#position">position</a></h4>
+<pre><code class="language-pepper">var position: int
+</code></pre>
+<p>The scroll position, such as the first row in view: from 0 to
+<code>content_length</code> less the rows in view.</p>
+<h4 id="viewport_content_length"><a class="header" href="#viewport_content_length">viewport_content_length</a></h4>
+<pre><code class="language-pepper">var viewport_content_length: int
+</code></pre>
+<p>How much of the content shows at once; 0 for the track's length.</p>
+<h3 id="constructor-12"><a class="header" href="#constructor-12">Constructor</a></h3>
+<h4 id="scrollbarstate-1"><a class="header" href="#scrollbarstate-1">ScrollbarState()</a></h4>
+<pre><code class="language-pepper">construct(content_length: int = 0, position: int = 0, viewport_content_length: int = 0)
+</code></pre>
+<p>Makes a state.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>content_length</code> — the number of positions</li>
+<li><code>position</code> — the current position</li>
+<li><code>viewport_content_length</code> — how many positions show at once</li>
+</ul>
+<h3 id="methods-7"><a class="header" href="#methods-7">Methods</a></h3>
+<h4 id="handle_mouse-1"><a class="header" href="#handle_mouse-1">handle_mouse</a></h4>
+<pre><code class="language-pepper">handle_mouse(event: term.MouseEvent, area: Rect): bool
+</code></pre>
+<p>Acts on a mouse event: the wheel over <code>area</code> scrolls by one, a left
+click on the track of the <code>Scrollbar</code> last drawn with this state
+moves the thumb there, and dragging the thumb moves it along. The
+position stays from 0 to <code>content_length</code> less the viewport.</p>
+<p>The state can scroll content with no scrollbar drawn, such as a
+<code>Paragraph</code> drawn with <code>scroll = state.position</code>; set
+<code>viewport_content_length</code> to the rows it shows.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>event</code> — the mouse event, as <code>Event.Mouse</code> gives it</li>
+<li><code>area</code> — where the wheel scrolls, such as the scrolled widget's area from <code>Terminal.area_of</code></li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>true when it acted on the event</li>
+</ul>
+<h2 id="scrollbar"><a class="header" href="#scrollbar">Scrollbar</a></h2>
+<pre><code class="language-pepper">struct Scrollbar
+</code></pre>
+<p>A scrollbar: arrows at the ends, a track between them, and a thumb as
+long as the share of the content in view, placed by the position.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import tui;
+import [Scrollbar, ScrollbarOrientation, ScrollbarState] from tui;
+
+var bar = Scrollbar(ScrollbarOrientation.VerticalRight);
+# in a frame: frame.render_stateful_widget(bar, area, ScrollbarState(100, 40));
+</code></pre>
+<h3 id="fields-12"><a class="header" href="#fields-12">Fields</a></h3>
+<h4 id="orientation"><a class="header" href="#orientation">orientation</a></h4>
+<pre><code class="language-pepper">var orientation: ScrollbarOrientation
+</code></pre>
+<p>The edge it is drawn along.</p>
+<h4 id="thumb_symbol"><a class="header" href="#thumb_symbol">thumb_symbol</a></h4>
+<pre><code class="language-pepper">var thumb_symbol: String
+</code></pre>
+<p>The thumb's symbol.</p>
+<h4 id="track_symbol"><a class="header" href="#track_symbol">track_symbol</a></h4>
+<pre><code class="language-pepper">var track_symbol: String
+</code></pre>
+<p>The track's symbol.</p>
+<h4 id="begin_symbol"><a class="header" href="#begin_symbol">begin_symbol</a></h4>
+<pre><code class="language-pepper">var begin_symbol: String
+</code></pre>
+<p>The symbol at the start (top or left); "" for none.</p>
+<h4 id="end_symbol"><a class="header" href="#end_symbol">end_symbol</a></h4>
+<pre><code class="language-pepper">var end_symbol: String
+</code></pre>
+<p>The symbol at the end (bottom or right); "" for none.</p>
+<h4 id="thumb_style"><a class="header" href="#thumb_style">thumb_style</a></h4>
+<pre><code class="language-pepper">var thumb_style: Style
+</code></pre>
+<p>The style of the thumb.</p>
+<h4 id="track_style"><a class="header" href="#track_style">track_style</a></h4>
+<pre><code class="language-pepper">var track_style: Style
+</code></pre>
+<p>The style of the track and the end symbols.</p>
+<h3 id="constructor-13"><a class="header" href="#constructor-13">Constructor</a></h3>
+<h4 id="scrollbar-1"><a class="header" href="#scrollbar-1">Scrollbar()</a></h4>
+<pre><code class="language-pepper">construct( orientation: ScrollbarOrientation = ScrollbarOrientation.VerticalRight, thumb_symbol: String = "█", track_symbol: String = "", begin_symbol: String = "", end_symbol: String = "", thumb_style: Style = Style(), track_style: Style = Style() )
+</code></pre>
+<p>Makes a scrollbar. Empty symbols take the defaults: "║", "▲" and "▼"
+for a vertical one, "═", "◄" and "►" for a horizontal one, and "█"
+for the thumb.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>orientation</code> — the edge it is drawn along</li>
+<li><code>thumb_symbol</code> — the thumb's symbol</li>
+<li><code>track_symbol</code> — the track's symbol</li>
+<li><code>begin_symbol</code> — the start symbol</li>
+<li><code>end_symbol</code> — the end symbol</li>
+<li><code>thumb_style</code> — the style of the thumb</li>
+<li><code>track_style</code> — the style of the track</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from sparkline.pep by `pep-doc package`. Do not edit. -->
+<h1 id="sparklinepep"><a class="header" href="#sparklinepep">sparkline.pep</a></h1>
+<p><code>Sparkline</code>: a row of tiny bars, one column per value.</p>
+<p>Source: <code>sparkline.pep</code></p>
+<h2 id="sparkline"><a class="header" href="#sparkline">Sparkline</a></h2>
+<pre><code class="language-pepper">struct Sparkline
+</code></pre>
+<p>One column per value, from the left, each a bar as tall as its value
+against <code>max</code>, drawn in eighths of a cell. Values past the area's width
+are not drawn.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import tui;
+import [Sparkline] from tui;
+
+var load = Sparkline([1, 4, 8, 2]);   # "▁▄█▂" in one row
+</code></pre>
+<h3 id="fields-13"><a class="header" href="#fields-13">Fields</a></h3>
+<h4 id="data-1"><a class="header" href="#data-1">data</a></h4>
+<pre><code class="language-pepper">var data: ulong[]
+</code></pre>
+<p>The values, left to right.</p>
+<h4 id="max-2"><a class="header" href="#max-2">max</a></h4>
+<pre><code class="language-pepper">var max: ulong
+</code></pre>
+<p>The value of a full-height bar; 0 for the largest value.</p>
+<h4 id="block-6"><a class="header" href="#block-6">block</a></h4>
+<pre><code class="language-pepper">var block: Block
+</code></pre>
+<p>The block around the sparkline; borderless by default.</p>
+<h4 id="style-6"><a class="header" href="#style-6">style</a></h4>
+<pre><code class="language-pepper">var style: Style
+</code></pre>
+<p>The style of the bars.</p>
+<h3 id="constructor-14"><a class="header" href="#constructor-14">Constructor</a></h3>
+<h4 id="sparkline-1"><a class="header" href="#sparkline-1">Sparkline()</a></h4>
+<pre><code class="language-pepper">construct(data: ulong[], max: ulong = 0, block: Block = Block(borders = BORDER_NONE), style: Style = Style())
+</code></pre>
+<p>Makes a sparkline.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>data</code> — the values, left to right</li>
+<li><code>max</code> — the value of a full-height bar; 0 for the largest value</li>
+<li><code>block</code> — the block around it</li>
+<li><code>style</code> — the style of the bars</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from style.pep by `pep-doc package`. Do not edit. -->
+<h1 id="stylepep"><a class="header" href="#stylepep">style.pep</a></h1>
+<p>Styles that layer: a <code>Style</code> sets only some of a cell's colors and
+modifiers, and <code>patch</code> lays one style over another, so a widget's style,
+a line's and a span's combine as Ratatui's do. Colors are pepper-term's
+<code>Color</code>: the 16 basic colors, the 256 indexed ones, and RGB.</p>
+<p>Source: <code>style.pep</code></p>
+<h2 id="bold"><a class="header" href="#bold">BOLD</a></h2>
+<pre><code class="language-pepper">const BOLD = 1
+</code></pre>
+<p>The bold modifier, for <code>Style.add_modifiers</code> and <code>Style.remove_modifiers</code>.</p>
+<h2 id="dim"><a class="header" href="#dim">DIM</a></h2>
+<pre><code class="language-pepper">const DIM = 2
+</code></pre>
+<p>The dim (faint) modifier.</p>
+<h2 id="italic"><a class="header" href="#italic">ITALIC</a></h2>
+<pre><code class="language-pepper">const ITALIC = 4
+</code></pre>
+<p>The italic modifier.</p>
+<h2 id="underline"><a class="header" href="#underline">UNDERLINE</a></h2>
+<pre><code class="language-pepper">const UNDERLINE = 8
+</code></pre>
+<p>The underline modifier.</p>
+<h2 id="reverse"><a class="header" href="#reverse">REVERSE</a></h2>
+<pre><code class="language-pepper">const REVERSE = 16
+</code></pre>
+<p>The reversed modifier: foreground and background swapped.</p>
+<h2 id="style-7"><a class="header" href="#style-7">Style</a></h2>
+<pre><code class="language-pepper">[Value] struct Style
+</code></pre>
+<p>Some of a cell's colors and modifiers. What a style leaves unset comes
+from the style beneath it when <code>patch</code> lays it over another.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import tui;
+import term;
+import [BasicColor, Color] from term;
+
+var base = tui.Style(foreground = Color.Basic(BasicColor.White), bold = true);
+var warning = tui.Style(foreground = Color.Basic(BasicColor.Yellow));
+var both = base.patch(warning);   # yellow and bold
+</code></pre>
+<h3 id="fields-14"><a class="header" href="#fields-14">Fields</a></h3>
+<h4 id="foreground"><a class="header" href="#foreground">foreground</a></h4>
+<pre><code class="language-pepper">var foreground: Color?
+</code></pre>
+<p>The text color, or Empty to keep the one beneath.</p>
+<h4 id="background"><a class="header" href="#background">background</a></h4>
+<pre><code class="language-pepper">var background: Color?
+</code></pre>
+<p>The background color, or Empty to keep the one beneath.</p>
+<h4 id="add_modifiers"><a class="header" href="#add_modifiers">add_modifiers</a></h4>
+<pre><code class="language-pepper">var add_modifiers: int
+</code></pre>
+<p>The modifiers this style turns on: <code>BOLD</code>, <code>DIM</code>, <code>ITALIC</code>,
+<code>UNDERLINE</code> and <code>REVERSE</code>, or-ed together.</p>
+<h4 id="remove_modifiers"><a class="header" href="#remove_modifiers">remove_modifiers</a></h4>
+<pre><code class="language-pepper">var remove_modifiers: int
+</code></pre>
+<p>The modifiers this style turns off.</p>
+<h3 id="constructor-15"><a class="header" href="#constructor-15">Constructor</a></h3>
+<h4 id="style-8"><a class="header" href="#style-8">Style()</a></h4>
+<pre><code class="language-pepper">construct( foreground: Color = Color.Default, background: Color = Color.Default, bold: bool = false, dim: bool = false, italic: bool = false, underline: bool = false, reverse: bool = false )
+</code></pre>
+<p>Makes a style. A color left as <code>Color.Default</code> is not set, so it
+comes from the style beneath; use <code>fg</code> or <code>bg</code> to set the terminal's
+own color over another.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>foreground</code> — the text color</li>
+<li><code>background</code> — the background color</li>
+<li><code>bold</code> — whether to turn bold on</li>
+<li><code>dim</code> — whether to turn dim on</li>
+<li><code>italic</code> — whether to turn italic on</li>
+<li><code>underline</code> — whether to turn underline on</li>
+<li><code>reverse</code> — whether to turn reversed on</li>
+</ul>
+<h3 id="methods-8"><a class="header" href="#methods-8">Methods</a></h3>
+<h4 id="fg"><a class="header" href="#fg">fg</a></h4>
+<pre><code class="language-pepper">fg(color: Color): Style
+</code></pre>
+<p>Returns this style with its text color set to <code>color</code>, even
+<code>Color.Default</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>color</code> — the text color</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the new style</li>
+</ul>
+<h4 id="bg"><a class="header" href="#bg">bg</a></h4>
+<pre><code class="language-pepper">bg(color: Color): Style
+</code></pre>
+<p>Returns this style with its background set to <code>color</code>, even
+<code>Color.Default</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>color</code> — the background color</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the new style</li>
+</ul>
+<h4 id="add_modifier"><a class="header" href="#add_modifier">add_modifier</a></h4>
+<pre><code class="language-pepper">add_modifier(modifiers: int): Style
+</code></pre>
+<p>Returns this style with <code>modifiers</code> turned on as well.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>modifiers</code> — the modifiers, such as <code>BOLD | ITALIC</code></li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the new style</li>
+</ul>
+<h4 id="remove_modifier"><a class="header" href="#remove_modifier">remove_modifier</a></h4>
+<pre><code class="language-pepper">remove_modifier(modifiers: int): Style
+</code></pre>
+<p>Returns this style with <code>modifiers</code> turned off.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>modifiers</code> — the modifiers, such as <code>BOLD</code></li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the new style</li>
+</ul>
+<h4 id="patch"><a class="header" href="#patch">patch</a></h4>
+<pre><code class="language-pepper">patch(other: Style): Style
+</code></pre>
+<p>Returns <code>other</code> laid over this style: its colors where it sets them,
+and its modifiers turned on or off over these.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>other</code> — the style on top</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the combined style</li>
+</ul>
+<h4 id="has"><a class="header" href="#has">has</a></h4>
+<pre><code class="language-pepper">has(modifier: int): bool
+</code></pre>
+<p>Returns whether this style turns <code>modifier</code> on.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>modifier</code> — one modifier, such as <code>BOLD</code></li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>true when it is on</li>
+</ul>
+<h4 id="to_term"><a class="header" href="#to_term">to_term</a></h4>
+<pre><code class="language-pepper">to_term(): term.Style
+</code></pre>
+<p>Returns the pepper-term style that draws this one: unset colors are
+the terminal's own.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the terminal style</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from table.pep by `pep-doc package`. Do not edit. -->
+<h1 id="tablepep"><a class="header" href="#tablepep">table.pep</a></h1>
+<p><code>Table</code>: rows of cells in columns sized by constraints, with a header and
+a selected row, scrolled like a <code>List</code>.</p>
+<p>Source: <code>table.pep</code></p>
+<h2 id="row"><a class="header" href="#row">Row</a></h2>
+<pre><code class="language-pepper">struct Row
+</code></pre>
+<p>One row of a <code>Table</code>: a <code>Text</code> per column.</p>
+<h3 id="fields-15"><a class="header" href="#fields-15">Fields</a></h3>
+<h4 id="cells"><a class="header" href="#cells">cells</a></h4>
+<pre><code class="language-pepper">var cells: Text[]
+</code></pre>
+<p>The cells, left to right.</p>
+<h4 id="style-9"><a class="header" href="#style-9">style</a></h4>
+<pre><code class="language-pepper">var style: Style
+</code></pre>
+<p>The style of the whole row.</p>
+<h4 id="height-1"><a class="header" href="#height-1">height</a></h4>
+<pre><code class="language-pepper">var height: int
+</code></pre>
+<p>The number of rows of the screen it takes.</p>
+<h3 id="constructor-16"><a class="header" href="#constructor-16">Constructor</a></h3>
+<h4 id="row-1"><a class="header" href="#row-1">Row()</a></h4>
+<pre><code class="language-pepper">construct(cells: Text[], style: Style = Style(), height: int = 1)
+</code></pre>
+<p>Makes a row.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>cells</code> — the cells, left to right</li>
+<li><code>style</code> — the style of the whole row</li>
+<li><code>height</code> — the rows of the screen it takes</li>
+</ul>
+<h2 id="table"><a class="header" href="#table">Table</a></h2>
+<pre><code class="language-pepper">struct Table
+</code></pre>
+<p>Rows of cells in columns, with an optional header row and the selected
+row highlighted. <code>widths</code> sizes the columns as a horizontal <code>Layout</code>
+does, with <code>column_spacing</code> between them.</p>
+<p>As a <code>StatefulWidget&lt;TableState&gt;</code> it draws the selection and scrolls to
+it; as a <code>Widget</code> it draws the rows from the top with none selected.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import tui;
+import [Constraint, Row, Table, TableState] from tui;
+
+var table = Table(
+    [Row(["Ada", "1815"]), Row(["Grace", "1906"])],
+    [Constraint.Length(6), Constraint.Length(4)],
+    header = Row(["Name", "Born"])
+);
+</code></pre>
+<h3 id="fields-16"><a class="header" href="#fields-16">Fields</a></h3>
+<h4 id="rows"><a class="header" href="#rows">rows</a></h4>
+<pre><code class="language-pepper">var rows: Row[]
+</code></pre>
+<p>The rows, top to bottom.</p>
+<h4 id="widths"><a class="header" href="#widths">widths</a></h4>
+<pre><code class="language-pepper">var widths: Constraint[]
+</code></pre>
+<p>One constraint per column.</p>
+<h4 id="header"><a class="header" href="#header">header</a></h4>
+<pre><code class="language-pepper">var header: Row
+</code></pre>
+<p>The header, drawn above the rows; a row with no cells for none.</p>
+<h4 id="block-7"><a class="header" href="#block-7">block</a></h4>
+<pre><code class="language-pepper">var block: Block
+</code></pre>
+<p>The block around the table; borderless by default.</p>
+<h4 id="style-10"><a class="header" href="#style-10">style</a></h4>
+<pre><code class="language-pepper">var style: Style
+</code></pre>
+<p>The style of the whole area.</p>
+<h4 id="column_spacing"><a class="header" href="#column_spacing">column_spacing</a></h4>
+<pre><code class="language-pepper">var column_spacing: int
+</code></pre>
+<p>Columns left empty between neighboring columns.</p>
+<h4 id="highlight_style-1"><a class="header" href="#highlight_style-1">highlight_style</a></h4>
+<pre><code class="language-pepper">var highlight_style: Style
+</code></pre>
+<p>The style laid over the selected row.</p>
+<h4 id="highlight_symbol-1"><a class="header" href="#highlight_symbol-1">highlight_symbol</a></h4>
+<pre><code class="language-pepper">var highlight_symbol: String
+</code></pre>
+<p>Drawn before the selected row; the other rows are indented by its
+width while a row is selected.</p>
+<h3 id="constructor-17"><a class="header" href="#constructor-17">Constructor</a></h3>
+<h4 id="table-1"><a class="header" href="#table-1">Table()</a></h4>
+<pre><code class="language-pepper">construct( rows: Row[], widths: Constraint[], header: Row = Row(Array&lt;Text&gt;()), block: Block = Block(borders = BORDER_NONE), style: Style = Style(), column_spacing: int = 1, highlight_style: Style = Style(reverse = true), highlight_symbol: String = "" )
+</code></pre>
+<p>Makes a table.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>rows</code> — the rows, top to bottom</li>
+<li><code>widths</code> — one constraint per column</li>
+<li><code>header</code> — the header row; one with no cells for none</li>
+<li><code>block</code> — the block around the table</li>
+<li><code>style</code> — the style of the whole area</li>
+<li><code>column_spacing</code> — columns between columns</li>
+<li><code>highlight_style</code> — the style of the selected row</li>
+<li><code>highlight_symbol</code> — the mark before the selected row</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from tabs.pep by `pep-doc package`. Do not edit. -->
+<h1 id="tabspep"><a class="header" href="#tabspep">tabs.pep</a></h1>
+<p><code>Tabs</code>: a row of titles with one selected.</p>
+<p>Source: <code>tabs.pep</code></p>
+<h2 id="tabs"><a class="header" href="#tabs">Tabs</a></h2>
+<pre><code class="language-pepper">struct Tabs
+</code></pre>
+<p>A row of titles, padded and separated by <code>divider</code>, with the selected
+one highlighted.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import tui;
+import [Tabs] from tui;
+
+var tabs = Tabs(["Files", "Search", "Help"], selected = 1);
+# " Files │ Search │ Help "
+</code></pre>
+<h3 id="fields-17"><a class="header" href="#fields-17">Fields</a></h3>
+<h4 id="titles"><a class="header" href="#titles">titles</a></h4>
+<pre><code class="language-pepper">var titles: Line[]
+</code></pre>
+<p>The titles, left to right.</p>
+<h4 id="selected-1"><a class="header" href="#selected-1">selected</a></h4>
+<pre><code class="language-pepper">var selected: ulong
+</code></pre>
+<p>The selected title.</p>
+<h4 id="block-8"><a class="header" href="#block-8">block</a></h4>
+<pre><code class="language-pepper">var block: Block
+</code></pre>
+<p>The block around the tabs; borderless by default.</p>
+<h4 id="style-11"><a class="header" href="#style-11">style</a></h4>
+<pre><code class="language-pepper">var style: Style
+</code></pre>
+<p>The style of the whole area.</p>
+<h4 id="highlight_style-2"><a class="header" href="#highlight_style-2">highlight_style</a></h4>
+<pre><code class="language-pepper">var highlight_style: Style
+</code></pre>
+<p>The style laid over the selected title.</p>
+<h4 id="divider"><a class="header" href="#divider">divider</a></h4>
+<pre><code class="language-pepper">var divider: String
+</code></pre>
+<p>Drawn between titles.</p>
+<h4 id="padding_left"><a class="header" href="#padding_left">padding_left</a></h4>
+<pre><code class="language-pepper">var padding_left: String
+</code></pre>
+<p>Drawn before each title.</p>
+<h4 id="padding_right"><a class="header" href="#padding_right">padding_right</a></h4>
+<pre><code class="language-pepper">var padding_right: String
+</code></pre>
+<p>Drawn after each title.</p>
+<h3 id="constructor-18"><a class="header" href="#constructor-18">Constructor</a></h3>
+<h4 id="tabs-1"><a class="header" href="#tabs-1">Tabs()</a></h4>
+<pre><code class="language-pepper">construct( titles: Line[], selected: ulong = 0, block: Block = Block(borders = BORDER_NONE), style: Style = Style(), highlight_style: Style = Style(reverse = true), divider: String = "│", padding_left: String = " ", padding_right: String = " " )
+</code></pre>
+<p>Makes tabs.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>titles</code> — the titles, left to right</li>
+<li><code>selected</code> — the selected title</li>
+<li><code>block</code> — the block around the tabs</li>
+<li><code>style</code> — the style of the whole area</li>
+<li><code>highlight_style</code> — the style of the selected title</li>
+<li><code>divider</code> — drawn between titles</li>
+<li><code>padding_left</code> — drawn before each title</li>
+<li><code>padding_right</code> — drawn after each title</li>
+</ul>
+<h3 id="methods-9"><a class="header" href="#methods-9">Methods</a></h3>
+<h4 id="handle_mouse-2"><a class="header" href="#handle_mouse-2">handle_mouse</a></h4>
+<pre><code class="language-pepper">handle_mouse(event: term.MouseEvent, area: Rect): bool
+</code></pre>
+<p>Selects the title a left click landed on, its padding included, with
+the tabs drawn in <code>area</code>. Keep the <code>Tabs</code> from frame to frame, or its
+<code>selected</code> in the app, to keep the choice.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>event</code> — the mouse event, as <code>Event.Mouse</code> gives it</li>
+<li><code>area</code> — where the tabs are drawn, such as <code>Terminal.area_of</code> gives</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>true when the click selected a title</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from terminal.pep by `pep-doc package`. Do not edit. -->
+<h1 id="terminalpep"><a class="header" href="#terminalpep">terminal.pep</a></h1>
+<p>Drawing a frame at a time: <code>Terminal</code> keeps the last frame's <code>Buffer</code>,
+has the app draw the next one into a <code>Frame</code>, and sends its backend only
+the cells that changed. <code>TermBackend</code> writes to the real terminal through
+pepper-term; <code>TestBackend</code> keeps the screen as a buffer, for tests.</p>
+<p>Source: <code>terminal.pep</code></p>
+<h2 id="backend"><a class="header" href="#backend">Backend</a></h2>
+<pre><code class="language-pepper">trait Backend
+</code></pre>
+<p>Where a <code>Terminal</code> sends its frames: a real terminal, or a buffer in a
+test.</p>
+<h3 id="methods-10"><a class="header" href="#methods-10">Methods</a></h3>
+<h4 id="size"><a class="header" href="#size">size</a></h4>
+<pre><code class="language-pepper">size(): Rect
+</code></pre>
+<p>Returns the screen's size, at the top left.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the screen's area</li>
+</ul>
+<h4 id="draw"><a class="header" href="#draw">draw</a></h4>
+<pre><code class="language-pepper">draw(updates: CellUpdate[])
+</code></pre>
+<p>Writes the cells in <code>updates</code> to the screen.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>updates</code> — the cells that changed, row by row</li>
+</ul>
+<h4 id="clear"><a class="header" href="#clear">clear</a></h4>
+<pre><code class="language-pepper">clear()
+</code></pre>
+<p>Erases the whole screen.</p>
+<h4 id="hide_cursor"><a class="header" href="#hide_cursor">hide_cursor</a></h4>
+<pre><code class="language-pepper">hide_cursor()
+</code></pre>
+<p>Hides the cursor.</p>
+<h4 id="show_cursor"><a class="header" href="#show_cursor">show_cursor</a></h4>
+<pre><code class="language-pepper">show_cursor(x: int, y: int)
+</code></pre>
+<p>Shows the cursor at column <code>x</code> and row <code>y</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>x</code> — the column</li>
+<li><code>y</code> — the row</li>
+</ul>
+<h4 id="flush"><a class="header" href="#flush">flush</a></h4>
+<pre><code class="language-pepper">flush()
+</code></pre>
+<p>Sends what was written to the screen.</p>
+<h2 id="termbackend"><a class="header" href="#termbackend">TermBackend</a></h2>
+<pre><code class="language-pepper">struct TermBackend
+</code></pre>
+<p>The backend of a real terminal: it writes escape sequences to standard
+output through pepper-term, all of a frame's in one write, and holds raw
+mode (and, when asked, mouse reporting and bracketed paste) on while it
+lives. Make one with <code>init</code>.</p>
+<h3 id="constructor-19"><a class="header" href="#constructor-19">Constructor</a></h3>
+<h4 id="termbackend-1"><a class="header" href="#termbackend-1">TermBackend()</a></h4>
+<pre><code class="language-pepper">construct(mouse: bool = false, paste: bool = false)
+</code></pre>
+<p>Makes the backend, turning raw mode on while it lives. <code>init</code> makes
+one and sets up the screen too.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>mouse</code> — whether to turn mouse reporting on too: presses, releases, drags and the wheel</li>
+<li><code>paste</code> — whether to turn bracketed paste on too, so a paste arrives as one <code>Event.Paste</code></li>
+</ul>
+<h2 id="testbackend"><a class="header" href="#testbackend">TestBackend</a></h2>
+<pre><code class="language-pepper">struct TestBackend
+</code></pre>
+<p>A backend that keeps the screen as a <code>Buffer</code>, for tests: draw frames to
+it, then compare <code>to_lines()</code> (and cells' styles) with what they should
+be.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import tui;
+import [Paragraph, Terminal, TestBackend] from tui;
+
+var backend = TestBackend(5, 1);
+var terminal = Terminal(backend);
+terminal.draw((frame) =&gt; {
+    frame.render_widget(Paragraph("hi"), frame.area);
+});
+assert(backend.to_lines()[0] == "hi   ", "drawn");
+</code></pre>
+<h3 id="fields-18"><a class="header" href="#fields-18">Fields</a></h3>
+<h4 id="buffer-2"><a class="header" href="#buffer-2">buffer</a></h4>
+<pre><code class="language-pepper">var buffer: Buffer
+</code></pre>
+<p>The screen.</p>
+<h4 id="cursor_visible"><a class="header" href="#cursor_visible">cursor_visible</a></h4>
+<pre><code class="language-pepper">var cursor_visible: bool
+</code></pre>
+<p>Whether the cursor shows.</p>
+<h4 id="cursor"><a class="header" href="#cursor">cursor</a></h4>
+<pre><code class="language-pepper">var cursor: (int, int)
+</code></pre>
+<p>Where the cursor was last shown: column and row.</p>
+<h3 id="constructor-20"><a class="header" href="#constructor-20">Constructor</a></h3>
+<h4 id="testbackend-1"><a class="header" href="#testbackend-1">TestBackend()</a></h4>
+<pre><code class="language-pepper">construct(width: int, height: int)
+</code></pre>
+<p>Makes a blank screen of <code>width</code> columns and <code>height</code> rows.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>width</code> — the columns</li>
+<li><code>height</code> — the rows</li>
+</ul>
+<h3 id="methods-11"><a class="header" href="#methods-11">Methods</a></h3>
+<h4 id="resize-1"><a class="header" href="#resize-1">resize</a></h4>
+<pre><code class="language-pepper">resize(width: int, height: int)
+</code></pre>
+<p>Changes the screen's size, blanking it, as a terminal window
+resized; the next <code>Terminal.draw</code> redraws everything.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>width</code> — the columns</li>
+<li><code>height</code> — the rows</li>
+</ul>
+<h4 id="to_lines-1"><a class="header" href="#to_lines-1">to_lines</a></h4>
+<pre><code class="language-pepper">to_lines(): String[]
+</code></pre>
+<p>Returns what the screen shows, a string per row.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the rows, top to bottom</li>
+</ul>
+<h2 id="frame"><a class="header" href="#frame">Frame</a></h2>
+<pre><code class="language-pepper">struct Frame
+</code></pre>
+<p>One frame being drawn: the area of the screen and the buffer widgets
+draw into. <code>Terminal.draw</code> makes one and hands it to the app.</p>
+<h3 id="fields-19"><a class="header" href="#fields-19">Fields</a></h3>
+<h4 id="area-2"><a class="header" href="#area-2">area</a></h4>
+<pre><code class="language-pepper">var area: Rect
+</code></pre>
+<p>The whole screen.</p>
+<h4 id="buffer-3"><a class="header" href="#buffer-3">buffer</a></h4>
+<pre><code class="language-pepper">var buffer: Buffer
+</code></pre>
+<p>The buffer the frame is drawn into.</p>
+<h3 id="constructor-21"><a class="header" href="#constructor-21">Constructor</a></h3>
+<h4 id="frame-1"><a class="header" href="#frame-1">Frame()</a></h4>
+<pre><code class="language-pepper">construct(buffer: Buffer)
+</code></pre>
+<p>Makes a frame that draws into <code>buffer</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>buffer</code> — the buffer to draw into; its area is the frame's</li>
+</ul>
+<h3 id="methods-12"><a class="header" href="#methods-12">Methods</a></h3>
+<h4 id="render_widget"><a class="header" href="#render_widget">render_widget</a></h4>
+<pre><code class="language-pepper">render_widget(widget: Widget, area: Rect, id: String = "")
+</code></pre>
+<p>Draws <code>widget</code> into <code>area</code> of the frame. With an <code>id</code>, the area is
+kept, for <code>Terminal.area_of</code> to tell after the frame which widget a
+mouse event landed on.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>widget</code> — the widget</li>
+<li><code>area</code> — where to draw it</li>
+<li><code>id</code> — a name for the area; "" keeps none</li>
+</ul>
+<h4 id="render_stateful_widget"><a class="header" href="#render_stateful_widget">render_stateful_widget</a></h4>
+<pre><code class="language-pepper">render_stateful_widget&lt;TState&gt;(widget: StatefulWidget&lt;TState&gt;, area: Rect, state: TState, id: String = "")
+</code></pre>
+<p>Draws <code>widget</code> into <code>area</code> of the frame with <code>state</code>, which the
+widget may change. With an <code>id</code>, the area is kept, as
+<code>render_widget</code> keeps it.</p>
+<p><strong>Type parameters</strong></p>
+<ul>
+<li><code>TState</code> — the state's type</li>
+</ul>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>widget</code> — the widget</li>
+<li><code>area</code> — where to draw it</li>
+<li><code>state</code> — its state</li>
+<li><code>id</code> — a name for the area; "" keeps none</li>
+</ul>
+<h4 id="set_cursor_position"><a class="header" href="#set_cursor_position">set_cursor_position</a></h4>
+<pre><code class="language-pepper">set_cursor_position(x: int, y: int)
+</code></pre>
+<p>Shows the cursor at column <code>x</code> and row <code>y</code> once the frame is drawn,
+as for a text field; it is hidden otherwise.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>x</code> — the column</li>
+<li><code>y</code> — the row</li>
+</ul>
+<h2 id="terminal"><a class="header" href="#terminal">Terminal</a></h2>
+<pre><code class="language-pepper">struct Terminal
+</code></pre>
+<p>A screen drawn a frame at a time, in immediate mode: each <code>draw</code> has the
+app draw the whole screen from its state, and writes to the backend only
+the cells that differ from the last frame. A change of the backend's
+size is noticed at the next <code>draw</code>, which then redraws everything.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import tui;
+import [Block, Terminal, TestBackend] from tui;
+
+var terminal = Terminal(TestBackend(20, 5));
+terminal.draw((frame) =&gt; {
+    frame.render_widget(Block(title = "Hello"), frame.area);
+});
+</code></pre>
+<h3 id="fields-20"><a class="header" href="#fields-20">Fields</a></h3>
+<h4 id="backend-1"><a class="header" href="#backend-1">backend</a></h4>
+<pre><code class="language-pepper">var backend: Backend
+</code></pre>
+<p>Where frames go.</p>
+<h4 id="clipboard"><a class="header" href="#clipboard">clipboard</a></h4>
+<pre><code class="language-pepper">var clipboard: term.Clipboard?
+</code></pre>
+<p>The clipboard <code>copy</code> uses, made with <code>ClipboardBackend.Auto</code> at the
+first copy while Empty; set it to choose another backend, or, in a
+test, <code>term.Clipboard(ClipboardBackend.Osc52)</code>, which writes to
+standard output only when it is a terminal.</p>
+<h3 id="constructor-22"><a class="header" href="#constructor-22">Constructor</a></h3>
+<h4 id="terminal-1"><a class="header" href="#terminal-1">Terminal()</a></h4>
+<pre><code class="language-pepper">construct(backend: Backend)
+</code></pre>
+<p>Makes a terminal that draws on <code>backend</code>. The backend's screen is
+taken to be blank.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>backend</code> — where frames go</li>
+</ul>
+<h3 id="methods-13"><a class="header" href="#methods-13">Methods</a></h3>
+<h4 id="size-1"><a class="header" href="#size-1">size</a></h4>
+<pre><code class="language-pepper">size(): Rect
+</code></pre>
+<p>Returns the screen's area, as of the last <code>draw</code>.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the area</li>
+</ul>
+<h4 id="area_of"><a class="header" href="#area_of">area_of</a></h4>
+<pre><code class="language-pepper">area_of(id: String): Rect
+</code></pre>
+<p>Returns the area the last <code>draw</code> drew the widget named <code>id</code> in, as
+<code>Frame.render_widget</code> kept it: for hit testing a mouse event, with
+<code>Rect.contains(mouse.column, mouse.row)</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>id</code> — the name given when drawing</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the area, or an empty <code>Rect</code> (which contains no cell) when the last frame drew nothing by that name</li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import tui;
+import [Paragraph, Terminal, TestBackend] from tui;
+
+var terminal = Terminal(TestBackend(20, 5));
+terminal.draw((frame) =&gt; {
+    frame.render_widget(Paragraph("hi"), frame.area, id = "greeting");
+});
+var hit = terminal.area_of("greeting").contains(3, 2);   # true
+</code></pre>
+<h4 id="draw-1"><a class="header" href="#draw-1">draw</a></h4>
+<pre><code class="language-pepper">draw(render: (Frame) =&gt; void): Buffer
+</code></pre>
+<p>Draws a frame: calls <code>render</code> with a blank <code>Frame</code> of the whole
+screen, then writes to the backend the cells that changed since the
+last frame, and flushes once.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>render</code> — draws the frame</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the buffer drawn, which the next frame is compared with</li>
+</ul>
+<h4 id="copy"><a class="header" href="#copy">copy</a></h4>
+<pre><code class="language-pepper">copy(text: String): Result&lt;void, term.ClipboardError&gt;
+</code></pre>
+<p>Copies <code>text</code> to the clipboard, through <code>clipboard</code>, a pepper-term
+<code>Clipboard</code> made at the first copy unless set
+(<code>ClipboardBackend.Auto</code>: the OS's clipboard
+when the program runs locally, else the terminal's, through OSC 52,
+which reaches the user's clipboard over SSH too). What the backend
+has not sent yet goes first, so the OSC 52 sequence is never written
+into the middle of a frame.</p>
+<p>Through OSC 52 the terminal does not say whether it copied, so
+success means the request was written.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>text</code> — the text to copy, such as a widget's <code>selected_text()</code></li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>nothing; a <code>ClipboardError</code> when there is no clipboard to reach, the text is past the OSC 52 limit, or the OS refused. Its <code>to_string()</code> holds none of the text, so it is safe to show</li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper"># in the event loop, on Ctrl+Y: copy what is selected, and say
+# in a status line if that failed
+var copied = terminal.copy(state.selected_text());
+if (copied.is_err()) {
+    status = $"could not copy: {copied.error()}";
+}
+</code></pre>
+<h4 id="clear-1"><a class="header" href="#clear-1">clear</a></h4>
+<pre><code class="language-pepper">clear()
+</code></pre>
+<p>Erases the screen; the next <code>draw</code> writes every cell.</p>
+<h2 id="init"><a class="header" href="#init">init</a></h2>
+<pre><code class="language-pepper">init(mouse: bool = false, paste: bool = false): Terminal
+</code></pre>
+<p>Sets up the terminal for a full-screen app and returns a <code>Terminal</code> that
+draws on it: raw mode on, the alternate screen, colors on, the cursor
+hidden, the screen blank. With <code>mouse</code>, mouse reporting is on too, and
+<code>Events.next</code> yields <code>Event.Mouse</code>; the terminal then keeps the mouse,
+so the user cannot select text with it (many terminals still select
+with Shift held). With <code>paste</code>, bracketed paste is on too, and a paste
+arrives as one <code>Event.Paste</code> rather than as typed keys.</p>
+<p>Call <code>restore</code> when the app ends. The terminal is also restored when the
+program ends without it: at the end of <code>main</code>, on a panic, and on
+SIGTERM, SIGHUP, SIGINT or SIGQUIT (POSIX). <code>process.exit</code> runs no exit
+handlers, so call <code>restore</code> before it.</p>
+<p>Call it before anything else turns pepper-term's raw mode on (a
+<code>term.RawMode</code>, a <code>term.LineReader</code> reading a line): its signal handlers
+would then stay in place of these, and a panic would leave the alternate
+screen up. To set the terminal up again after <code>restore</code>, let the old
+<code>Terminal</code> go first: its backend's raw mode, freed later, would turn the
+new one's off.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>mouse</code> — whether to turn mouse reporting on: presses, releases, drags and the wheel</li>
+<li><code>paste</code> — whether to turn bracketed paste on</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the terminal</li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import tui;
+
+main(): int {
+    var terminal = tui.init(mouse = true, paste = true);
+    # ... draw frames and read events ...
+    tui.restore();
+    return 0;
+}
+</code></pre>
+<h2 id="restore"><a class="header" href="#restore">restore</a></h2>
+<pre><code class="language-pepper">restore()
+</code></pre>
+<p>Puts the terminal back as <code>init</code> found it: the main screen, the cursor
+showing, and raw mode, mouse reporting and bracketed paste off. Does
+nothing when it is already restored.</p>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from text.pep by `pep-doc package`. Do not edit. -->
+<h1 id="textpep"><a class="header" href="#textpep">text.pep</a></h1>
+<p>Styled text: a <code>Span</code> is a run of text in one style, a <code>Line</code> a row of
+spans, and a <code>Text</code> a stack of lines. Each converts from a <code>String</code>, so a
+widget that takes a <code>Text</code> takes a plain string too.</p>
+<p>Source: <code>text.pep</code></p>
+<h2 id="alignment-1"><a class="header" href="#alignment-1">Alignment</a></h2>
+<pre><code class="language-pepper">enum Alignment
+</code></pre>
+<p>Where a line sits in the width it is given.</p>
+<h3 id="cases-5"><a class="header" href="#cases-5">Cases</a></h3>
+<h4 id="left"><a class="header" href="#left">Left</a></h4>
+<pre><code class="language-pepper">Left
+</code></pre>
+<p>Against the left edge.</p>
+<h4 id="center"><a class="header" href="#center">Center</a></h4>
+<pre><code class="language-pepper">Center
+</code></pre>
+<p>In the middle; an odd leftover column goes to the right.</p>
+<h4 id="right-1"><a class="header" href="#right-1">Right</a></h4>
+<pre><code class="language-pepper">Right
+</code></pre>
+<p>Against the right edge.</p>
+<h2 id="span"><a class="header" href="#span">Span</a></h2>
+<pre><code class="language-pepper">struct Span
+</code></pre>
+<p>A run of text in one style.</p>
+<h3 id="fields-21"><a class="header" href="#fields-21">Fields</a></h3>
+<h4 id="content-1"><a class="header" href="#content-1">content</a></h4>
+<pre><code class="language-pepper">var content: String
+</code></pre>
+<p>The text; a line break in it is drawn as nothing.</p>
+<h4 id="style-12"><a class="header" href="#style-12">style</a></h4>
+<pre><code class="language-pepper">var style: Style
+</code></pre>
+<p>The style laid over the line's.</p>
+<h3 id="constructors"><a class="header" href="#constructors">Constructors</a></h3>
+<h4 id="span-1"><a class="header" href="#span-1">Span()</a></h4>
+<pre><code class="language-pepper">[Implicit] construct(content: String)
+</code></pre>
+<p>Makes an unstyled span, also from a <code>String</code> where a <code>Span</code> is
+expected.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>content</code> — the text</li>
+</ul>
+<h4 id="span-2"><a class="header" href="#span-2">Span()</a></h4>
+<pre><code class="language-pepper">construct(content: String, style: Style)
+</code></pre>
+<p>Makes a span.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>content</code> — the text</li>
+<li><code>style</code> — its style</li>
+</ul>
+<h3 id="methods-14"><a class="header" href="#methods-14">Methods</a></h3>
+<h4 id="width-1"><a class="header" href="#width-1">width</a></h4>
+<pre><code class="language-pepper">width(): int
+</code></pre>
+<p>Returns the number of columns the span takes.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the display width</li>
+</ul>
+<h2 id="line"><a class="header" href="#line">Line</a></h2>
+<pre><code class="language-pepper">struct Line
+</code></pre>
+<p>A row of spans, with a style beneath them all and an alignment.</p>
+<h3 id="fields-22"><a class="header" href="#fields-22">Fields</a></h3>
+<h4 id="spans"><a class="header" href="#spans">spans</a></h4>
+<pre><code class="language-pepper">var spans: Span[]
+</code></pre>
+<p>The spans, left to right.</p>
+<h4 id="style-13"><a class="header" href="#style-13">style</a></h4>
+<pre><code class="language-pepper">var style: Style
+</code></pre>
+<p>The style beneath the spans' own.</p>
+<h4 id="alignment-2"><a class="header" href="#alignment-2">alignment</a></h4>
+<pre><code class="language-pepper">var alignment: Alignment?
+</code></pre>
+<p>Where the line sits, when it is narrower than its area; Empty to
+follow the widget's.</p>
+<h3 id="constructors-1"><a class="header" href="#constructors-1">Constructors</a></h3>
+<h4 id="line-1"><a class="header" href="#line-1">Line()</a></h4>
+<pre><code class="language-pepper">[Implicit] construct(content: String)
+</code></pre>
+<p>Makes an unstyled line of one span, also from a <code>String</code> where a
+<code>Line</code> is expected.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>content</code> — the text</li>
+</ul>
+<h4 id="line-2"><a class="header" href="#line-2">Line()</a></h4>
+<pre><code class="language-pepper">construct(spans: Span[], style: Style = Style())
+</code></pre>
+<p>Makes a line.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>spans</code> — the spans, left to right</li>
+<li><code>style</code> — the style beneath them</li>
+</ul>
+<h3 id="methods-15"><a class="header" href="#methods-15">Methods</a></h3>
+<h4 id="width-2"><a class="header" href="#width-2">width</a></h4>
+<pre><code class="language-pepper">width(): int
+</code></pre>
+<p>Returns the number of columns the line takes.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the display width</li>
+</ul>
+<h4 id="aligned"><a class="header" href="#aligned">aligned</a></h4>
+<pre><code class="language-pepper">aligned(alignment: Alignment): Line
+</code></pre>
+<p>Returns this line, aligned to <code>alignment</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>alignment</code> — where it sits</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>this line</li>
+</ul>
+<h2 id="text-1"><a class="header" href="#text-1">Text</a></h2>
+<pre><code class="language-pepper">struct Text
+</code></pre>
+<p>Lines stacked top to bottom, with a style beneath them all.</p>
+<h3 id="fields-23"><a class="header" href="#fields-23">Fields</a></h3>
+<h4 id="lines"><a class="header" href="#lines">lines</a></h4>
+<pre><code class="language-pepper">var lines: Line[]
+</code></pre>
+<p>The lines, top to bottom.</p>
+<h4 id="style-14"><a class="header" href="#style-14">style</a></h4>
+<pre><code class="language-pepper">var style: Style
+</code></pre>
+<p>The style beneath the lines' own.</p>
+<h3 id="constructors-2"><a class="header" href="#constructors-2">Constructors</a></h3>
+<h4 id="text-2"><a class="header" href="#text-2">Text()</a></h4>
+<pre><code class="language-pepper">[Implicit] construct(content: String)
+</code></pre>
+<p>Makes unstyled text, a line for each "\n"-separated part of
+<code>content</code>, also from a <code>String</code> where a <code>Text</code> is expected.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>content</code> — the text</li>
+</ul>
+<h4 id="text-3"><a class="header" href="#text-3">Text()</a></h4>
+<pre><code class="language-pepper">construct(lines: Line[], style: Style = Style())
+</code></pre>
+<p>Makes text.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>lines</code> — the lines, top to bottom</li>
+<li><code>style</code> — the style beneath them</li>
+</ul>
+<h3 id="methods-16"><a class="header" href="#methods-16">Methods</a></h3>
+<h4 id="height-2"><a class="header" href="#height-2">height</a></h4>
+<pre><code class="language-pepper">height(): int
+</code></pre>
+<p>Returns the number of lines.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the height in rows</li>
+</ul>
+<h4 id="width-3"><a class="header" href="#width-3">width</a></h4>
+<pre><code class="language-pepper">width(): int
+</code></pre>
+<p>Returns the width of the widest line.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the width in columns</li>
+</ul>
+<h4 id="to_string-1"><a class="header" href="#to_string-1">to_string</a></h4>
+<pre><code class="language-pepper">to_string(): String
+</code></pre>
+<p>Returns the text without its styles: the lines' spans, the lines
+joined by "\n".</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the plain text</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from text_input.pep by `pep-doc package`. Do not edit. -->
+<h1 id="text_inputpep"><a class="header" href="#text_inputpep">text_input.pep</a></h1>
+<p><code>TextInput</code>: an editable field of text, on one row or wrapped over
+many, with a cursor, a selection and pastes; <code>TextInputState</code> holds the
+text and the cursor from frame to frame.</p>
+<p>Source: <code>text_input.pep</code></p>
+<h2 id="textinputstate"><a class="header" href="#textinputstate">TextInputState</a></h2>
+<pre><code class="language-pepper">struct TextInputState
+</code></pre>
+<p>The state of a <code>TextInput</code>: the text, the cursor, the selection and the
+scroll. Feed it the app's events with <code>handle_event</code>; drawing scrolls it
+to keep the cursor in view.</p>
+<p>The cursor and the selection move a character at a time: a code point
+with the combining marks after it. Widths are display widths, so a wide
+character takes two columns.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import tui;
+
+var state = tui.TextInputState();
+state.set_text("hello");
+state.paste("\nworld");   # one row: the line end becomes a space
+assert(state.text == "hello world", "pasted at the cursor");
+</code></pre>
+<h3 id="fields-24"><a class="header" href="#fields-24">Fields</a></h3>
+<h4 id="multiline"><a class="header" href="#multiline">multiline</a></h4>
+<pre><code class="language-pepper">var multiline: bool
+</code></pre>
+<p>Whether the field takes line ends, from Enter and pastes, and wraps
+its text over the rows of its area; otherwise it is one row that
+scrolls sideways.</p>
+<h4 id="keep_newlines"><a class="header" href="#keep_newlines">keep_newlines</a></h4>
+<pre><code class="language-pepper">var keep_newlines: bool
+</code></pre>
+<p>For a one-row field, whether a paste keeps its line ends, each shown
+as "⏎", rather than turning each into a space.</p>
+<h4 id="paste_truncated"><a class="header" href="#paste_truncated">paste_truncated</a></h4>
+<pre><code class="language-pepper">var paste_truncated: bool
+</code></pre>
+<p>Whether the last paste was cut short: pepper-term keeps only the
+start of a paste past its limit (a megabyte).</p>
+<h4 id="scroll-1"><a class="header" href="#scroll-1">scroll</a></h4>
+<pre><code class="language-pepper">var scroll: int
+</code></pre>
+<p>The first column (one row) or the first row (multiline) shown.</p>
+<h3 id="properties-1"><a class="header" href="#properties-1">Properties</a></h3>
+<h4 id="text-4"><a class="header" href="#text-4">text</a></h4>
+<pre><code class="language-pepper">var text: String { get; }
+</code></pre>
+<p>The text.</p>
+<h4 id="cursor-1"><a class="header" href="#cursor-1">cursor</a></h4>
+<pre><code class="language-pepper">var cursor: ulong { get; }
+</code></pre>
+<p>The cursor, as a byte offset into <code>text</code>.</p>
+<h3 id="constructor-23"><a class="header" href="#constructor-23">Constructor</a></h3>
+<h4 id="textinputstate-1"><a class="header" href="#textinputstate-1">TextInputState()</a></h4>
+<pre><code class="language-pepper">construct(multiline: bool = false, keep_newlines: bool = false)
+</code></pre>
+<p>Makes an empty field.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>multiline</code> — whether it takes line ends and wraps</li>
+<li><code>keep_newlines</code> — for one row, whether pastes keep line ends</li>
+</ul>
+<h3 id="methods-17"><a class="header" href="#methods-17">Methods</a></h3>
+<h4 id="set_text"><a class="header" href="#set_text">set_text</a></h4>
+<pre><code class="language-pepper">set_text(value: String)
+</code></pre>
+<p>Replaces the text, putting the cursor at its end and selecting
+nothing.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the new text</li>
+</ul>
+<h4 id="select_all"><a class="header" href="#select_all">select_all</a></h4>
+<pre><code class="language-pepper">select_all()
+</code></pre>
+<p>Selects the whole text, with the cursor at its end.</p>
+<h4 id="selected_text-1"><a class="header" href="#selected_text-1">selected_text</a></h4>
+<pre><code class="language-pepper">selected_text(): String
+</code></pre>
+<p>Returns the selected text, for copying to the clipboard.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the text between the selection's ends, or "" when nothing is selected</li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import tui;
+
+var state = tui.TextInputState();
+state.set_text("hello");
+state.select_all();
+assert(state.selected_text() == "hello", "all of it");
+</code></pre>
+<h4 id="insert"><a class="header" href="#insert">insert</a></h4>
+<pre><code class="language-pepper">insert(value: String)
+</code></pre>
+<p>Puts <code>value</code> in at the cursor, in place of the selection, and moves
+the cursor past it. Line ends go in as they are, even in a one-row
+field (which shows each as "⏎"); <code>paste</code> turns them into spaces
+there.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the text to put in</li>
+</ul>
+<h4 id="paste-1"><a class="header" href="#paste-1">paste</a></h4>
+<pre><code class="language-pepper">paste(value: String, truncated: bool = false)
+</code></pre>
+<p>Puts a paste in at the cursor, as <code>Event.Paste</code> gives it: in a
+one-row field without <code>keep_newlines</code>, each line end becomes a
+space. Sets <code>paste_truncated</code> to <code>truncated</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the pasted text, with "\n" line ends</li>
+<li><code>truncated</code> — whether the paste was cut short</li>
+</ul>
+<h4 id="handle_event"><a class="header" href="#handle_event">handle_event</a></h4>
+<pre><code class="language-pepper">handle_event(event: Event): bool
+</code></pre>
+<p>Acts on an event: a key (see <code>handle_key</code>) or a paste.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>event</code> — the event, as <code>Events.next</code> gives it</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>true when it acted on the event; the app handles the rest</li>
+</ul>
+<h4 id="handle_key"><a class="header" href="#handle_key">handle_key</a></h4>
+<pre><code class="language-pepper">handle_key(key: term.KeyEvent): bool
+</code></pre>
+<p>Acts on a key as a text field does: a character goes in at the
+cursor; Backspace and Delete remove the selection or the character
+before or after the cursor; Left, Right, Home and End move the
+cursor (to the start or end of its line), selecting with Shift held;
+in a multiline field Enter puts in a line end, and Up and Down move
+a row as the last draw wrapped it.</p>
+<p>Keys with Ctrl or Alt, Tab, Escape, and Enter in a one-row field are
+left to the app.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>key</code> — the key, as <code>Event.Key</code> gives it</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>true when it acted on the key</li>
+</ul>
+<h2 id="textinput"><a class="header" href="#textinput">TextInput</a></h2>
+<pre><code class="language-pepper">struct TextInput
+</code></pre>
+<p>An editable field of text, drawn from a <code>TextInputState</code>: the text,
+the selection in <code>selection_style</code>, and the cursor as a cell in
+<code>cursor_style</code>. A one-row field scrolls sideways to keep the cursor in
+view; a multiline one wraps at the area's width, keeps its line ends,
+and scrolls down.</p>
+<p>Text that could move the cursor or send the terminal a sequence shows
+harmlessly: a line end in a one-row field as "⏎", and any other control
+character (C0, DEL and C1) as U+FFFD.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import tui;
+import [Block, TextInput, TextInputState] from tui;
+
+var input = TextInput(block = Block(title = "Name"));
+var state = TextInputState();
+# in the event loop: state.handle_event(event.value());
+# in a frame: frame.render_stateful_widget(input, area, state);
+</code></pre>
+<h3 id="fields-25"><a class="header" href="#fields-25">Fields</a></h3>
+<h4 id="block-9"><a class="header" href="#block-9">block</a></h4>
+<pre><code class="language-pepper">var block: Block
+</code></pre>
+<p>The block around the field; borderless by default.</p>
+<h4 id="style-15"><a class="header" href="#style-15">style</a></h4>
+<pre><code class="language-pepper">var style: Style
+</code></pre>
+<p>The style of the whole area.</p>
+<h4 id="selection_style"><a class="header" href="#selection_style">selection_style</a></h4>
+<pre><code class="language-pepper">var selection_style: Style
+</code></pre>
+<p>The style laid over the selected text.</p>
+<h4 id="cursor_style"><a class="header" href="#cursor_style">cursor_style</a></h4>
+<pre><code class="language-pepper">var cursor_style: Style
+</code></pre>
+<p>The style laid over the cell at the cursor; <code>Style()</code> hides the
+cursor, as for a field without focus.</p>
+<h3 id="constructor-24"><a class="header" href="#constructor-24">Constructor</a></h3>
+<h4 id="textinput-1"><a class="header" href="#textinput-1">TextInput()</a></h4>
+<pre><code class="language-pepper">construct( block: Block = Block(borders = BORDER_NONE), style: Style = Style(), selection_style: Style = Style(reverse = true), cursor_style: Style = Style(reverse = true) )
+</code></pre>
+<p>Makes a text field.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>block</code> — the block around it</li>
+<li><code>style</code> — the style of the whole area</li>
+<li><code>selection_style</code> — the style of the selected text</li>
+<li><code>cursor_style</code> — the style of the cell at the cursor</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from widget.pep by `pep-doc package`. Do not edit. -->
+<h1 id="widgetpep"><a class="header" href="#widgetpep">widget.pep</a></h1>
+<p>The widget traits: a <code>Widget</code> draws itself into a buffer, and a
+<code>StatefulWidget</code> draws with state the app keeps between frames, such as
+a list's selection.</p>
+<p>Source: <code>widget.pep</code></p>
+<h2 id="widget"><a class="header" href="#widget">Widget</a></h2>
+<pre><code class="language-pepper">trait Widget
+</code></pre>
+<p>Something that draws itself into an area of a buffer. Every widget of
+this package is one, and an app writes its own the same way.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import tui;
+import [Buffer, Rect, Style, Widget] from tui;
+
+struct Hello {}
+
+extend Hello with Widget {
+    render(area: Rect, buffer: Buffer) {
+        buffer.set_string(area.x, area.y, "hello", Style(), area.width);
+    }
+}
+</code></pre>
+<h3 id="methods-18"><a class="header" href="#methods-18">Methods</a></h3>
+<h4 id="render"><a class="header" href="#render">render</a></h4>
+<pre><code class="language-pepper">render(area: Rect, buffer: Buffer)
+</code></pre>
+<p>Draws the widget into <code>area</code> of <code>buffer</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>area</code> — where to draw; the widget draws nothing outside it</li>
+<li><code>buffer</code> — the buffer to draw into</li>
+</ul>
+<h2 id="statefulwidget"><a class="header" href="#statefulwidget">StatefulWidget</a></h2>
+<pre><code class="language-pepper">trait StatefulWidget&lt;TState&gt;
+</code></pre>
+<p>A widget that draws with state the app keeps from frame to frame: the
+widget reads it, and may change it (a list scrolls its offset to keep
+the selection in view).</p>
+<p><strong>Type parameters</strong></p>
+<ul>
+<li><code>TState</code> — the state's type, such as <code>ListState</code></li>
+</ul>
+<h3 id="methods-19"><a class="header" href="#methods-19">Methods</a></h3>
+<h4 id="render-1"><a class="header" href="#render-1">render</a></h4>
+<pre><code class="language-pepper">render(area: Rect, buffer: Buffer, state: TState)
+</code></pre>
+<p>Draws the widget into <code>area</code> of <code>buffer</code> with <code>state</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>area</code> — where to draw</li>
+<li><code>buffer</code> — the buffer to draw into</li>
+<li><code>state</code> — the state, which the widget may change</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from width.pep by `pep-doc package`. Do not edit. -->
+<h1 id="widthpep"><a class="header" href="#widthpep">width.pep</a></h1>
+<p>Display width: how many terminal columns a character or a string takes.
+Wide characters (CJK, Hangul, fullwidth forms, most emoji) take two,
+combining marks and other zero-width characters none, and every other
+printable character one.</p>
+<p>Source: <code>width.pep</code></p>
+<h2 id="char_width"><a class="header" href="#char_width">char_width</a></h2>
+<pre><code class="language-pepper">char_width(code_point: uint): int
+</code></pre>
+<p>Returns the number of columns <code>code_point</code> takes on a terminal: 2 for a
+wide character, 0 for a combining mark, a zero-width character or a
+control character, and 1 otherwise.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>code_point</code> — the Unicode code point</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>0, 1 or 2</li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import tui;
+
+assert(tui.char_width(97) == 1, "'a'");
+assert(tui.char_width(30028) == 2, "'界'");
+</code></pre>
+<h2 id="display_width"><a class="header" href="#display_width">display_width</a></h2>
+<pre><code class="language-pepper">display_width(value: String): int
+</code></pre>
+<p>Returns the number of columns <code>text</code> takes on a terminal: the sum of
+<code>char_width</code> over its code points.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the text to measure</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the width in columns</li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import tui;
+
+assert(tui.display_width("ab界") == 4, "two narrow, one wide");
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+
+    </div>
+    </body>
+</html>

@@ -1,0 +1,342 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>jsonrpc.pep - lsp</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">lsp</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <!-- Generated from jsonrpc.pep by `pep-doc package`. Do not edit. -->
+<h1 id="jsonrpcpep"><a class="header" href="#jsonrpcpep">jsonrpc.pep</a></h1>
+<p>Source: <code>jsonrpc.pep</code></p>
+<h2 id="parse_error"><a class="header" href="#parse_error">PARSE_ERROR</a></h2>
+<pre><code class="language-pepper">const PARSE_ERROR = -32700
+</code></pre>
+<p>The request was not valid JSON.</p>
+<h2 id="invalid_request"><a class="header" href="#invalid_request">INVALID_REQUEST</a></h2>
+<pre><code class="language-pepper">const INVALID_REQUEST = -32600
+</code></pre>
+<p>The message was not a valid request.</p>
+<h2 id="method_not_found"><a class="header" href="#method_not_found">METHOD_NOT_FOUND</a></h2>
+<pre><code class="language-pepper">const METHOD_NOT_FOUND = -32601
+</code></pre>
+<p>No handler for the method.</p>
+<h2 id="invalid_params"><a class="header" href="#invalid_params">INVALID_PARAMS</a></h2>
+<pre><code class="language-pepper">const INVALID_PARAMS = -32602
+</code></pre>
+<p>The parameters did not match the method.</p>
+<h2 id="internal_error"><a class="header" href="#internal_error">INTERNAL_ERROR</a></h2>
+<pre><code class="language-pepper">const INTERNAL_ERROR = -32603
+</code></pre>
+<p>The server failed while handling the request.</p>
+<h2 id="server_not_initialized"><a class="header" href="#server_not_initialized">SERVER_NOT_INITIALIZED</a></h2>
+<pre><code class="language-pepper">const SERVER_NOT_INITIALIZED = -32002
+</code></pre>
+<p>A request other than <code>initialize</code> arrived before it.</p>
+<h2 id="request_cancelled"><a class="header" href="#request_cancelled">REQUEST_CANCELLED</a></h2>
+<pre><code class="language-pepper">const REQUEST_CANCELLED = -32800
+</code></pre>
+<p>The server cancelled the request.</p>
+<h2 id="content_modified"><a class="header" href="#content_modified">CONTENT_MODIFIED</a></h2>
+<pre><code class="language-pepper">const CONTENT_MODIFIED = -32801
+</code></pre>
+<p>The document changed while the request ran, so its answer is stale.</p>
+<h2 id="request_failed"><a class="header" href="#request_failed">REQUEST_FAILED</a></h2>
+<pre><code class="language-pepper">const REQUEST_FAILED = -32803
+</code></pre>
+<p>The request failed though it was valid.</p>
+<h2 id="responseerror"><a class="header" href="#responseerror">ResponseError</a></h2>
+<pre><code class="language-pepper">struct ResponseError
+</code></pre>
+<p>The error a request answers with instead of a result.</p>
+<h3 id="fields"><a class="header" href="#fields">Fields</a></h3>
+<h4 id="code"><a class="header" href="#code">code</a></h4>
+<pre><code class="language-pepper">var code: int
+</code></pre>
+<p>One of the codes above, or a server's own.</p>
+<h4 id="message"><a class="header" href="#message">message</a></h4>
+<pre><code class="language-pepper">var message: String
+</code></pre>
+<p>What went wrong, for a person to read.</p>
+<h4 id="data"><a class="header" href="#data">data</a></h4>
+<pre><code class="language-pepper">var data: JsonValue?
+</code></pre>
+<p>More about the error, sent as is; Empty sends none.</p>
+<h3 id="constructor"><a class="header" href="#constructor">Constructor</a></h3>
+<h4 id="responseerror-1"><a class="header" href="#responseerror-1">ResponseError()</a></h4>
+<pre><code class="language-pepper">construct(code: int = INTERNAL_ERROR, message: String = "")
+</code></pre>
+<p>Creates an error.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>code</code> — the error code</li>
+<li><code>message</code> — what went wrong</li>
+</ul>
+<h3 id="static-methods"><a class="header" href="#static-methods">Static methods</a></h3>
+<h4 id="method_not_found-1"><a class="header" href="#method_not_found-1">method_not_found</a></h4>
+<pre><code class="language-pepper">static method_not_found(method: String): ResponseError
+</code></pre>
+<p>The error for a method the server does not handle.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>method</code> — the method's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>a <code>METHOD_NOT_FOUND</code> error naming it</li>
+</ul>
+<h4 id="invalid_params-1"><a class="header" href="#invalid_params-1">invalid_params</a></h4>
+<pre><code class="language-pepper">static invalid_params(message: String): ResponseError
+</code></pre>
+<p>The error for parameters that do not match the method.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>message</code> — what is wrong with them</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>an <code>INVALID_PARAMS</code> error</li>
+</ul>
+<h4 id="internal"><a class="header" href="#internal">internal</a></h4>
+<pre><code class="language-pepper">static internal(message: String): ResponseError
+</code></pre>
+<p>The error for a request the server failed to handle.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>message</code> — what went wrong</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>an <code>INTERNAL_ERROR</code> error</li>
+</ul>
+<h3 id="methods"><a class="header" href="#methods">Methods</a></h3>
+<h4 id="to_json"><a class="header" href="#to_json">to_json</a></h4>
+<pre><code class="language-pepper">to_json(): JsonValue
+</code></pre>
+<p>The error as JSON, the <code>error</code> member of a response.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the error object</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="document.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="server.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="document.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="server.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

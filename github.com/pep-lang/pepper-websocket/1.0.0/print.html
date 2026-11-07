@@ -1,0 +1,776 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>websocket</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">websocket</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <!-- Generated from pep.toml by `pep-doc package`. Do not edit. -->
+<h1 id="websocket-100"><a class="header" href="#websocket-100">websocket 1.0.0</a></h1>
+<p>WebSocket (RFC 6455): client and server over TCP and TLS</p>
+<h2 id="pages"><a class="header" href="#pages">Pages</a></h2>
+<ul>
+<li><a href="module.html">websocket</a>: WebSocket (RFC 6455): a client and a server, over TCP (<code>ws://</code>) and TLS (<code>wss://</code>).</li>
+<li><a href="frame.html">frame.pep</a>: WebSocket frames (RFC 6455, section 5): <code>Opcode</code>, <code>Frame</code>, and the wire format with <code>encode_frame</code> and <code>decode_frame</code>.</li>
+<li><a href="handshake.html">handshake.pep</a>: The opening handshake (RFC 6455, section 4): the HTTP/1.1 <code>Upgrade</code> request a client sends and the <code>101 Switching Protocols</code> a server answers it with, tied together by <code>accept_key</code>.</li>
+<li><a href="websocket.html">websocket.pep</a>: A WebSocket connection: <code>WebSocket</code>, opened by <code>connect</code> (a client) or <code>accept</code> (a server), and the <code>Message</code>s it sends and receives.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from module.pep by `pep-doc package`. Do not edit. -->
+<h1 id="websocket"><a class="header" href="#websocket">websocket</a></h1>
+<p>WebSocket (RFC 6455): a client and a server, over TCP (<code>ws://</code>) and TLS
+(<code>wss://</code>).</p>
+<p>Bring it in with <code>import websocket</code>. A client opens a connection with
+<code>WebSocket.connect(url)</code>; a server runs the handshake on a connection its
+listener accepted with <code>WebSocket.accept(tcp)</code>. Either end then sends
+with <code>send_text</code> and <code>send_binary</code> and gets whole messages from
+<code>receive</code>, which joins fragments, answers pings, and checks the protocol.
+Every call that waits parks only its task inside <code>async.run</code>.</p>
+<ul>
+<li><code>WebSocket</code>, <code>Message</code>: a connection and what it receives</li>
+<li><code>Frame</code>, <code>Opcode</code>, <code>encode_frame</code>, <code>decode_frame</code>: the wire format</li>
+<li><code>accept_key</code>: the handshake's <code>Sec-WebSocket-Accept</code></li>
+<li><code>CLOSE_NORMAL</code> and the other <code>CLOSE_</code> constants: close status codes</li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import async;
+import io;
+import websocket;
+
+main(): int {
+    async.run(() =&gt; {
+        var listener = io.TcpListener.bind(io.SocketAddress.parse("127.0.0.1:0").value()).value();
+        var port = listener.local_address().value().port();
+        var server = async.Task&lt;void&gt;.spawn_local(() =&gt; {
+            var (tcp, peer) = listener.accept().value();
+            var socket = websocket.WebSocket.accept(tcp).value();
+            var message = socket.receive().value();
+            socket.send_text("echo: " + message.text());
+            socket.receive();   # the client's close
+        });
+        var client = websocket.WebSocket.connect($"ws://127.0.0.1:{port}/").value();
+        client.send_text("hi");
+        print(client.receive().value().text());   # echo: hi
+        client.close();
+        server.join();
+    });
+    return 0;
+}
+</code></pre>
+<p>Source: <code>module.pep</code></p>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from frame.pep by `pep-doc package`. Do not edit. -->
+<h1 id="framepep"><a class="header" href="#framepep">frame.pep</a></h1>
+<p>WebSocket frames (RFC 6455, section 5): <code>Opcode</code>, <code>Frame</code>, and the wire
+format with <code>encode_frame</code> and <code>decode_frame</code>.</p>
+<p>Source: <code>frame.pep</code></p>
+<h2 id="opcode"><a class="header" href="#opcode">Opcode</a></h2>
+<pre><code class="language-pepper">enum Opcode: u8
+</code></pre>
+<p>What a frame carries (RFC 6455, section 5.2).</p>
+<h3 id="cases"><a class="header" href="#cases">Cases</a></h3>
+<h4 id="continuation"><a class="header" href="#continuation">Continuation</a></h4>
+<pre><code class="language-pepper">Continuation = 0
+</code></pre>
+<p>A later fragment of a message that a <code>Text</code> or <code>Binary</code> frame began.</p>
+<h4 id="text"><a class="header" href="#text">Text</a></h4>
+<pre><code class="language-pepper">Text = 1
+</code></pre>
+<p>A UTF-8 text message, or its first fragment.</p>
+<h4 id="binary"><a class="header" href="#binary">Binary</a></h4>
+<pre><code class="language-pepper">Binary = 2
+</code></pre>
+<p>A binary message, or its first fragment.</p>
+<h4 id="close"><a class="header" href="#close">Close</a></h4>
+<pre><code class="language-pepper">Close = 8
+</code></pre>
+<p>The closing handshake: an optional status code and reason.</p>
+<h4 id="ping"><a class="header" href="#ping">Ping</a></h4>
+<pre><code class="language-pepper">Ping = 9
+</code></pre>
+<p>A ping, which the peer answers with a <code>Pong</code> carrying the same bytes.</p>
+<h4 id="pong"><a class="header" href="#pong">Pong</a></h4>
+<pre><code class="language-pepper">Pong = 10
+</code></pre>
+<p>The answer to a <code>Ping</code>, or an unasked heartbeat.</p>
+<h2 id="max_control_payload"><a class="header" href="#max_control_payload">MAX_CONTROL_PAYLOAD</a></h2>
+<pre><code class="language-pepper">const MAX_CONTROL_PAYLOAD: ulong = 125
+</code></pre>
+<p>The most bytes a control frame (<code>Close</code>, <code>Ping</code>, <code>Pong</code>) may carry.</p>
+<h2 id="frame"><a class="header" href="#frame">Frame</a></h2>
+<pre><code class="language-pepper">struct Frame
+</code></pre>
+<p>One frame: an opcode, the payload, and whether it ends its message.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">var frame = websocket.Frame(websocket.Opcode.Text, "hi".bytes());
+var bytes = websocket.encode_frame(frame);   # 81 02 68 69
+</code></pre>
+<h3 id="fields"><a class="header" href="#fields">Fields</a></h3>
+<h4 id="fin"><a class="header" href="#fin">fin</a></h4>
+<pre><code class="language-pepper">var fin: bool
+</code></pre>
+<p>Whether this is the last frame of its message (the FIN bit).</p>
+<h4 id="opcode-1"><a class="header" href="#opcode-1">opcode</a></h4>
+<pre><code class="language-pepper">var opcode: Opcode
+</code></pre>
+<p>What the frame carries.</p>
+<h4 id="payload"><a class="header" href="#payload">payload</a></h4>
+<pre><code class="language-pepper">var payload: u8[]
+</code></pre>
+<p>The payload, unmasked.</p>
+<h4 id="masked"><a class="header" href="#masked">masked</a></h4>
+<pre><code class="language-pepper">var masked: bool
+</code></pre>
+<p>Whether the frame arrived masked. <code>decode_frame</code> sets it;
+<code>encode_frame</code> masks by its <code>mask</code> argument instead.</p>
+<h3 id="constructor"><a class="header" href="#constructor">Constructor</a></h3>
+<h4 id="frame-1"><a class="header" href="#frame-1">Frame()</a></h4>
+<pre><code class="language-pepper">construct(opcode: Opcode, payload: u8[], fin: bool = true)
+</code></pre>
+<p>Creates a frame.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>opcode</code> — what the frame carries</li>
+<li><code>payload</code> — the payload, unmasked</li>
+<li><code>fin</code> — false for a fragment that more frames of its message follow</li>
+</ul>
+<h3 id="methods"><a class="header" href="#methods">Methods</a></h3>
+<h4 id="is_control"><a class="header" href="#is_control">is_control</a></h4>
+<pre><code class="language-pepper">is_control(): bool
+</code></pre>
+<p>Returns whether this is a control frame: <code>Close</code>, <code>Ping</code> or <code>Pong</code>.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>true for an opcode of 8 or more</li>
+</ul>
+<h2 id="encode_frame"><a class="header" href="#encode_frame">encode_frame</a></h2>
+<pre><code class="language-pepper">encode_frame(frame: Frame): u8[]
+</code></pre>
+<p>Encodes <code>frame</code> unmasked, as a server sends it.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>frame</code> — the frame to encode</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the frame's bytes: header, then payload</li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">var bytes = websocket.encode_frame(websocket.Frame(websocket.Opcode.Ping, Array&lt;u8&gt;()));
+# bytes holds 89 00
+</code></pre>
+<h2 id="encode_frame-1"><a class="header" href="#encode_frame-1">encode_frame</a></h2>
+<pre><code class="language-pepper">encode_frame(frame: Frame, mask: u8[]): u8[]
+</code></pre>
+<p>Encodes <code>frame</code> masked with <code>mask</code>, as a client sends it: each payload
+byte is XORed with <code>mask[i % 4]</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>frame</code> — the frame to encode</li>
+<li><code>mask</code> — the four-byte masking key; a client picks a new random one for each frame</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the frame's bytes: header, masking key, then masked payload</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if <code>mask</code> does not hold exactly 4 bytes</li>
+</ul>
+<h2 id="decode_frame"><a class="header" href="#decode_frame">decode_frame</a></h2>
+<pre><code class="language-pepper">decode_frame(bytes: u8[], max_payload: ulong): Result&lt;(Frame, ulong)?&gt;
+</code></pre>
+<p>Decodes the frame at the start of <code>bytes</code>.</p>
+<p>Checks what RFC 6455 requires of every frame: no reserved bits (this
+package negotiates no extensions), a known opcode, and a control frame
+that is not fragmented and carries at most <code>MAX_CONTROL_PAYLOAD</code> bytes.
+Whether a frame must be masked depends on who sent it, so that is left to
+the caller (see <code>Frame.masked</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>bytes</code> — the received bytes, starting at a frame</li>
+<li><code>max_payload</code> — the largest payload to accept</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the frame and how many bytes of <code>bytes</code> it took; Empty when <code>bytes</code> does not hold the whole frame yet; an error when the frame breaks the protocol or its payload is over <code>max_payload</code></li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">var bytes = [0x81 as u8, 0x02, 0x68, 0x69];   # "hi", unmasked
+var (frame, used) = websocket.decode_frame(bytes, 1024).value().value();
+# frame.opcode == websocket.Opcode.Text, used == 4
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from handshake.pep by `pep-doc package`. Do not edit. -->
+<h1 id="handshakepep"><a class="header" href="#handshakepep">handshake.pep</a></h1>
+<p>The opening handshake (RFC 6455, section 4): the HTTP/1.1 <code>Upgrade</code>
+request a client sends and the <code>101 Switching Protocols</code> a server answers
+it with, tied together by <code>accept_key</code>.</p>
+<p>Source: <code>handshake.pep</code></p>
+<h2 id="accept_key"><a class="header" href="#accept_key">accept_key</a></h2>
+<pre><code class="language-pepper">accept_key(key: String): String
+</code></pre>
+<p>Returns the <code>Sec-WebSocket-Accept</code> value that answers a client's
+<code>Sec-WebSocket-Key</code>: the base64 of the SHA-1 of the key followed by RFC
+6455's GUID.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>key</code> — the client's <code>Sec-WebSocket-Key</code>, as sent</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the server's <code>Sec-WebSocket-Accept</code></li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper"># The example of RFC 6455, section 1.3:
+websocket.accept_key("dGhlIHNhbXBsZSBub25jZQ==");   # "s3pPLMBiTxaQ9kYGzzhZRbK+xOo="
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from websocket.pep by `pep-doc package`. Do not edit. -->
+<h1 id="websocketpep"><a class="header" href="#websocketpep">websocket.pep</a></h1>
+<p>A WebSocket connection: <code>WebSocket</code>, opened by <code>connect</code> (a client) or
+<code>accept</code> (a server), and the <code>Message</code>s it sends and receives.</p>
+<p>Source: <code>websocket.pep</code></p>
+<h2 id="default_max_message_size"><a class="header" href="#default_max_message_size">DEFAULT_MAX_MESSAGE_SIZE</a></h2>
+<pre><code class="language-pepper">const DEFAULT_MAX_MESSAGE_SIZE: ulong = 16777216
+</code></pre>
+<p>The largest message a <code>WebSocket</code> receives by default: 16 MiB.</p>
+<h2 id="close_normal"><a class="header" href="#close_normal">CLOSE_NORMAL</a></h2>
+<pre><code class="language-pepper">const CLOSE_NORMAL: int = 1000
+</code></pre>
+<p>The status code of a normal close (RFC 6455, section 7.4.1).</p>
+<h2 id="close_going_away"><a class="header" href="#close_going_away">CLOSE_GOING_AWAY</a></h2>
+<pre><code class="language-pepper">const CLOSE_GOING_AWAY: int = 1001
+</code></pre>
+<p>The status code of an endpoint going away, such as a server shutting down.</p>
+<h2 id="close_protocol_error"><a class="header" href="#close_protocol_error">CLOSE_PROTOCOL_ERROR</a></h2>
+<pre><code class="language-pepper">const CLOSE_PROTOCOL_ERROR: int = 1002
+</code></pre>
+<p>The status code of a protocol error.</p>
+<h2 id="close_unsupported_data"><a class="header" href="#close_unsupported_data">CLOSE_UNSUPPORTED_DATA</a></h2>
+<pre><code class="language-pepper">const CLOSE_UNSUPPORTED_DATA: int = 1003
+</code></pre>
+<p>The status code of a message of a type the endpoint does not accept.</p>
+<h2 id="close_no_status"><a class="header" href="#close_no_status">CLOSE_NO_STATUS</a></h2>
+<pre><code class="language-pepper">const CLOSE_NO_STATUS: int = 1005
+</code></pre>
+<p>The code a <code>Message</code> reports for a close frame that carried no code; it
+is never sent.</p>
+<h2 id="close_invalid_data"><a class="header" href="#close_invalid_data">CLOSE_INVALID_DATA</a></h2>
+<pre><code class="language-pepper">const CLOSE_INVALID_DATA: int = 1007
+</code></pre>
+<p>The status code of a text message that is not valid UTF-8.</p>
+<h2 id="close_policy_violation"><a class="header" href="#close_policy_violation">CLOSE_POLICY_VIOLATION</a></h2>
+<pre><code class="language-pepper">const CLOSE_POLICY_VIOLATION: int = 1008
+</code></pre>
+<p>The status code of a message that breaks the endpoint's policy.</p>
+<h2 id="close_too_big"><a class="header" href="#close_too_big">CLOSE_TOO_BIG</a></h2>
+<pre><code class="language-pepper">const CLOSE_TOO_BIG: int = 1009
+</code></pre>
+<p>The status code of a message over the endpoint's size limit.</p>
+<h2 id="close_internal_error"><a class="header" href="#close_internal_error">CLOSE_INTERNAL_ERROR</a></h2>
+<pre><code class="language-pepper">const CLOSE_INTERNAL_ERROR: int = 1011
+</code></pre>
+<p>The status code of a server failing on an unexpected condition.</p>
+<h2 id="message"><a class="header" href="#message">Message</a></h2>
+<pre><code class="language-pepper">struct Message
+</code></pre>
+<p>A message a <code>WebSocket</code> received: text, binary, or the peer's close.</p>
+<p>A message split into fragments arrives whole. For a <code>Close</code>,
+<code>close_code</code> and <code>text()</code> say why the peer closed.</p>
+<h3 id="fields-1"><a class="header" href="#fields-1">Fields</a></h3>
+<h4 id="opcode-2"><a class="header" href="#opcode-2">opcode</a></h4>
+<pre><code class="language-pepper">var opcode: Opcode
+</code></pre>
+<p><code>Opcode.Text</code>, <code>Opcode.Binary</code>, or <code>Opcode.Close</code>.</p>
+<h4 id="data"><a class="header" href="#data">data</a></h4>
+<pre><code class="language-pepper">var data: u8[]
+</code></pre>
+<p>The message's bytes; for a <code>Close</code>, the reason's UTF-8 bytes.</p>
+<h4 id="close_code"><a class="header" href="#close_code">close_code</a></h4>
+<pre><code class="language-pepper">var close_code: int
+</code></pre>
+<p>For a <code>Close</code>, the peer's status code (<code>CLOSE_NO_STATUS</code> when it gave
+none); 0 otherwise.</p>
+<h3 id="constructor-1"><a class="header" href="#constructor-1">Constructor</a></h3>
+<h4 id="message-1"><a class="header" href="#message-1">Message()</a></h4>
+<pre><code class="language-pepper">construct(opcode: Opcode, data: u8[], close_code: int = 0)
+</code></pre>
+<p>Creates a message.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>opcode</code> — <code>Opcode.Text</code>, <code>Opcode.Binary</code>, or <code>Opcode.Close</code></li>
+<li><code>data</code> — the message's bytes</li>
+<li><code>close_code</code> — the peer's status code, for a <code>Close</code></li>
+</ul>
+<h3 id="methods-1"><a class="header" href="#methods-1">Methods</a></h3>
+<h4 id="is_text"><a class="header" href="#is_text">is_text</a></h4>
+<pre><code class="language-pepper">is_text(): bool
+</code></pre>
+<p>Returns whether this is a text message.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>true for <code>Opcode.Text</code></li>
+</ul>
+<h4 id="is_binary"><a class="header" href="#is_binary">is_binary</a></h4>
+<pre><code class="language-pepper">is_binary(): bool
+</code></pre>
+<p>Returns whether this is a binary message.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>true for <code>Opcode.Binary</code></li>
+</ul>
+<h4 id="is_close"><a class="header" href="#is_close">is_close</a></h4>
+<pre><code class="language-pepper">is_close(): bool
+</code></pre>
+<p>Returns whether this is the peer's close, after which the connection
+is closed.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>true for <code>Opcode.Close</code></li>
+</ul>
+<h4 id="text-1"><a class="header" href="#text-1">text</a></h4>
+<pre><code class="language-pepper">text(): String
+</code></pre>
+<p>Returns <code>data</code> as text: the message of a text message, or the reason
+of a close. A <code>WebSocket</code> checks both are valid UTF-8.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the text; a byte of a binary message that is not valid UTF-8 becomes U+FFFD</li>
+</ul>
+<h2 id="websocket-1"><a class="header" href="#websocket-1">WebSocket</a></h2>
+<pre><code class="language-pepper">struct WebSocket
+</code></pre>
+<p>One WebSocket connection (RFC 6455), as a client (<code>connect</code>) or a server
+(<code>accept</code>), over TCP or TLS.</p>
+<p><code>receive</code> returns the next text or binary message whole, joining
+fragments, answering pings, and skipping pongs; when the peer closes, it
+answers the close and returns a <code>Close</code> message. <code>send_text</code>,
+<code>send_binary</code> and <code>ping</code> send; <code>close</code> runs the closing handshake. A
+frame that breaks the protocol, an invalid UTF-8 text, or a message over
+<code>max_message_size</code> closes the connection with the matching status code
+and makes <code>receive</code> return an error.</p>
+<p>A connection belongs to one task at a time: use it from the task that
+opened it, or hand it over. In a task of <code>async.run</code>, a call that waits
+parks only the task.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import websocket;
+
+main(): int {
+    var socket = websocket.WebSocket.connect("ws://localhost:8080/chat").value();
+    socket.send_text("hello");
+    var reply = socket.receive().value();
+    print(reply.text());
+    socket.close();
+    return 0;
+}
+</code></pre>
+<h3 id="fields-2"><a class="header" href="#fields-2">Fields</a></h3>
+<h4 id="request"><a class="header" href="#request">request</a></h4>
+<pre><code class="language-pepper">var request: http.Request
+</code></pre>
+<p>The opening handshake's request: on a server, the client's (its
+<code>url</code> is the target, such as <code>/chat?room=1</code>, and its headers hold
+<code>Origin</code>, <code>Sec-WebSocket-Protocol</code> and the like); on a client, the one
+it sent.</p>
+<h4 id="max_message_size"><a class="header" href="#max_message_size">max_message_size</a></h4>
+<pre><code class="language-pepper">var max_message_size: ulong
+</code></pre>
+<p>The largest message <code>receive</code> accepts; a larger one closes the
+connection with <code>CLOSE_TOO_BIG</code>.</p>
+<h3 id="constructor-2"><a class="header" href="#constructor-2">Constructor</a></h3>
+<h4 id="websocket-2"><a class="header" href="#websocket-2">WebSocket()</a></h4>
+<pre><code class="language-pepper">construct(tcp: io.TcpStream, stream: tls.TlsStream?, client: bool)
+</code></pre>
+<p>Wraps a connected stream that has finished no handshake. Use
+<code>connect</code> or <code>accept</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>tcp</code> — the TCP connection</li>
+<li><code>stream</code> — the TLS stream over <code>tcp</code>, or Empty for plain TCP</li>
+<li><code>client</code> — true for the client end</li>
+</ul>
+<h3 id="static-methods"><a class="header" href="#static-methods">Static methods</a></h3>
+<h4 id="connect"><a class="header" href="#connect">connect</a></h4>
+<pre><code class="language-pepper">static connect(url: String): Result&lt;WebSocket&gt;
+</code></pre>
+<p>Opens a connection to <code>url</code>, a <code>ws://</code> or <code>wss://</code> URL, and runs the
+opening handshake. <code>wss://</code> checks the server's certificate against
+the system's root certificates.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>url</code> — the server's URL, such as <code>wss://example.com/chat</code></li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the open connection; an error when the URL is not a WebSocket URL, the connection fails, or the server refuses the upgrade</li>
+</ul>
+<h4 id="connect-1"><a class="header" href="#connect-1">connect</a></h4>
+<pre><code class="language-pepper">static connect(url: String, connector: tls.TlsConnector): Result&lt;WebSocket&gt;
+</code></pre>
+<p>Opens a connection to <code>url</code> and runs the opening handshake, using
+<code>connector</code> for <code>wss://</code>, such as one that trusts a private
+certificate authority.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>url</code> — the server's URL, such as <code>wss://example.com/chat</code></li>
+<li><code>connector</code> — the TLS connector for <code>wss://</code>; unused for <code>ws://</code></li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the open connection; an error when the URL is not a WebSocket URL, the connection fails, or the server refuses the upgrade</li>
+</ul>
+<h4 id="accept"><a class="header" href="#accept">accept</a></h4>
+<pre><code class="language-pepper">static accept(tcp: io.TcpStream): Result&lt;WebSocket&gt;
+</code></pre>
+<p>Runs the server's side of the opening handshake on a connection a
+listener accepted: reads the client's upgrade request and answers it
+with <code>101 Switching Protocols</code>.</p>
+<p>A request that is not a valid upgrade is answered with <code>400 Bad Request</code> (or <code>426 Upgrade Required</code> for a version other than 13), and
+the connection is closed.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>tcp</code> — the accepted connection</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the open connection, whose <code>request</code> is the client's; an error when the request is not a valid upgrade or the connection fails</li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">var listener = io.TcpListener.bind(io.SocketAddress.parse("0.0.0.0:8080").value()).value();
+var (tcp, peer) = listener.accept().value();
+var socket = websocket.WebSocket.accept(tcp).value();
+var message = socket.receive().value();
+socket.send_text("you said " + message.text());
+</code></pre>
+<h4 id="accept-1"><a class="header" href="#accept-1">accept</a></h4>
+<pre><code class="language-pepper">static accept(tcp: io.TcpStream, stream: tls.TlsStream): Result&lt;WebSocket&gt;
+</code></pre>
+<p>Runs the server's side of the opening handshake on a TLS connection
+(<code>wss://</code>) that a <code>tls.TlsAcceptor</code> accepted. See <code>accept(tcp)</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>tcp</code> — the accepted TCP connection</li>
+<li><code>stream</code> — the TLS stream over <code>tcp</code></li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the open connection, whose <code>request</code> is the client's; an error when the request is not a valid upgrade or the connection fails</li>
+</ul>
+<h3 id="methods-2"><a class="header" href="#methods-2">Methods</a></h3>
+<h4 id="is_open"><a class="header" href="#is_open">is_open</a></h4>
+<pre><code class="language-pepper">is_open(): bool
+</code></pre>
+<p>Returns whether the connection is still open: no close was sent or
+received and no error closed it.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>true until the closing handshake starts or the connection fails</li>
+</ul>
+<h4 id="set_read_timeout"><a class="header" href="#set_read_timeout">set_read_timeout</a></h4>
+<pre><code class="language-pepper">set_read_timeout(milliseconds: ulong): Result&lt;void&gt;
+</code></pre>
+<p>Makes <code>receive</code> and <code>close</code> give up with an error when nothing
+arrives for <code>milliseconds</code>, which also closes the connection. By
+default they wait as long as it takes, so set one when a peer might
+never answer.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>milliseconds</code> — how long a read may wait; 0 to wait forever</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>an Ok result; the platform error when the socket refuses it</li>
+</ul>
+<h4 id="send_text"><a class="header" href="#send_text">send_text</a></h4>
+<pre><code class="language-pepper">send_text(message: String): Result&lt;void&gt;
+</code></pre>
+<p>Sends a text message in one frame.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>message</code> — the text</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>an Ok result once it is written; an error when the connection is closed or the write fails</li>
+</ul>
+<h4 id="send_binary"><a class="header" href="#send_binary">send_binary</a></h4>
+<pre><code class="language-pepper">send_binary(data: u8[]): Result&lt;void&gt;
+</code></pre>
+<p>Sends a binary message in one frame.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>data</code> — the bytes</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>an Ok result once it is written; an error when the connection is closed or the write fails</li>
+</ul>
+<h4 id="ping-1"><a class="header" href="#ping-1">ping</a></h4>
+<pre><code class="language-pepper">ping(data: u8[]): Result&lt;void&gt;
+</code></pre>
+<p>Sends a ping; the peer answers with a pong, which <code>receive</code> skips.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>data</code> — at most <code>MAX_CONTROL_PAYLOAD</code> bytes for the pong to echo</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>an Ok result once it is written; an error when the connection is closed, <code>data</code> is too long, or the write fails</li>
+</ul>
+<h4 id="send_frame"><a class="header" href="#send_frame">send_frame</a></h4>
+<pre><code class="language-pepper">send_frame(frame: Frame): Result&lt;void&gt;
+</code></pre>
+<p>Sends one frame as it is, masked on a client. To send a message in
+fragments, send a <code>Text</code> or <code>Binary</code> frame with <code>fin</code> false, then
+<code>Continuation</code> frames, the last with <code>fin</code> true; control frames may
+go between them.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>frame</code> — the frame to send</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>an Ok result once it is written; an error when the connection is closed, the frame is a <code>Close</code> (use <code>close</code>), a control frame is fragmented or carries more than <code>MAX_CONTROL_PAYLOAD</code> bytes, or the write fails</li>
+</ul>
+<h4 id="receive"><a class="header" href="#receive">receive</a></h4>
+<pre><code class="language-pepper">receive(): Result&lt;Message&gt;
+</code></pre>
+<p>Receives the next text or binary message, or the peer's close.</p>
+<p>Answers each ping with a pong and skips pongs on the way. When the
+peer closes, it answers with a close, closes the connection, and
+returns a <code>Close</code> message.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the message; an error when the connection is closed, ends without a close, or the peer breaks the protocol (which closes it with the matching status code)</li>
+</ul>
+<h4 id="close-1"><a class="header" href="#close-1">close</a></h4>
+<pre><code class="language-pepper">close(code: int = CLOSE_NORMAL, reason: String = ""): Result&lt;void&gt;
+</code></pre>
+<p>Runs the closing handshake: sends a close with <code>code</code> and <code>reason</code>,
+reads until the peer's close (dropping any messages still on the
+way), and closes the connection. Closing a closed connection does
+nothing. It waits for the peer as <code>receive</code> does: see
+<code>set_read_timeout</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>code</code> — the status code, such as <code>CLOSE_NORMAL</code></li>
+<li><code>reason</code> — why, in at most 123 bytes of UTF-8</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>an Ok result once the connection is closed; an error when writing the close fails or the peer ends the connection without one</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+
+    </div>
+    </body>
+</html>

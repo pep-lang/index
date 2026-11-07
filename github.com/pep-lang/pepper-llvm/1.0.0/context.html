@@ -1,0 +1,544 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>context.pep - llvm</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">llvm</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <!-- Generated from context.pep by `pep-doc package`. Do not edit. -->
+<h1 id="contextpep"><a class="header" href="#contextpep">context.pep</a></h1>
+<p><code>Context</code>: owns LLVM's types and constants, and makes the types, blocks
+and attributes of everything built in it.</p>
+<p>Source: <code>context.pep</code></p>
+<h2 id="context"><a class="header" href="#context">Context</a></h2>
+<pre><code class="language-pepper">struct Context
+</code></pre>
+<p>An LLVM context (<code>LLVMContextRef</code>), which owns the types and constants
+of the modules built in it. It is disposed when the last reference to it
+goes away; a <code>Module</code> or <code>Builder</code> made from it holds a reference, so it
+outlives them.</p>
+<p>A context is not thread-safe: use each one, and everything made in it,
+from one thread.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">var context = llvm.Context();
+var i32 = context.int32_type();
+var answer = i32.const_int(42);   # i32 42
+</code></pre>
+<h3 id="properties"><a class="header" href="#properties">Properties</a></h3>
+<h4 id="ref"><a class="header" href="#ref">ref</a></h4>
+<pre><code class="language-pepper">var ref: __ptr&lt;void&gt; { get; }
+</code></pre>
+<p>The LLVM-C handle, for calls into <code>llvm_c</code>.</p>
+<h3 id="constructor"><a class="header" href="#constructor">Constructor</a></h3>
+<h4 id="context-1"><a class="header" href="#context-1">Context()</a></h4>
+<pre><code class="language-pepper">construct(thread_safe: bool = false)
+</code></pre>
+<p>Creates an empty context.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>thread_safe</code> — whether to make it inside an ORC thread-safe context, which a <code>Jit</code> needs for the modules it runs</li>
+</ul>
+<h3 id="methods"><a class="header" href="#methods">Methods</a></h3>
+<h4 id="is_thread_safe"><a class="header" href="#is_thread_safe">is_thread_safe</a></h4>
+<pre><code class="language-pepper">is_thread_safe(): bool
+</code></pre>
+<p>Reports whether the context was made for a <code>Jit</code> (<code>thread_safe</code>).</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>true for a thread-safe context</li>
+</ul>
+<h4 id="int1_type"><a class="header" href="#int1_type">int1_type</a></h4>
+<pre><code class="language-pepper">int1_type(): Type
+</code></pre>
+<p>Returns the 1-bit integer type, <code>i1</code>, which comparisons produce.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the type</li>
+</ul>
+<h4 id="int8_type"><a class="header" href="#int8_type">int8_type</a></h4>
+<pre><code class="language-pepper">int8_type(): Type
+</code></pre>
+<p>Returns the 8-bit integer type, <code>i8</code>.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the type</li>
+</ul>
+<h4 id="int16_type"><a class="header" href="#int16_type">int16_type</a></h4>
+<pre><code class="language-pepper">int16_type(): Type
+</code></pre>
+<p>Returns the 16-bit integer type, <code>i16</code>.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the type</li>
+</ul>
+<h4 id="int32_type"><a class="header" href="#int32_type">int32_type</a></h4>
+<pre><code class="language-pepper">int32_type(): Type
+</code></pre>
+<p>Returns the 32-bit integer type, <code>i32</code>.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the type</li>
+</ul>
+<h4 id="int64_type"><a class="header" href="#int64_type">int64_type</a></h4>
+<pre><code class="language-pepper">int64_type(): Type
+</code></pre>
+<p>Returns the 64-bit integer type, <code>i64</code>.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the type</li>
+</ul>
+<h4 id="int_type"><a class="header" href="#int_type">int_type</a></h4>
+<pre><code class="language-pepper">int_type(bits: uint): Type
+</code></pre>
+<p>Returns the integer type of <code>bits</code> bits.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>bits</code> — the width, from 1 to 2^23</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the type</li>
+</ul>
+<h4 id="float_type"><a class="header" href="#float_type">float_type</a></h4>
+<pre><code class="language-pepper">float_type(): Type
+</code></pre>
+<p>Returns the 32-bit floating-point type, <code>float</code>.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the type</li>
+</ul>
+<h4 id="double_type"><a class="header" href="#double_type">double_type</a></h4>
+<pre><code class="language-pepper">double_type(): Type
+</code></pre>
+<p>Returns the 64-bit floating-point type, <code>double</code>.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the type</li>
+</ul>
+<h4 id="void_type"><a class="header" href="#void_type">void_type</a></h4>
+<pre><code class="language-pepper">void_type(): Type
+</code></pre>
+<p>Returns the <code>void</code> type.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the type</li>
+</ul>
+<h4 id="pointer_type"><a class="header" href="#pointer_type">pointer_type</a></h4>
+<pre><code class="language-pepper">pointer_type(address_space: uint = 0): Type
+</code></pre>
+<p>Returns the pointer type, <code>ptr</code> (pointers carry no pointee type).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>address_space</code> — the address space; 0, the default, is ordinary memory</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the type</li>
+</ul>
+<h4 id="struct_type"><a class="header" href="#struct_type">struct_type</a></h4>
+<pre><code class="language-pepper">struct_type(fields: Type[], packed: bool = false): Type
+</code></pre>
+<p>Returns a literal struct type, such as <code>{ i32, ptr }</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>fields</code> — the field types</li>
+<li><code>packed</code> — whether the fields have no padding between them</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the type</li>
+</ul>
+<h4 id="named_struct_type"><a class="header" href="#named_struct_type">named_struct_type</a></h4>
+<pre><code class="language-pepper">named_struct_type(name: String): Type
+</code></pre>
+<p>Returns a new named struct type with no fields yet; give it fields
+with <code>Type.set_body</code>. Named structs may refer to themselves.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>name</code> — the struct's name (<code>%name</code> in IR)</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the type</li>
+</ul>
+<h4 id="const_string"><a class="header" href="#const_string">const_string</a></h4>
+<pre><code class="language-pepper">const_string(text: String, null_terminated: bool = true): Value
+</code></pre>
+<p>Returns a constant array of the bytes of <code>text</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>text</code> — the bytes</li>
+<li><code>null_terminated</code> — whether to add a NUL byte after them</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the constant, of type <code>[n x i8]</code></li>
+</ul>
+<h4 id="const_struct"><a class="header" href="#const_struct">const_struct</a></h4>
+<pre><code class="language-pepper">const_struct(fields: Value[], packed: bool = false): Value
+</code></pre>
+<p>Returns a constant of a literal struct type.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>fields</code> — the field values, each a constant</li>
+<li><code>packed</code> — whether the fields have no padding between them</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the constant</li>
+</ul>
+<h4 id="append_block"><a class="header" href="#append_block">append_block</a></h4>
+<pre><code class="language-pepper">append_block(function: Value, name: String = ""): BasicBlock
+</code></pre>
+<p>Appends a new basic block to the end of a function.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>function</code> — the function</li>
+<li><code>name</code> — the block's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the block</li>
+</ul>
+<h4 id="attribute"><a class="header" href="#attribute">attribute</a></h4>
+<pre><code class="language-pepper">attribute(name: String, value: ulong = 0): Attribute
+</code></pre>
+<p>Returns an attribute by its IR name, such as <code>nounwind</code> or <code>noalias</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>name</code> — the attribute's name</li>
+<li><code>value</code> — the attribute's integer value, for those that take one (<code>align</code>)</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the attribute</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if LLVM has no attribute named <code>name</code></li>
+</ul>
+<h4 id="string_attribute"><a class="header" href="#string_attribute">string_attribute</a></h4>
+<pre><code class="language-pepper">string_attribute(key: String, value: String): Attribute
+</code></pre>
+<p>Returns a string attribute (<code>"key"="value"</code>), such as <code>target-cpu</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>key</code> — the attribute's key</li>
+<li><code>value</code> — the attribute's value</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the attribute</li>
+</ul>
+<h4 id="insert_block"><a class="header" href="#insert_block">insert_block</a></h4>
+<pre><code class="language-pepper">insert_block(before: BasicBlock, name: String = ""): BasicBlock
+</code></pre>
+<p>Creates a block and inserts it before <code>before</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>before</code> — the block to insert before</li>
+<li><code>name</code> — the block's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the new block</li>
+</ul>
+<h4 id="metadata_kind"><a class="header" href="#metadata_kind">metadata_kind</a></h4>
+<pre><code class="language-pepper">metadata_kind(name: String): uint
+</code></pre>
+<p>Returns the kind of metadata named <code>name</code>, such as <code>tbaa</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>name</code> — the kind's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the kind</li>
+</ul>
+<h4 id="metadata_string"><a class="header" href="#metadata_string">metadata_string</a></h4>
+<pre><code class="language-pepper">metadata_string(text: String): Metadata
+</code></pre>
+<p>Returns a metadata string.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>text</code> — the string</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the metadata</li>
+</ul>
+<h4 id="metadata_node"><a class="header" href="#metadata_node">metadata_node</a></h4>
+<pre><code class="language-pepper">metadata_node(operands: Metadata[]): Metadata
+</code></pre>
+<p>Returns a metadata tuple (<code>!{...}</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>operands</code> — the operands</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the metadata</li>
+</ul>
+<h4 id="metadata_value"><a class="header" href="#metadata_value">metadata_value</a></h4>
+<pre><code class="language-pepper">metadata_value(metadata: Metadata): Value
+</code></pre>
+<p>Wraps metadata as a value, for <code>Value.set_metadata</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>metadata</code> — the metadata</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the value</li>
+</ul>
+<h4 id="constant_metadata"><a class="header" href="#constant_metadata">constant_metadata</a></h4>
+<pre><code class="language-pepper">constant_metadata(value: Value): Metadata
+</code></pre>
+<p>Wraps a constant as metadata.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the constant</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the metadata</li>
+</ul>
+<h4 id="inline_asm"><a class="header" href="#inline_asm">inline_asm</a></h4>
+<pre><code class="language-pepper">inline_asm( function_type: Type, assembly: String, constraints: String, side_effects: bool, align_stack: bool ): Value
+</code></pre>
+<p>Returns inline assembly in AT&amp;T syntax that cannot unwind.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>function_type</code> — the assembly's function type</li>
+<li><code>assembly</code> — the assembly text</li>
+<li><code>constraints</code> — the operand constraints</li>
+<li><code>side_effects</code> — whether it has side effects</li>
+<li><code>align_stack</code> — whether it needs an aligned stack</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the value to call</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="builder.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="debug_info.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="builder.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="debug_info.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

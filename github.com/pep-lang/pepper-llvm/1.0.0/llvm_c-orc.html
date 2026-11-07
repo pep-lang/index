@@ -1,0 +1,414 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>llvm_c/orc.pep - llvm</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">llvm</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <!-- Generated from llvm_c/orc.pep by `pep-doc package`. Do not edit. -->
+<h1 id="llvm_corcpep"><a class="header" href="#llvm_corcpep">llvm_c/orc.pep</a></h1>
+<p>The parts of <code>llvm-c/Orc.h</code> and <code>LLJIT.h</code> needed to compile modules in
+memory and call them: ORC's LLJIT, thread-safe contexts and modules,
+and resolving the process's own symbols.</p>
+<p>Every <code>LLVMOrc*Ref</code> is <code>void*</code>; errors are <code>LLVMErrorRef</code> (<code>void*</code>, null
+for success), read with <code>LLVMGetErrorMessage</code>.</p>
+<p>Source: <code>llvm_c/orc.pep</code></p>
+<h2 id="llvmorccreatelljit"><a class="header" href="#llvmorccreatelljit">LLVMOrcCreateLLJIT</a></h2>
+<pre><code class="language-pepper">extern void* LLVMOrcCreateLLJIT(void** jit, void* builder)
+</code></pre>
+<p>Creates an LLJIT for the host.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>jit</code> — receives the JIT</li>
+<li><code>builder</code> — a builder with options, or null for the defaults</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>null on success, else an error</li>
+</ul>
+<h2 id="llvmorcdisposelljit"><a class="header" href="#llvmorcdisposelljit">LLVMOrcDisposeLLJIT</a></h2>
+<pre><code class="language-pepper">extern void* LLVMOrcDisposeLLJIT(void* jit)
+</code></pre>
+<p>Destroys an LLJIT and the code it compiled.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>jit</code> — the JIT</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>null on success, else an error</li>
+</ul>
+<h2 id="llvmorclljitgetmainjitdylib"><a class="header" href="#llvmorclljitgetmainjitdylib">LLVMOrcLLJITGetMainJITDylib</a></h2>
+<pre><code class="language-pepper">extern void* LLVMOrcLLJITGetMainJITDylib(void* jit)
+</code></pre>
+<p>Returns the JIT's main library, which modules are added to.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>jit</code> — the JIT</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the library</li>
+</ul>
+<h2 id="llvmorclljitgetglobalprefix"><a class="header" href="#llvmorclljitgetglobalprefix">LLVMOrcLLJITGetGlobalPrefix</a></h2>
+<pre><code class="language-pepper">extern char LLVMOrcLLJITGetGlobalPrefix(void* jit)
+</code></pre>
+<p>Returns the prefix the JIT's platform puts on symbol names (<code>_</code> on
+macOS, none elsewhere).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>jit</code> — the JIT</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the prefix character, or 0</li>
+</ul>
+<h2 id="llvmorclljitgettriplestring"><a class="header" href="#llvmorclljitgettriplestring">LLVMOrcLLJITGetTripleString</a></h2>
+<pre><code class="language-pepper">extern char* LLVMOrcLLJITGetTripleString(void* jit)
+</code></pre>
+<p>Returns the JIT's target triple; the JIT owns the string.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>jit</code> — the JIT</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the triple</li>
+</ul>
+<h2 id="llvmorclljitgetdatalayoutstr"><a class="header" href="#llvmorclljitgetdatalayoutstr">LLVMOrcLLJITGetDataLayoutStr</a></h2>
+<pre><code class="language-pepper">extern char* LLVMOrcLLJITGetDataLayoutStr(void* jit)
+</code></pre>
+<p>Returns the JIT's data layout string; the JIT owns the string.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>jit</code> — the JIT</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the data layout</li>
+</ul>
+<h2 id="llvmorclljitaddllvmirmodule"><a class="header" href="#llvmorclljitaddllvmirmodule">LLVMOrcLLJITAddLLVMIRModule</a></h2>
+<pre><code class="language-pepper">extern void* LLVMOrcLLJITAddLLVMIRModule(void* jit, void* library, void* module)
+</code></pre>
+<p>Adds a module, taking ownership of it.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>jit</code> — the JIT</li>
+<li><code>library</code> — the library to add it to</li>
+<li><code>module</code> — the thread-safe module</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>null on success, else an error</li>
+</ul>
+<h2 id="llvmorclljitlookup"><a class="header" href="#llvmorclljitlookup">LLVMOrcLLJITLookup</a></h2>
+<pre><code class="language-pepper">extern void* LLVMOrcLLJITLookup(void* jit, ulong* address, char* name)
+</code></pre>
+<p>Compiles what a symbol needs and returns its address.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>jit</code> — the JIT</li>
+<li><code>address</code> — receives the address</li>
+<li><code>name</code> — the symbol's name, without the platform's prefix</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>null on success, else an error</li>
+</ul>
+<h2 id="llvmorccreatenewthreadsafecontext"><a class="header" href="#llvmorccreatenewthreadsafecontext">LLVMOrcCreateNewThreadSafeContext</a></h2>
+<pre><code class="language-pepper">extern void* LLVMOrcCreateNewThreadSafeContext()
+</code></pre>
+<p>Creates a thread-safe context, which owns an LLVM context.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the thread-safe context</li>
+</ul>
+<h2 id="llvmorcthreadsafecontextgetcontext"><a class="header" href="#llvmorcthreadsafecontextgetcontext">LLVMOrcThreadSafeContextGetContext</a></h2>
+<pre><code class="language-pepper">extern void* LLVMOrcThreadSafeContextGetContext(void* context)
+</code></pre>
+<p>Returns the LLVM context a thread-safe context owns.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>context</code> — the thread-safe context</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the LLVM context</li>
+</ul>
+<h2 id="llvmorcdisposethreadsafecontext"><a class="header" href="#llvmorcdisposethreadsafecontext">LLVMOrcDisposeThreadSafeContext</a></h2>
+<pre><code class="language-pepper">extern void LLVMOrcDisposeThreadSafeContext(void* context)
+</code></pre>
+<p>Releases a thread-safe context; modules made in it keep it alive.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>context</code> — the thread-safe context</li>
+</ul>
+<h2 id="llvmorccreatenewthreadsafemodule"><a class="header" href="#llvmorccreatenewthreadsafemodule">LLVMOrcCreateNewThreadSafeModule</a></h2>
+<pre><code class="language-pepper">extern void* LLVMOrcCreateNewThreadSafeModule(void* module, void* context)
+</code></pre>
+<p>Wraps a module for the JIT, taking ownership of it.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>module</code> — the module, made in the thread-safe context's LLVM context</li>
+<li><code>context</code> — the thread-safe context</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the thread-safe module</li>
+</ul>
+<h2 id="llvmorcdisposethreadsafemodule"><a class="header" href="#llvmorcdisposethreadsafemodule">LLVMOrcDisposeThreadSafeModule</a></h2>
+<pre><code class="language-pepper">extern void LLVMOrcDisposeThreadSafeModule(void* module)
+</code></pre>
+<p>Destroys a thread-safe module that was not added to a JIT.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>module</code> — the thread-safe module</li>
+</ul>
+<h2 id="llvmorccreatedynamiclibrarysearchgeneratorforprocess"><a class="header" href="#llvmorccreatedynamiclibrarysearchgeneratorforprocess">LLVMOrcCreateDynamicLibrarySearchGeneratorForProcess</a></h2>
+<pre><code class="language-pepper">extern void* LLVMOrcCreateDynamicLibrarySearchGeneratorForProcess( void** generator, char global_prefix, void* filter, void* filter_context )
+</code></pre>
+<p>Creates a generator that resolves symbols from the running process
+(the C library and everything else it loaded).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>generator</code> — receives the generator</li>
+<li><code>global_prefix</code> — the JIT's global prefix</li>
+<li><code>filter</code> — a predicate on names, or null for every symbol</li>
+<li><code>filter_context</code> — the predicate's context, or null</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>null on success, else an error</li>
+</ul>
+<h2 id="llvmorcjitdylibaddgenerator"><a class="header" href="#llvmorcjitdylibaddgenerator">LLVMOrcJITDylibAddGenerator</a></h2>
+<pre><code class="language-pepper">extern void LLVMOrcJITDylibAddGenerator(void* library, void* generator)
+</code></pre>
+<p>Adds a definition generator to a library, which takes ownership of it.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>library</code> — the library</li>
+<li><code>generator</code> — the generator</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="llvm_c-link.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="llvm_c-target.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="llvm_c-link.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="llvm_c-target.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

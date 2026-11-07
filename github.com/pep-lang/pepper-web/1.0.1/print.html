@@ -1,0 +1,966 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>web</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">web</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <!-- Generated from pep.toml by `pep-doc package`. Do not edit. -->
+<h1 id="web-101"><a class="header" href="#web-101">web 1.0.1</a></h1>
+<p>A web framework over http.Server: routing, middleware, cookies, forms and static files</p>
+<h2 id="pages"><a class="header" href="#pages">Pages</a></h2>
+<ul>
+<li><a href="module.html">web</a>: A web framework over the runtime's <code>http.Server</code>: a router with path parameters, middleware, cookies, form and query parsing, and static files.</li>
+<li><a href="cookie.html">cookie.pep</a>: Cookies (RFC 6265): <code>Cookie</code> and <code>set_cookie</code> write <code>Set-Cookie</code>; <code>parse_cookies</code> reads a <code>Cookie</code> field.</li>
+<li><a href="form.html">form.pep</a>: Request bodies of HTML forms: <code>parse_form</code> reads <code>application/x-www-form-urlencoded</code> and <code>multipart/form-data</code> into a <code>Form</code> of fields and uploaded <code>FormFile</code>s.</li>
+<li><a href="gzip_cache.html">gzip_cache.pep</a>: The gzipped bodies <code>static_files</code> keeps in memory, so a text file is compressed once and not on every request.</li>
+<li><a href="respond.html">respond.pep</a>: Responses and middleware: <code>text</code>, <code>html</code>, <code>json_response</code> and <code>redirect</code> build common responses; <code>log_requests</code> is a middleware that logs each request.</li>
+<li><a href="router.html">router.pep</a>: Routing: <code>Router</code> sends each request to the handler registered for its method and path, through the router's middleware; <code>Context</code> is what a handler gets; <code>serve</code> runs a router on an <code>http.Server</code>.</li>
+<li><a href="static.html">static.pep</a>: Static files: <code>static_files</code> serves a folder with content types, <code>ETag</code> and <code>If-None-Match</code>, single <code>Range</code> requests, and gzip for text; <code>content_type</code> maps a file name to its media type.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from module.pep by `pep-doc package`. Do not edit. -->
+<h1 id="web"><a class="header" href="#web">web</a></h1>
+<p>A web framework over the runtime's <code>http.Server</code>: a router with path
+parameters, middleware, cookies, form and query parsing, and static
+files.</p>
+<p>Bring it in with <code>import web</code>. Build a <code>Router</code> of routes and
+middleware; <code>web.serve(server, app)</code> runs routers on an <code>http.Server</code>,
+calling <code>app</code> to set up a router for each request.
+A handler gets a <code>Context</code> (the request, its path parameters, and
+helpers for the query, cookies and body) and returns an <code>http.Response</code>.</p>
+<ul>
+<li><code>Router</code>, <code>Context</code>, <code>Handler</code>, <code>Middleware</code>, <code>serve</code>: routing</li>
+<li><code>text</code>, <code>html</code>, <code>json_response</code>, <code>redirect</code>, <code>log_requests</code>:
+responses and a logging middleware</li>
+<li><code>Cookie</code>, <code>SameSite</code>, <code>set_cookie</code>, <code>parse_cookies</code>: cookies</li>
+<li><code>Form</code>, <code>FormFile</code>, <code>parse_form</code>: form bodies, multipart included</li>
+<li><code>static_files</code>, <code>content_type</code>, <code>MAX_GZIP_SIZE</code>,
+<code>MAX_GZIP_CACHE_SIZE</code>: static files</li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import async;
+import http;
+import io;
+import web;
+
+app(router: web.Router) {
+    router.use(web.log_requests);
+    router.get("/hello/{name}", (c) =&gt; web.text("hello, " + c.param("name")));
+    router.get("/static/{*path}", web.static_files(io.Path("public")));
+}
+
+main(): int {
+    async.run(() =&gt; {
+        var server = http.Server.bind(io.SocketAddress.parse("127.0.0.1:8080").value()).value();
+        web.serve(server, app);
+    });
+    return 0;
+}
+</code></pre>
+<p>Source: <code>module.pep</code></p>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from cookie.pep by `pep-doc package`. Do not edit. -->
+<h1 id="cookiepep"><a class="header" href="#cookiepep">cookie.pep</a></h1>
+<p>Cookies (RFC 6265): <code>Cookie</code> and <code>set_cookie</code> write <code>Set-Cookie</code>;
+<code>parse_cookies</code> reads a <code>Cookie</code> field. <code>Context.cookie</code> reads one
+cookie of a request.</p>
+<p>Source: <code>cookie.pep</code></p>
+<h2 id="samesite"><a class="header" href="#samesite">SameSite</a></h2>
+<pre><code class="language-pepper">enum SameSite
+</code></pre>
+<p>The <code>SameSite</code> attribute of a cookie: whether the browser sends it with
+requests that other sites start.</p>
+<h3 id="cases"><a class="header" href="#cases">Cases</a></h3>
+<h4 id="default"><a class="header" href="#default">Default</a></h4>
+<pre><code class="language-pepper">Default
+</code></pre>
+<p>No attribute; the browser's default applies (<code>Lax</code> in current ones).</p>
+<h4 id="lax"><a class="header" href="#lax">Lax</a></h4>
+<pre><code class="language-pepper">Lax
+</code></pre>
+<p>Sent with top-level navigations from other sites, not with their
+subrequests.</p>
+<h4 id="strict"><a class="header" href="#strict">Strict</a></h4>
+<pre><code class="language-pepper">Strict
+</code></pre>
+<p>Sent only with requests this site starts.</p>
+<h4 id="none"><a class="header" href="#none">None</a></h4>
+<pre><code class="language-pepper">None
+</code></pre>
+<p>Sent with every request; browsers require <code>secure</code> with it.</p>
+<h2 id="cookie"><a class="header" href="#cookie">Cookie</a></h2>
+<pre><code class="language-pepper">struct Cookie
+</code></pre>
+<p>A cookie to set on the client, with its attributes. Write it into a
+response with <code>set_cookie</code>.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">var session = web.Cookie("session", "abc123");
+session.http_only = true;
+session.secure = true;
+session.same_site = web.SameSite.Lax;
+session.max_age = Optional&lt;long&gt;.Value(3600);
+web.set_cookie(response, session);
+</code></pre>
+<h3 id="fields"><a class="header" href="#fields">Fields</a></h3>
+<h4 id="name"><a class="header" href="#name">name</a></h4>
+<pre><code class="language-pepper">var name: String
+</code></pre>
+<p>The name: an HTTP token (letters, digits and <code>!#$%&amp;'*+-.^_`|~</code>).</p>
+<h4 id="value"><a class="header" href="#value">value</a></h4>
+<pre><code class="language-pepper">var value: String
+</code></pre>
+<p>The value: printable ASCII except space, <code>"</code>, <code>,</code>, <code>;</code> and <code>\</code>.
+Encode other text first, such as with <code>Uri.encode</code>.</p>
+<h4 id="path"><a class="header" href="#path">path</a></h4>
+<pre><code class="language-pepper">var path: String
+</code></pre>
+<p>The <code>Path</code> attribute; empty for none (the browser uses the request's
+directory).</p>
+<h4 id="domain"><a class="header" href="#domain">domain</a></h4>
+<pre><code class="language-pepper">var domain: String
+</code></pre>
+<p>The <code>Domain</code> attribute; empty for none (only the host that set it).</p>
+<h4 id="max_age"><a class="header" href="#max_age">max_age</a></h4>
+<pre><code class="language-pepper">var max_age: long?
+</code></pre>
+<p>The <code>Max-Age</code> attribute in seconds; 0 or less deletes the cookie.
+None for a session cookie, unless <code>expires</code> is set.</p>
+<h4 id="expires"><a class="header" href="#expires">expires</a></h4>
+<pre><code class="language-pepper">var expires: time.OffsetDateTime?
+</code></pre>
+<p>The <code>Expires</code> attribute; none for none.</p>
+<h4 id="secure"><a class="header" href="#secure">secure</a></h4>
+<pre><code class="language-pepper">var secure: bool
+</code></pre>
+<p>The <code>Secure</code> attribute: sent only over HTTPS.</p>
+<h4 id="http_only"><a class="header" href="#http_only">http_only</a></h4>
+<pre><code class="language-pepper">var http_only: bool
+</code></pre>
+<p>The <code>HttpOnly</code> attribute: hidden from scripts in the page.</p>
+<h4 id="same_site"><a class="header" href="#same_site">same_site</a></h4>
+<pre><code class="language-pepper">var same_site: SameSite
+</code></pre>
+<p>The <code>SameSite</code> attribute.</p>
+<h3 id="constructor"><a class="header" href="#constructor">Constructor</a></h3>
+<h4 id="cookie-1"><a class="header" href="#cookie-1">Cookie()</a></h4>
+<pre><code class="language-pepper">construct(name: String, value: String)
+</code></pre>
+<p>Creates a session cookie with path <code>/</code> and no other attributes.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>name</code> — the name</li>
+<li><code>value</code> — the value</li>
+</ul>
+<h3 id="methods"><a class="header" href="#methods">Methods</a></h3>
+<h4 id="to_string"><a class="header" href="#to_string">to_string</a></h4>
+<pre><code class="language-pepper">to_string(): String
+</code></pre>
+<p>Returns the cookie as the value of a <code>Set-Cookie</code> field, such as
+<code>id=7; Path=/; Max-Age=60; HttpOnly</code>.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the field value</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if <code>name</code>, <code>value</code>, <code>path</code> or <code>domain</code> has a character it may not have ("invalid cookie ..."), since it could split the field or add attributes</li>
+</ul>
+<h2 id="set_cookie"><a class="header" href="#set_cookie">set_cookie</a></h2>
+<pre><code class="language-pepper">set_cookie(response: http.Response, cookie: Cookie)
+</code></pre>
+<p>Adds a <code>Set-Cookie</code> field for <code>cookie</code> to <code>response</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>response</code> — the response</li>
+<li><code>cookie</code> — the cookie to set</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>as <code>Cookie.to_string</code> does</li>
+</ul>
+<h2 id="parse_cookies"><a class="header" href="#parse_cookies">parse_cookies</a></h2>
+<pre><code class="language-pepper">parse_cookies(header: String): Array&lt;(String, String)&gt;
+</code></pre>
+<p>Returns the names and values in a <code>Cookie</code> field, such as
+<code>a=1; b="two"</code>, in order. Surrounding double quotes are removed from a
+value; nothing is decoded. A piece without <code>=</code> is skipped.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>header</code> — the field's value</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the pairs</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from form.pep by `pep-doc package`. Do not edit. -->
+<h1 id="formpep"><a class="header" href="#formpep">form.pep</a></h1>
+<p>Request bodies of HTML forms: <code>parse_form</code> reads
+<code>application/x-www-form-urlencoded</code> and <code>multipart/form-data</code> into a
+<code>Form</code> of fields and uploaded <code>FormFile</code>s.</p>
+<p>Source: <code>form.pep</code></p>
+<h2 id="formfile"><a class="header" href="#formfile">FormFile</a></h2>
+<pre><code class="language-pepper">struct FormFile
+</code></pre>
+<p>A file uploaded in a <code>multipart/form-data</code> body.</p>
+<h3 id="fields-1"><a class="header" href="#fields-1">Fields</a></h3>
+<h4 id="name-1"><a class="header" href="#name-1">name</a></h4>
+<pre><code class="language-pepper">var name: String
+</code></pre>
+<p>The form field's name.</p>
+<h4 id="file_name"><a class="header" href="#file_name">file_name</a></h4>
+<pre><code class="language-pepper">var file_name: String
+</code></pre>
+<p>The file name the client gave, as sent: never use it as a path on
+its own, since it may hold <code>/</code>, <code>\</code> or <code>..</code>.</p>
+<h4 id="content_type"><a class="header" href="#content_type">content_type</a></h4>
+<pre><code class="language-pepper">var content_type: String
+</code></pre>
+<p>The part's <code>Content-Type</code>; <code>application/octet-stream</code> when it has none.</p>
+<h4 id="data"><a class="header" href="#data">data</a></h4>
+<pre><code class="language-pepper">var data: u8[]
+</code></pre>
+<p>The file's bytes.</p>
+<h3 id="constructor-1"><a class="header" href="#constructor-1">Constructor</a></h3>
+<h4 id="formfile-1"><a class="header" href="#formfile-1">FormFile()</a></h4>
+<pre><code class="language-pepper">construct(name: String, file_name: String, content_type: String, data: u8[])
+</code></pre>
+<p>Creates a file part.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>name</code> — the form field's name</li>
+<li><code>file_name</code> — the file name the client gave</li>
+<li><code>content_type</code> — the media type</li>
+<li><code>data</code> — the bytes</li>
+</ul>
+<h2 id="form"><a class="header" href="#form">Form</a></h2>
+<pre><code class="language-pepper">struct Form
+</code></pre>
+<p>The fields and files of a submitted form, in the order they were sent.
+A name may repeat.</p>
+<h3 id="fields-2"><a class="header" href="#fields-2">Fields</a></h3>
+<h4 id="fields-3"><a class="header" href="#fields-3">fields</a></h4>
+<pre><code class="language-pepper">var fields: Array&lt;(String, String)&gt;
+</code></pre>
+<p>The text fields, as names and values.</p>
+<h4 id="files"><a class="header" href="#files">files</a></h4>
+<pre><code class="language-pepper">var files: Array&lt;FormFile&gt;
+</code></pre>
+<p>The uploaded files (only <code>multipart/form-data</code> has any).</p>
+<h3 id="constructor-2"><a class="header" href="#constructor-2">Constructor</a></h3>
+<h4 id="form-1"><a class="header" href="#form-1">Form()</a></h4>
+<pre><code class="language-pepper">construct()
+</code></pre>
+<p>Creates an empty form.</p>
+<h3 id="methods-1"><a class="header" href="#methods-1">Methods</a></h3>
+<h4 id="get"><a class="header" href="#get">get</a></h4>
+<pre><code class="language-pepper">get(name: String): String?
+</code></pre>
+<p>Returns the first value of the field <code>name</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>name</code> — the field's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>its value, or none when the form has no such field</li>
+</ul>
+<h4 id="get_all"><a class="header" href="#get_all">get_all</a></h4>
+<pre><code class="language-pepper">get_all(name: String): String[]
+</code></pre>
+<p>Returns every value of the field <code>name</code>, such as the checked boxes of
+one group.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>name</code> — the field's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the values in order; empty when there are none</li>
+</ul>
+<h4 id="file"><a class="header" href="#file">file</a></h4>
+<pre><code class="language-pepper">file(name: String): FormFile?
+</code></pre>
+<p>Returns the first file uploaded as the field <code>name</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>name</code> — the field's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the file, or none when the form has no such file</li>
+</ul>
+<h2 id="parse_form"><a class="header" href="#parse_form">parse_form</a></h2>
+<pre><code class="language-pepper">parse_form(request: http.Request): Result&lt;Form&gt;
+</code></pre>
+<p>Parses the body of <code>request</code> as a form, by its <code>Content-Type</code>:
+<code>application/x-www-form-urlencoded</code> (<code>+</code> is a space, percent-escapes are
+decoded) or <code>multipart/form-data</code> (RFC 7578), whose parts with a
+<code>filename</code> become <code>files</code> and the rest <code>fields</code>, decoded as UTF-8.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>request</code> — the request</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the form; an error for another content type, a missing or invalid boundary (RFC 2046: 1 to 70 characters), an invalid percent-escape, or a multipart body that is not well formed</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from gzip_cache.pep by `pep-doc package`. Do not edit. -->
+<h1 id="gzip_cachepep"><a class="header" href="#gzip_cachepep">gzip_cache.pep</a></h1>
+<p>The gzipped bodies <code>static_files</code> keeps in memory, so a text file is
+compressed once and not on every request.</p>
+<p>Source: <code>gzip_cache.pep</code></p>
+<h2 id="max_gzip_cache_size"><a class="header" href="#max_gzip_cache_size">MAX_GZIP_CACHE_SIZE</a></h2>
+<pre><code class="language-pepper">const MAX_GZIP_CACHE_SIZE: ulong = 33554432
+</code></pre>
+<p>The most gzipped bytes <code>static_files</code> keeps in memory, over all files:
+32 MiB. When a new body would pass it, the least recently served ones are
+dropped first.</p>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from respond.pep by `pep-doc package`. Do not edit. -->
+<h1 id="respondpep"><a class="header" href="#respondpep">respond.pep</a></h1>
+<p>Responses and middleware: <code>text</code>, <code>html</code>, <code>json_response</code> and
+<code>redirect</code> build common responses; <code>log_requests</code> is a middleware that
+logs each request.</p>
+<p>Source: <code>respond.pep</code></p>
+<h2 id="text"><a class="header" href="#text">text</a></h2>
+<pre><code class="language-pepper">text(body: String, status: int = 200): http.Response
+</code></pre>
+<p>Returns a response with <code>body</code> as <code>text/plain; charset=utf-8</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>body</code> — the text</li>
+<li><code>status</code> — the status code</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the response</li>
+</ul>
+<h2 id="html"><a class="header" href="#html">html</a></h2>
+<pre><code class="language-pepper">html(body: String, status: int = 200): http.Response
+</code></pre>
+<p>Returns a response with <code>body</code> as <code>text/html; charset=utf-8</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>body</code> — the HTML</li>
+<li><code>status</code> — the status code</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the response</li>
+</ul>
+<h2 id="json_response"><a class="header" href="#json_response">json_response</a></h2>
+<pre><code class="language-pepper">json_response(value: json.JsonValue, status: int = 200): http.Response
+</code></pre>
+<p>Returns a response with <code>value</code> written as compact JSON, as
+<code>application/json</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the JSON value</li>
+<li><code>status</code> — the status code</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the response</li>
+</ul>
+<h2 id="redirect"><a class="header" href="#redirect">redirect</a></h2>
+<pre><code class="language-pepper">redirect(location: String, status: int = 303): http.Response
+</code></pre>
+<p>Returns a redirect to <code>location</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>location</code> — the URL to go to, absolute or relative to the request's</li>
+<li><code>status</code> — the status code: 303 See Other (the default) makes the client follow with a <code>GET</code>; 307 and 308 keep the method; 301 and 302 are the older permanent and temporary forms</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the response, with a <code>Location</code> field and no body</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if <code>location</code> holds a CR, LF or NUL ("invalid redirect location"), which would split the response; encode text from the request (<code>Uri.encode</code>) before putting it in a URL</li>
+</ul>
+<h2 id="log_requests"><a class="header" href="#log_requests">log_requests</a></h2>
+<pre><code class="language-pepper">log_requests(context: Context, next: Handler): http.Response
+</code></pre>
+<p>A middleware that logs each request at the <code>info</code> level once it is
+answered, with its method, path, status and time in milliseconds, under
+the target <code>web</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>context</code> — the request</li>
+<li><code>next</code> — the rest of the chain</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li><code>next</code>'s response</li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">var router = web.Router().use(web.log_requests);
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from router.pep by `pep-doc package`. Do not edit. -->
+<h1 id="routerpep"><a class="header" href="#routerpep">router.pep</a></h1>
+<p>Routing: <code>Router</code> sends each request to the handler registered for its
+method and path, through the router's middleware; <code>Context</code> is what a
+handler gets; <code>serve</code> runs a router on an <code>http.Server</code>.</p>
+<p>Source: <code>router.pep</code></p>
+<h2 id="handler"><a class="header" href="#handler">Handler</a></h2>
+<pre><code class="language-pepper">type Handler = (Context) =&gt; http.Response
+</code></pre>
+<p>A function that answers one request.</p>
+<h2 id="middleware"><a class="header" href="#middleware">Middleware</a></h2>
+<pre><code class="language-pepper">type Middleware = (Context, Handler) =&gt; http.Response
+</code></pre>
+<p>A function that wraps the rest of the chain: it gets the request's
+<code>Context</code> and <code>next</code>, the handler (or the next middleware) it wraps. It
+may answer by itself, or call <code>next(context)</code> and return or change that
+response.</p>
+<h2 id="context"><a class="header" href="#context">Context</a></h2>
+<pre><code class="language-pepper">struct Context
+</code></pre>
+<p>What a handler gets for one request: the request itself and the path
+parameters its route matched, with helpers that read the query, the
+cookies and the body.</p>
+<h3 id="fields-4"><a class="header" href="#fields-4">Fields</a></h3>
+<h4 id="request"><a class="header" href="#request">request</a></h4>
+<pre><code class="language-pepper">var request: http.Request
+</code></pre>
+<p>The request, with its body read in full.</p>
+<h4 id="params"><a class="header" href="#params">params</a></h4>
+<pre><code class="language-pepper">var params: HashMap&lt;String, String&gt;
+</code></pre>
+<p>The path parameters of the matched route, decoded: <code>{id}</code> in
+<code>/users/{id}</code> is <code>params["id"]</code>. Empty for a request no route matched.</p>
+<h3 id="constructor-3"><a class="header" href="#constructor-3">Constructor</a></h3>
+<h4 id="context-1"><a class="header" href="#context-1">Context()</a></h4>
+<pre><code class="language-pepper">construct(request: http.Request)
+</code></pre>
+<p>Creates the context of <code>request</code>, with no path parameters.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>request</code> — the request</li>
+</ul>
+<h3 id="methods-2"><a class="header" href="#methods-2">Methods</a></h3>
+<h4 id="param"><a class="header" href="#param">param</a></h4>
+<pre><code class="language-pepper">param(name: String): String
+</code></pre>
+<p>Returns the path parameter <code>name</code>, decoded.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>name</code> — the parameter's name in the route, such as <code>id</code> for <code>{id}</code></li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>its value, or <code>""</code> when the route has no such parameter</li>
+</ul>
+<h4 id="query"><a class="header" href="#query">query</a></h4>
+<pre><code class="language-pepper">query(name: String): String?
+</code></pre>
+<p>Returns the first value of the query parameter <code>name</code>, decoded as a
+form (<code>+</code> is a space).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>name</code> — the parameter's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>its first value; none when the query does not have it or is not valid form encoding</li>
+</ul>
+<h4 id="query_pairs"><a class="header" href="#query_pairs">query_pairs</a></h4>
+<pre><code class="language-pepper">query_pairs(): Array&lt;(String, String)&gt;
+</code></pre>
+<p>Returns every name and value of the query, decoded, in order.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the pairs; empty when there is no query or it is not valid form encoding</li>
+</ul>
+<h4 id="cookie-2"><a class="header" href="#cookie-2">cookie</a></h4>
+<pre><code class="language-pepper">cookie(name: String): String?
+</code></pre>
+<p>Returns the value of the cookie <code>name</code> that the client sent.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>name</code> — the cookie's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>its value, without quotes; none when the request has no such cookie</li>
+</ul>
+<h4 id="form-2"><a class="header" href="#form-2">form</a></h4>
+<pre><code class="language-pepper">form(): Result&lt;Form&gt;
+</code></pre>
+<p>Parses the body as a form: <code>application/x-www-form-urlencoded</code> or
+<code>multipart/form-data</code> (see <code>parse_form</code>).</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the form's fields and files, or an error for another content type or a malformed body</li>
+</ul>
+<h4 id="json"><a class="header" href="#json">json</a></h4>
+<pre><code class="language-pepper">json(): Result&lt;json.JsonValue, json.JsonError&gt;
+</code></pre>
+<p>Parses the body as JSON.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the value, or the parse error</li>
+</ul>
+<h2 id="router"><a class="header" href="#router">Router</a></h2>
+<pre><code class="language-pepper">struct Router
+</code></pre>
+<p>Sends each request to the handler of the first route whose method and
+path pattern match it, through the router's middleware.</p>
+<p>A pattern is a path whose segments are literal text, <code>{name}</code> (any one
+segment, as the parameter <code>name</code>) or, as the last segment, <code>{*name}</code> (the
+rest of the path, slashes included, possibly empty). Literal segments
+and parameters are compared after percent-decoding, segment by segment.
+A <code>HEAD</code> request also matches <code>GET</code> routes (the server sends no body).</p>
+<p>A path no route matches gets <code>404 Not Found</code>; a path that matches only
+routes of other methods gets <code>405 Method Not Allowed</code> with an <code>Allow</code>
+field; a path with an invalid percent-escape gets <code>400 Bad Request</code>.
+These pass through the middleware too.</p>
+<p>A router is used on one thread; <code>serve</code> builds one for each request.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">var router = web.Router();
+router.get("/users/{id}", (c) =&gt; web.text("user " + c.param("id")));
+router.get("/files/{*path}", (c) =&gt; web.text("file " + c.param("path")));
+var response = router.handle(http.Request("GET", "/users/42"));   # 200, "user 42"
+</code></pre>
+<h3 id="constructor-4"><a class="header" href="#constructor-4">Constructor</a></h3>
+<h4 id="router-1"><a class="header" href="#router-1">Router()</a></h4>
+<pre><code class="language-pepper">construct()
+</code></pre>
+<p>Creates a router with no routes and no middleware.</p>
+<h3 id="methods-3"><a class="header" href="#methods-3">Methods</a></h3>
+<h4 id="route"><a class="header" href="#route">route</a></h4>
+<pre><code class="language-pepper">route(method: String, pattern: String, handler: Handler): Router
+</code></pre>
+<p>Adds a route for <code>method</code> and <code>pattern</code>. Routes are tried in the order
+they were added.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>method</code> — the method, such as <code>GET</code>; compared exactly</li>
+<li><code>pattern</code> — the path pattern, such as <code>/users/{id}</code></li>
+<li><code>handler</code> — answers the requests the route matches</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>this router</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if <code>pattern</code> does not start with <code>/</code> ("route pattern must start with '/'") or has <code>{*name}</code> before its last segment ("a wildcard must be the last segment")</li>
+</ul>
+<h4 id="get-1"><a class="header" href="#get-1">get</a></h4>
+<pre><code class="language-pepper">get(pattern: String, handler: Handler): Router
+</code></pre>
+<p>Adds a <code>GET</code> route (which <code>HEAD</code> requests match too).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>pattern</code> — the path pattern</li>
+<li><code>handler</code> — answers the requests the route matches</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>this router</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>as <code>route</code> does</li>
+</ul>
+<h4 id="post"><a class="header" href="#post">post</a></h4>
+<pre><code class="language-pepper">post(pattern: String, handler: Handler): Router
+</code></pre>
+<p>Adds a <code>POST</code> route.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>pattern</code> — the path pattern</li>
+<li><code>handler</code> — answers the requests the route matches</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>this router</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>as <code>route</code> does</li>
+</ul>
+<h4 id="put"><a class="header" href="#put">put</a></h4>
+<pre><code class="language-pepper">put(pattern: String, handler: Handler): Router
+</code></pre>
+<p>Adds a <code>PUT</code> route.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>pattern</code> — the path pattern</li>
+<li><code>handler</code> — answers the requests the route matches</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>this router</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>as <code>route</code> does</li>
+</ul>
+<h4 id="patch"><a class="header" href="#patch">patch</a></h4>
+<pre><code class="language-pepper">patch(pattern: String, handler: Handler): Router
+</code></pre>
+<p>Adds a <code>PATCH</code> route.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>pattern</code> — the path pattern</li>
+<li><code>handler</code> — answers the requests the route matches</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>this router</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>as <code>route</code> does</li>
+</ul>
+<h4 id="delete"><a class="header" href="#delete">delete</a></h4>
+<pre><code class="language-pepper">delete(pattern: String, handler: Handler): Router
+</code></pre>
+<p>Adds a <code>DELETE</code> route.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>pattern</code> — the path pattern</li>
+<li><code>handler</code> — answers the requests the route matches</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>this router</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>as <code>route</code> does</li>
+</ul>
+<h4 id="use"><a class="header" href="#use">use</a></h4>
+<pre><code class="language-pepper">use(middleware: Middleware): Router
+</code></pre>
+<p>Adds a middleware around every request, the 404, 405 and 400 answers
+included. The first one added is the outermost: it sees the request
+first and the response last.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>middleware</code> — the middleware</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>this router</li>
+</ul>
+<h4 id="handle"><a class="header" href="#handle">handle</a></h4>
+<pre><code class="language-pepper">handle(request: http.Request): http.Response
+</code></pre>
+<p>Answers <code>request</code>: finds its route, then runs the middleware and the
+route's handler.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>request</code> — the request; its <code>url</code> is the request target (<code>/path?query</code>)</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the response</li>
+</ul>
+<h2 id="serve"><a class="header" href="#serve">serve</a></h2>
+<pre><code class="language-pepper">serve(server: http.Server, app: shared (Router) =&gt; void)
+</code></pre>
+<p>Serves requests from <code>server</code> with a router that <code>app</code> sets up, until
+the task is cancelled (when <code>async.run</code> ends). For each request it makes
+a <code>Router</code>, calls <code>app</code> to add the routes and middleware, and lets the
+router answer. A router and its handlers are not thread-safe, so they
+are not shared between the worker threads of <code>async.run</code>: keep <code>app</code> to
+adding routes, and put state the handlers share, such as a connection
+pool or a counter, in a <code>[Shared]</code> struct (or an <code>async.Atomic&lt;T&gt;</code>) at
+module scope.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>server</code> — the server, from <code>http.Server.bind</code> or <code>bind_tls</code></li>
+<li><code>app</code> — adds the routes and middleware to a new router</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>outside <code>async.run</code></li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">routes(router: web.Router) {
+    router.get("/", (c) =&gt; web.text("hello"));
+}
+
+main(): int {
+    async.run(() =&gt; {
+        var server = http.Server.bind(io.SocketAddress.parse("127.0.0.1:8080").value()).value();
+        web.serve(server, routes);
+    });
+    return 0;
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from static.pep by `pep-doc package`. Do not edit. -->
+<h1 id="staticpep"><a class="header" href="#staticpep">static.pep</a></h1>
+<p>Static files: <code>static_files</code> serves a folder with content types,
+<code>ETag</code> and <code>If-None-Match</code>, single <code>Range</code> requests, and gzip for text;
+<code>content_type</code> maps a file name to its media type.</p>
+<p>Source: <code>static.pep</code></p>
+<h2 id="max_gzip_size"><a class="header" href="#max_gzip_size">MAX_GZIP_SIZE</a></h2>
+<pre><code class="language-pepper">const MAX_GZIP_SIZE: ulong = 4194304
+</code></pre>
+<p>The largest file <code>static_files</code> compresses with gzip: 4 MiB. Larger
+files are sent as they are, streamed from disk.</p>
+<h2 id="static_files"><a class="header" href="#static_files">static_files</a></h2>
+<pre><code class="language-pepper">static_files(root: io.Path): Handler
+</code></pre>
+<p>Returns a handler that serves the files under <code>root</code> for <code>GET</code> and
+<code>HEAD</code> routes whose pattern ends in <code>{*path}</code>: the file at <code>root</code>
+joined with the request's <code>path</code> parameter (<code>index.html</code> for a folder).</p>
+<p>It refuses a path that could leave <code>root</code> with <code>404 Not Found</code>: one
+with a <code>..</code> segment, an absolute path, a backslash, a drive or stream
+name (<code>:</code>), or a NUL, in plain or percent-encoded form (the router
+decodes the path before the handler checks it). It does not follow the
+path's symbolic links any differently from the system, so a link inside
+<code>root</code> that points outside it is served.</p>
+<p>A file is sent with the <code>Content-Type</code> that <code>content_type</code> gives, an
+<code>ETag</code> made from its size and modification time, and <code>Accept-Ranges: bytes</code>. A request whose <code>If-None-Match</code> lists the <code>ETag</code> gets <code>304 Not Modified</code>. A single <code>Range: bytes=...</code> gets <code>206 Partial Content</code> (or
+<code>416 Range Not Satisfiable</code>), unless an <code>If-Range</code> names another
+<code>ETag</code>; several ranges get the whole file. A text file (<code>text/*</code>, JSON,
+JavaScript, SVG, XML) of at most <code>MAX_GZIP_SIZE</code> bytes is gzipped for a
+client that accepts it, with <code>Vary: Accept-Encoding</code>. The gzipped body
+is kept in memory (up to <code>MAX_GZIP_CACHE_SIZE</code> bytes over all files) and
+made again only when the file's size or modification time changes, or
+after it was dropped to make room.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>root</code> — the folder to serve</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the handler</li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">var router = web.Router();
+router.get("/assets/{*path}", web.static_files(io.Path("public")));
+</code></pre>
+<h2 id="content_type-1"><a class="header" href="#content_type-1">content_type</a></h2>
+<pre><code class="language-pepper">content_type(name: String): String
+</code></pre>
+<p>Returns the media type for a file name, by its extension: <code>text/html; charset=utf-8</code> for <code>.html</code>, <code>image/png</code> for <code>.png</code>, and the like.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>name</code> — the file name or path</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the media type; <code>application/octet-stream</code> for an unknown extension</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+
+    </div>
+    </body>
+</html>

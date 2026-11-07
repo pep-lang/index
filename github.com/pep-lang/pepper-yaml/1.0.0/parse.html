@@ -1,0 +1,398 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>parse.pep - yaml</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">yaml</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <!-- Generated from parse.pep by `pep-doc package`. Do not edit. -->
+<h1 id="parsepep"><a class="header" href="#parsepep">parse.pep</a></h1>
+<p><code>parse</code> and <code>parse_all</code>: reading YAML text into <code>YamlValue</code>s;
+<code>YamlError</code>, what they report when the text is not YAML; and
+<code>decode_text</code>, for text in UTF-16.</p>
+<p>Source: <code>parse.pep</code></p>
+<h2 id="yamlerror"><a class="header" href="#yamlerror">YamlError</a></h2>
+<pre><code class="language-pepper">struct YamlError
+</code></pre>
+<p>What <code>parse</code> reports when the text is not YAML, and what <code>decode</code>
+reports when a value does not fit its property: what is wrong, and the
+line and column where it is.</p>
+<p><code>to_string()</code> renders it like a compiler error:
+<code>config.yaml:4:12: error: undefined alias 'base'</code>.</p>
+<h3 id="fields"><a class="header" href="#fields">Fields</a></h3>
+<h4 id="message"><a class="header" href="#message">message</a></h4>
+<pre><code class="language-pepper">var message: String
+</code></pre>
+<p>What is wrong, worded like a compiler error (<code>expected ':' after the key</code>).</p>
+<h4 id="path"><a class="header" href="#path">path</a></h4>
+<pre><code class="language-pepper">var path: String
+</code></pre>
+<p>The path given to <code>parse</code>, which names the text in <code>to_string()</code>;
+empty when none was given.</p>
+<h4 id="line"><a class="header" href="#line">line</a></h4>
+<pre><code class="language-pepper">var line: ulong
+</code></pre>
+<p>The line of the error, from 1; 0 for an error with no text to point
+into, such as one from <code>from_yaml</code>.</p>
+<h4 id="column"><a class="header" href="#column">column</a></h4>
+<pre><code class="language-pepper">var column: ulong
+</code></pre>
+<p>The column of the error, from 1, counting bytes as clang does; 0
+when <code>line</code> is.</p>
+<h4 id="offset"><a class="header" href="#offset">offset</a></h4>
+<pre><code class="language-pepper">var offset: ulong
+</code></pre>
+<p>The byte offset of the error in the text, from 0.</p>
+<h4 id="value_path"><a class="header" href="#value_path">value_path</a></h4>
+<pre><code class="language-pepper">var value_path: String
+</code></pre>
+<p>Where in the document the value an error is about is, as a path from
+the root <code>$</code> (<code>$.server.port</code>, <code>$.hosts[0]</code>); empty for an error in
+the text's syntax. <code>decode</code> and <code>from_yaml</code> set it, and start
+<code>message</code> with it.</p>
+<h3 id="constructor"><a class="header" href="#constructor">Constructor</a></h3>
+<h4 id="yamlerror-1"><a class="header" href="#yamlerror-1">YamlError()</a></h4>
+<pre><code class="language-pepper">construct(message: String = "", path: String = "", line: ulong = 1, column: ulong = 1, offset: ulong = 0)
+</code></pre>
+<p>Creates an error.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>message</code> — what is wrong</li>
+<li><code>path</code> — the name of the text, or empty</li>
+<li><code>line</code> — the line of the error, from 1</li>
+<li><code>column</code> — the column of the error, from 1</li>
+<li><code>offset</code> — the byte offset of the error, from 0</li>
+</ul>
+<h3 id="methods"><a class="header" href="#methods">Methods</a></h3>
+<h4 id="to_string"><a class="header" href="#to_string">to_string</a></h4>
+<pre><code class="language-pepper">to_string(): String
+</code></pre>
+<p>Returns the error as a compiler prints one:
+<code>path:line:column: error: message</code>, without the <code>path:</code> when there
+is no path and without <code>line:column:</code> when <code>line</code> is 0.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the rendered error</li>
+</ul>
+<h2 id="parse"><a class="header" href="#parse">parse</a></h2>
+<pre><code class="language-pepper">parse( text: String, path: String = "", max_depth: ulong = 256, max_alias_nodes: ulong = 1000000, merge_keys: bool = false ): Result&lt;YamlValue, YamlError&gt;
+</code></pre>
+<p>Parses YAML 1.2 text holding one document into a <code>YamlValue</code>.</p>
+<p>Plain scalars are read with the core schema: <code>null</code>, <code>~</code> and nothing are
+<code>Null</code>; <code>true</code> and <code>false</code> (also <code>True</code>, <code>TRUE</code>, ...) are booleans;
+<code>42</code>, <code>0x2a</code> and <code>0o52</code> are integers; <code>1.5</code>, <code>1e3</code>, <code>.inf</code> and <code>.nan</code>
+are floats; anything else, <code>yes</code>, <code>no</code>, <code>on</code> and <code>off</code> included, is a
+string. Quoted and block scalars (<code>|</code>, <code>&gt;</code>) are strings.</p>
+<p>Only the core schema's tags are read: <code>!!str</code>, <code>!!int</code>, <code>!!float</code>,
+<code>!!bool</code>, <code>!!null</code>, <code>!!seq</code> and <code>!!map</code> (and <code>!</code>, which makes a plain
+scalar a string). Any other tag is an error, so no text can ask for a
+type of its own to be made.</p>
+<p>Anchors and aliases (<code>&amp;base</code>, <code>*base</code>) are read, and an alias is the
+value its anchor names, shared rather than copied. So that a small
+text cannot stand for a huge value (the "billion laughs" attack), the
+nodes all aliases stand for, counted as if each were copied, may not
+pass <code>max_alias_nodes</code>.</p>
+<p>The text must be valid UTF-8; a byte-order mark at the start is skipped
+(use <code>decode_text</code> for UTF-16). A mapping's keys must be scalars and
+must differ. YAML 1.1's merge key (<code>&lt;&lt;: *base</code>) is an ordinary key
+unless <code>merge_keys</code> is true.</p>
+<p>With <code>merge_keys</code>, a plain <code>&lt;&lt;</code> key merges the mapping it names, or each
+mapping of the list it names, into the mapping that holds it: the
+merged keys take the place of the <code>&lt;&lt;</code> entry, keys the mapping sets
+itself win, and an earlier mapping of the list wins over a later one.
+A merged mapping is usually an alias, so its nodes count toward
+<code>max_alias_nodes</code>. A <code>&lt;&lt;</code> naming anything else is an error.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>text</code> — the YAML text</li>
+<li><code>path</code> — the name of the text (a file name, say), which the error's <code>to_string()</code> puts first</li>
+<li><code>max_depth</code> — how deeply collections may nest</li>
+<li><code>max_alias_nodes</code> — how many nodes the aliases may stand for in all</li>
+<li><code>merge_keys</code> — whether a <code>&lt;&lt;</code> key merges mappings, as in YAML 1.1</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the document's value (<code>Null</code> for text with no document), or an error naming the first problem and its line and column; text holding more than one document is an error (use <code>parse_all</code>)</li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import yaml;
+
+var parsed = yaml.parse("server:\n  port: 8080\n  debug: no\n");
+assert(parsed.value()["server"]["port"].as_int().value() == 8080, "an integer");
+assert(parsed.value()["server"]["debug"].as_string().value() == "no", "not a boolean");
+var bad = yaml.parse("a: *missing", path = "config.yaml");
+assert(bad.error().to_string() == "config.yaml:1:4: error: undefined alias 'missing'", "where");
+</code></pre>
+<h2 id="parse_all"><a class="header" href="#parse_all">parse_all</a></h2>
+<pre><code class="language-pepper">parse_all( text: String, path: String = "", max_depth: ulong = 256, max_alias_nodes: ulong = 1000000, merge_keys: bool = false ): Result&lt;Array&lt;YamlValue&gt;, YamlError&gt;
+</code></pre>
+<p>Parses YAML 1.2 text holding any number of documents, each started by
+<code>---</code> or ended by <code>...</code>, into one <code>YamlValue</code> each.</p>
+<p>Each document is read as <code>parse</code> reads one, merge keys included; anchors and <code>%TAG</code>
+directives hold only in their own document.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>text</code> — the YAML text</li>
+<li><code>path</code> — the name of the text (a file name, say), which the error's <code>to_string()</code> puts first</li>
+<li><code>max_depth</code> — how deeply collections may nest</li>
+<li><code>max_alias_nodes</code> — how many nodes the aliases of each document may stand for in all</li>
+<li><code>merge_keys</code> — whether a <code>&lt;&lt;</code> key merges mappings, as in YAML 1.1</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the documents in order (none for empty text), or an error naming the first problem and its line and column</li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import yaml;
+
+var documents = yaml.parse_all("---\nname: a\n---\nname: b\n").value();
+assert(documents.count == 2, "two documents");
+assert(documents[1]["name"].as_string().value() == "b", "the second");
+</code></pre>
+<h2 id="decode_text"><a class="header" href="#decode_text">decode_text</a></h2>
+<pre><code class="language-pepper">decode_text(bytes: u8[], path: String = ""): Result&lt;String, YamlError&gt;
+</code></pre>
+<p>Decodes the bytes of a YAML file into text for <code>parse</code>, in whichever
+encoding YAML allows they are: UTF-8, or UTF-16 in either byte order,
+told apart by a byte-order mark or, without one, by where the zero bytes
+of the first character are. A byte-order mark is dropped.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>bytes</code> — the file's contents</li>
+<li><code>path</code> — the name of the text, which the error's <code>to_string()</code> puts first</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the text, or an error when the bytes are not valid in their encoding or are UTF-32, which this package does not read</li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import text;
+import yaml;
+
+var bytes = text.Utf16.encode("\u{feff}a: 1\n");
+var decoded = yaml.decode_text(bytes).value();
+assert(yaml.parse(decoded).value()["a"].as_int().value() == 1, "UTF-16");
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="document.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="value.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="document.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="value.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

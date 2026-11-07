@@ -1,0 +1,482 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>diff</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">diff</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <!-- Generated from pep.toml by `pep-doc package`. Do not edit. -->
+<h1 id="diff-100"><a class="header" href="#diff-100">diff 1.0.0</a></h1>
+<p>Myers and patience diff, unified-diff output, and patch apply</p>
+<h2 id="pages"><a class="header" href="#pages">Pages</a></h2>
+<ul>
+<li><a href="module.html">diff</a>: Diffs: the edits that turn one sequence into another, unified diffs of text, and applying them.</li>
+<li><a href="edits.html">edits.pep</a>: Edit scripts: <code>myers</code> and <code>patience</code> find the edits that turn one sequence into another, as runs of equal, deleted and inserted elements.</li>
+<li><a href="patch.html">patch.pep</a>: Patches: <code>apply</code> applies a unified diff to the text it was made from.</li>
+<li><a href="unified.html">unified.pep</a>: Text diffs: <code>split_lines</code> cuts text into lines, and <code>unified</code> writes the difference of two texts as a unified diff, the format of <code>diff -u</code> and <code>git diff</code>.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from module.pep by `pep-doc package`. Do not edit. -->
+<h1 id="diff"><a class="header" href="#diff">diff</a></h1>
+<p>Diffs: the edits that turn one sequence into another, unified diffs of
+text, and applying them.</p>
+<p>Bring it in with <code>import diff</code>.</p>
+<ul>
+<li><code>myers</code>, <code>patience</code>: an edit script between two arrays, as <code>Edit</code> runs</li>
+<li><code>split_lines</code>: text cut into lines that keep their endings</li>
+<li><code>unified</code>: the unified diff of two texts, as <code>diff -u</code> and <code>git diff</code> write it</li>
+<li><code>apply</code>: a unified diff applied to the text it was made from</li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import diff;
+
+main(): int {
+    var old_text = "one\ntwo\nthree\n";
+    var new_text = "one\n2\nthree\n";
+    var patch = diff.unified(old_text, new_text, from_name = "a/n.txt", to_name = "b/n.txt");
+    print(patch);
+    # --- a/n.txt
+    # +++ b/n.txt
+    # @@ -1,3 +1,3 @@
+    #  one
+    # -two
+    # +2
+    #  three
+    assert(diff.apply(old_text, patch).value() == new_text, "a round trip");
+    return 0;
+}
+</code></pre>
+<p>Source: <code>module.pep</code></p>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from edits.pep by `pep-doc package`. Do not edit. -->
+<h1 id="editspep"><a class="header" href="#editspep">edits.pep</a></h1>
+<p>Edit scripts: <code>myers</code> and <code>patience</code> find the edits that turn one
+sequence into another, as runs of equal, deleted and inserted elements.</p>
+<p>Source: <code>edits.pep</code></p>
+<h2 id="editkind"><a class="header" href="#editkind">EditKind</a></h2>
+<pre><code class="language-pepper">enum EditKind
+</code></pre>
+<p>What a run of an edit script does.</p>
+<h3 id="cases"><a class="header" href="#cases">Cases</a></h3>
+<h4 id="equal"><a class="header" href="#equal">Equal</a></h4>
+<pre><code class="language-pepper">Equal
+</code></pre>
+<p>The run is in both sequences.</p>
+<h4 id="delete"><a class="header" href="#delete">Delete</a></h4>
+<pre><code class="language-pepper">Delete
+</code></pre>
+<p>The run is only in the first sequence.</p>
+<h4 id="insert"><a class="header" href="#insert">Insert</a></h4>
+<pre><code class="language-pepper">Insert
+</code></pre>
+<p>The run is only in the second sequence.</p>
+<h2 id="edit"><a class="header" href="#edit">Edit</a></h2>
+<pre><code class="language-pepper">struct Edit
+</code></pre>
+<p>One run of an edit script: <code>count</code> elements at <code>a_start</code> in the first
+sequence and <code>b_start</code> in the second.</p>
+<h3 id="fields"><a class="header" href="#fields">Fields</a></h3>
+<h4 id="kind"><a class="header" href="#kind">kind</a></h4>
+<pre><code class="language-pepper">var kind: EditKind
+</code></pre>
+<p>What the run does.</p>
+<h4 id="a_start"><a class="header" href="#a_start">a_start</a></h4>
+<pre><code class="language-pepper">var a_start: ulong
+</code></pre>
+<p>Where the run starts in the first sequence; for an <code>Insert</code>, the
+index it goes before.</p>
+<h4 id="b_start"><a class="header" href="#b_start">b_start</a></h4>
+<pre><code class="language-pepper">var b_start: ulong
+</code></pre>
+<p>Where the run starts in the second sequence; for a <code>Delete</code>, the
+index of the element that follows it.</p>
+<h4 id="count"><a class="header" href="#count">count</a></h4>
+<pre><code class="language-pepper">var count: ulong
+</code></pre>
+<p>The number of elements in the run, at least 1.</p>
+<h3 id="constructor"><a class="header" href="#constructor">Constructor</a></h3>
+<h4 id="edit-1"><a class="header" href="#edit-1">Edit()</a></h4>
+<pre><code class="language-pepper">construct(kind: EditKind, a_start: ulong, b_start: ulong, count: ulong)
+</code></pre>
+<p>Makes a run.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>kind</code> — what the run does</li>
+<li><code>a_start</code> — where it starts in the first sequence</li>
+<li><code>b_start</code> — where it starts in the second sequence</li>
+<li><code>count</code> — how many elements it covers</li>
+</ul>
+<h3 id="methods"><a class="header" href="#methods">Methods</a></h3>
+<h4 id="to_string"><a class="header" href="#to_string">to_string</a></h4>
+<pre><code class="language-pepper">to_string(): String
+</code></pre>
+<p>Returns the run as <code>kind a_start b_start count</code>, such as <code>Delete 4 3 2</code>.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the run in a line of text</li>
+</ul>
+<h2 id="myers"><a class="header" href="#myers">myers</a></h2>
+<pre><code class="language-pepper">myers&lt;T&gt;(a: T[], b: T[]): Edit[]
+</code></pre>
+<p>Returns a shortest edit script from <code>a</code> to <code>b</code>, found with Myers'
+algorithm in O((N + M) * D) time and O(N + M) space, where D is the
+number of elements deleted and inserted.</p>
+<p>Elements compare with <code>==</code>. Runs alternate between <code>Equal</code> and changes,
+and within a change a <code>Delete</code> comes before the <code>Insert</code>, as <code>diff</code>
+prints them. Applying the runs in order to <code>a</code> gives <code>b</code>.</p>
+<p><strong>Type parameters</strong></p>
+<ul>
+<li><code>T</code> — the element type</li>
+</ul>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>a</code> — the first sequence</li>
+<li><code>b</code> — the second sequence</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the runs, in order; empty when both sequences are empty</li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">var edits = diff.myers(["a", "b", "c"], ["a", "c", "d"]);
+# Equal 0 0 1, Delete 1 1 1, Equal 2 1 1, Insert 3 2 1
+</code></pre>
+<h2 id="patience"><a class="header" href="#patience">patience</a></h2>
+<pre><code class="language-pepper">patience&lt;T&gt;(a: T[], b: T[]): Edit[]
+</code></pre>
+<p>Returns an edit script from <code>a</code> to <code>b</code> found with patience diff: it
+matches the elements that occur exactly once in each sequence, keeps the
+longest run of them that is in the same order in both, and diffs between
+those anchors the same way, falling back to <code>myers</code> where no element is
+unique. The result is often easier to read than Myers' when blocks move,
+but need not be the shortest.</p>
+<p>Elements compare with <code>==</code> and are counted in a <code>HashMap&lt;T, ...&gt;</code>, so
+<code>T</code> must hash the way it compares (as <code>String</code>, the number types and
+<code>[Equatable]</code> structs do).</p>
+<p><strong>Type parameters</strong></p>
+<ul>
+<li><code>T</code> — the element type</li>
+</ul>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>a</code> — the first sequence</li>
+<li><code>b</code> — the second sequence</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the runs, in the same form as <code>myers</code> gives</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from patch.pep by `pep-doc package`. Do not edit. -->
+<h1 id="patchpep"><a class="header" href="#patchpep">patch.pep</a></h1>
+<p>Patches: <code>apply</code> applies a unified diff to the text it was made from.</p>
+<p>Source: <code>patch.pep</code></p>
+<h2 id="apply"><a class="header" href="#apply">apply</a></h2>
+<pre><code class="language-pepper">apply(text: String, patch: String): Result&lt;String&gt;
+</code></pre>
+<p>Applies the unified diff <code>patch</code> to <code>text</code> and returns the new text.</p>
+<p>Each hunk must match <code>text</code> exactly where its <code>@@</code> header says: every
+unchanged and removed line, line ending included. A hunk that does not
+is an error; <code>apply</code> never shifts a hunk or matches it fuzzily. Lines
+before the first <code>@@</code> (<code>diff --git</code>, <code>index</code>, <code>---</code>, <code>+++</code>) are skipped,
+and hunks must come in order without overlapping, as <code>unified</code> and <code>git diff</code> write them. A patch with no hunks gives <code>text</code> unchanged.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>text</code> — the old text</li>
+<li><code>patch</code> — the diff, as <code>unified</code> writes it</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the new text, or an error naming the line of the patch and of <code>text</code> where they disagree</li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">var patch = diff.unified("one\ntwo\n", "one\n2\n");
+diff.apply("one\ntwo\n", patch).value();   # "one\n2\n"
+diff.apply("one\nthree\n", patch).error().message;
+# "patch line 3: hunk does not match line 2 of the text"
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from unified.pep by `pep-doc package`. Do not edit. -->
+<h1 id="unifiedpep"><a class="header" href="#unifiedpep">unified.pep</a></h1>
+<p>Text diffs: <code>split_lines</code> cuts text into lines, and <code>unified</code> writes the
+difference of two texts as a unified diff, the format of <code>diff -u</code> and
+<code>git diff</code>.</p>
+<p>Source: <code>unified.pep</code></p>
+<h2 id="algorithm"><a class="header" href="#algorithm">Algorithm</a></h2>
+<pre><code class="language-pepper">enum Algorithm
+</code></pre>
+<p>Which algorithm <code>unified</code> diffs lines with.</p>
+<h3 id="cases-1"><a class="header" href="#cases-1">Cases</a></h3>
+<h4 id="myers-1"><a class="header" href="#myers-1">Myers</a></h4>
+<pre><code class="language-pepper">Myers
+</code></pre>
+<p><code>myers</code>: a shortest diff. The default, as in <code>git diff</code>.</p>
+<h4 id="patience-1"><a class="header" href="#patience-1">Patience</a></h4>
+<pre><code class="language-pepper">Patience
+</code></pre>
+<p><code>patience</code>: anchors on lines that occur once in each text, as
+<code>git diff --patience</code> does.</p>
+<h2 id="split_lines"><a class="header" href="#split_lines">split_lines</a></h2>
+<pre><code class="language-pepper">split_lines(text: String): String[]
+</code></pre>
+<p>Splits <code>text</code> into lines, each keeping its <code>"\n"</code> (and a <code>"\r"</code> before
+it), so joining them gives <code>text</code> back. A last line with no <code>"\n"</code> is a
+line of its own; <code>""</code> has no lines.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>text</code> — the text to split</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the lines, in order</li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">diff.split_lines("a\nb");   # ["a\n", "b"]
+</code></pre>
+<h2 id="unified"><a class="header" href="#unified">unified</a></h2>
+<pre><code class="language-pepper">unified( a: String, b: String, context: ulong = 3, from_name: String = "a", to_name: String = "b", algorithm: Algorithm = Algorithm.Myers ): String
+</code></pre>
+<p>Returns the unified diff that turns <code>a</code> into <code>b</code>: a <code>---</code> and a <code>+++</code>
+line naming the two sides, then one hunk for each group of changes, with
+<code>context</code> unchanged lines around it. A hunk starts with
+<code>@@ -start,count +start,count @@</code>, and its lines start with <code>' '</code>
+(unchanged), <code>'-'</code> (only in <code>a</code>) or <code>'+'</code> (only in <code>b</code>). A last line with
+no newline is followed by <code>\ No newline at end of file</code>. Changes at most
+<code>2 * context</code> lines apart share a hunk, as in <code>git diff</code>.</p>
+<p>Lines are compared whole, line endings included, so a <code>"\r\n"</code> line
+differs from the same line ending in <code>"\n"</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>a</code> — the old text</li>
+<li><code>b</code> — the new text</li>
+<li><code>context</code> — how many unchanged lines to show around each change</li>
+<li><code>from_name</code> — what the <code>---</code> line names <code>a</code> as, such as <code>a/main.pep</code></li>
+<li><code>to_name</code> — what the <code>+++</code> line names <code>b</code> as</li>
+<li><code>algorithm</code> — how to match the lines</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the diff, or <code>""</code> when the texts are equal</li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">diff.unified("one\ntwo\n", "one\n2\n");
+# --- a
+# +++ b
+# @@ -1,2 +1,2 @@
+#  one
+# -two
+# +2
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+
+    </div>
+    </body>
+</html>

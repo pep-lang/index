@@ -1,0 +1,543 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>database.pep - sqlite</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">sqlite</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <!-- Generated from database.pep by `pep-doc package`. Do not edit. -->
+<h1 id="databasepep"><a class="header" href="#databasepep">database.pep</a></h1>
+<p><code>Database</code>: a connection to an SQLite database, and its transactions.</p>
+<p>Source: <code>database.pep</code></p>
+<h2 id="open_read_only"><a class="header" href="#open_read_only">OPEN_READ_ONLY</a></h2>
+<pre><code class="language-pepper">const OPEN_READ_ONLY = 0x1
+</code></pre>
+<p>Opens the database for reading only; it must exist.</p>
+<h2 id="open_read_write"><a class="header" href="#open_read_write">OPEN_READ_WRITE</a></h2>
+<pre><code class="language-pepper">const OPEN_READ_WRITE = 0x2
+</code></pre>
+<p>Opens the database for reading and writing.</p>
+<h2 id="open_create"><a class="header" href="#open_create">OPEN_CREATE</a></h2>
+<pre><code class="language-pepper">const OPEN_CREATE = 0x4
+</code></pre>
+<p>With <code>OPEN_READ_WRITE</code>, creates the database when it does not exist.</p>
+<h2 id="open_uri"><a class="header" href="#open_uri">OPEN_URI</a></h2>
+<pre><code class="language-pepper">const OPEN_URI = 0x40
+</code></pre>
+<p>Reads the path as a URI (<code>file:data.db?mode=ro</code>).</p>
+<h2 id="open_memory"><a class="header" href="#open_memory">OPEN_MEMORY</a></h2>
+<pre><code class="language-pepper">const OPEN_MEMORY = 0x80
+</code></pre>
+<p>Opens an in-memory database, whatever the path says.</p>
+<h2 id="open_no_mutex"><a class="header" href="#open_no_mutex">OPEN_NO_MUTEX</a></h2>
+<pre><code class="language-pepper">const OPEN_NO_MUTEX = 0x8000
+</code></pre>
+<p>Leaves out the connection's own lock: a connection used by one thread
+at a time needs none. Ignored when SQLite was built single-threaded.</p>
+<h2 id="open_full_mutex"><a class="header" href="#open_full_mutex">OPEN_FULL_MUTEX</a></h2>
+<pre><code class="language-pepper">const OPEN_FULL_MUTEX = 0x10000
+</code></pre>
+<p>Serializes every call on the connection with its own lock, whatever
+SQLite's default threading mode is.</p>
+<h2 id="database"><a class="header" href="#database">Database</a></h2>
+<pre><code class="language-pepper">struct Database
+</code></pre>
+<p>A connection to an SQLite database.</p>
+<p>Open one with <code>open</code> (a file) or <code>open_in_memory</code>. <code>execute</code> runs SQL
+that returns no rows; <code>prepare</code> makes a <code>Statement</code> for SQL with
+parameters or rows; <code>query&lt;T&gt;</code> runs a query and decodes every row into a
+struct. <code>transaction</code> runs a function inside a transaction that it
+commits, or rolls back when the function fails.</p>
+<p>The connection is closed when the last reference to it, and to every
+statement prepared on it, goes away, or earlier with <code>close()</code>. It
+belongs to one thread at a time: hand it to another thread whole with
+<code>Channel.send(move(db))</code>, or share connections through a <code>Pool</code>.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import sqlite;
+
+struct User {
+    var id: long;
+    var name: String;
+}
+
+main(): int {
+    var db = sqlite.Database.open("app.db").value();
+    db.execute("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT)").value();
+    db.execute("INSERT INTO users (name) VALUES (?)", [sqlite.Value.Text("Ada")]).value();
+    for (var user in db.query&lt;User&gt;("SELECT id, name FROM users").value()) {
+        print($"{user.id}: {user.name}");
+    }
+    return 0;
+}
+</code></pre>
+<h3 id="constructor"><a class="header" href="#constructor">Constructor</a></h3>
+<h4 id="database-1"><a class="header" href="#database-1">Database()</a></h4>
+<pre><code class="language-pepper">construct(handle: __ptr&lt;void&gt;)
+</code></pre>
+<p>Wraps a connection <code>open</code> made; use <code>open</code> instead.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>handle</code> — the <code>sqlite3*</code>, which the database takes over</li>
+</ul>
+<h3 id="static-methods"><a class="header" href="#static-methods">Static methods</a></h3>
+<h4 id="open"><a class="header" href="#open">open</a></h4>
+<pre><code class="language-pepper">static open(path: String, flags: int = OPEN_READ_WRITE | OPEN_CREATE): SqliteResult&lt;Database&gt;
+</code></pre>
+<p>Opens (by default, creating) the database file at <code>path</code>.</p>
+<p><code>":memory:"</code> and an empty path open a private in-memory database,
+and a temporary on-disk one, as SQLite documents.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>path</code> — the database file</li>
+<li><code>flags</code> — <code>OPEN_READ_ONLY</code>, or <code>OPEN_READ_WRITE</code> with or without <code>OPEN_CREATE</code>, plus <code>OPEN_URI</code> or <code>OPEN_MEMORY</code></li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the connection, or the error (<code>SQLITE_CANTOPEN</code>, 14, when the file cannot be opened)</li>
+</ul>
+<h4 id="open_in_memory"><a class="header" href="#open_in_memory">open_in_memory</a></h4>
+<pre><code class="language-pepper">static open_in_memory(): SqliteResult&lt;Database&gt;
+</code></pre>
+<p>Opens a new, private in-memory database, gone when it is closed.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the connection, or the error</li>
+</ul>
+<h3 id="methods"><a class="header" href="#methods">Methods</a></h3>
+<h4 id="is_open"><a class="header" href="#is_open">is_open</a></h4>
+<pre><code class="language-pepper">is_open(): bool
+</code></pre>
+<p>Reports whether the connection is open: false after <code>close()</code>.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>true until the connection is closed</li>
+</ul>
+<h4 id="close"><a class="header" href="#close">close</a></h4>
+<pre><code class="language-pepper">close()
+</code></pre>
+<p>Closes the connection now rather than when the last reference to it
+goes away. Statements prepared on it keep it open until they are
+finalized, but no longer through this <code>Database</code>. Calling it again
+does nothing.</p>
+<h4 id="execute"><a class="header" href="#execute">execute</a></h4>
+<pre><code class="language-pepper">execute(sql: String): SqliteResult&lt;void&gt;
+</code></pre>
+<p>Runs <code>sql</code>, which may hold several statements separated by <code>;</code>, and
+discards any rows.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>sql</code> — the SQL</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>nothing, or the error of the first statement that fails; the statements before it have run</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the database is closed</li>
+</ul>
+<h4 id="execute-1"><a class="header" href="#execute-1">execute</a></h4>
+<pre><code class="language-pepper">execute(sql: String, parameters: Value[]): SqliteResult&lt;long&gt;
+</code></pre>
+<p>Runs one statement with <code>parameters</code> bound to it in order, and
+discards any rows.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>sql</code> — one SQL statement</li>
+<li><code>parameters</code> — one value per parameter</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the number of rows it inserted, changed or deleted, or the error; for any other statement, the count of the last write before it, as SQLite's <code>changes()</code> reports</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the database is closed</li>
+</ul>
+<h4 id="prepare"><a class="header" href="#prepare">prepare</a></h4>
+<pre><code class="language-pepper">prepare(sql: String): SqliteResult&lt;Statement&gt;
+</code></pre>
+<p>Compiles the first statement in <code>sql</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>sql</code> — the SQL; anything after its first statement is ignored</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the statement, or the error (<code>SQLITE_ERROR</code> for a syntax error or an unknown table, <code>SQLITE_MISUSE</code> for SQL that holds no statement)</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the database is closed</li>
+</ul>
+<h4 id="query"><a class="header" href="#query">query</a></h4>
+<pre><code class="language-pepper">query&lt;T&gt;(sql: String, parameters: Value[] = Array&lt;Value&gt;()): SqliteResult&lt;T[]&gt;
+</code></pre>
+<p>Runs a query with <code>parameters</code> bound to it in order, and decodes
+each row into a <code>T</code> as <code>Statement.read&lt;T&gt;()</code> does.</p>
+<p><strong>Type parameters</strong></p>
+<ul>
+<li><code>T</code> — the struct each row decodes into</li>
+</ul>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>sql</code> — one SQL query</li>
+<li><code>parameters</code> — one value per parameter</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the rows, or the first error</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the database is closed</li>
+</ul>
+<h4 id="changes"><a class="header" href="#changes">changes</a></h4>
+<pre><code class="language-pepper">changes(): long
+</code></pre>
+<p>Returns the number of rows the last <code>INSERT</code>, <code>UPDATE</code> or <code>DELETE</code>
+changed.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the row count</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the database is closed</li>
+</ul>
+<h4 id="last_insert_rowid"><a class="header" href="#last_insert_rowid">last_insert_rowid</a></h4>
+<pre><code class="language-pepper">last_insert_rowid(): long
+</code></pre>
+<p>Returns the rowid of the last row inserted, 0 before any.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the rowid</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the database is closed</li>
+</ul>
+<h4 id="set_busy_timeout"><a class="header" href="#set_busy_timeout">set_busy_timeout</a></h4>
+<pre><code class="language-pepper">set_busy_timeout(milliseconds: int)
+</code></pre>
+<p>Sets how long a statement waits for a lock another connection holds
+before it fails with <code>SQLITE_BUSY</code> (5). The default is not to wait.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>milliseconds</code> — the longest wait; 0 or less turns waiting off</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the database is closed</li>
+</ul>
+<h4 id="in_transaction"><a class="header" href="#in_transaction">in_transaction</a></h4>
+<pre><code class="language-pepper">in_transaction(): bool
+</code></pre>
+<p>Reports whether a transaction is open.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>true between <code>begin</code> and <code>commit</code> or <code>rollback</code></li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the database is closed</li>
+</ul>
+<h4 id="begin"><a class="header" href="#begin">begin</a></h4>
+<pre><code class="language-pepper">begin(): SqliteResult&lt;void&gt;
+</code></pre>
+<p>Starts a transaction (<code>BEGIN</code>).</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>nothing, or the error (<code>SQLITE_ERROR</code> inside a transaction: transactions do not nest)</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the database is closed</li>
+</ul>
+<h4 id="commit"><a class="header" href="#commit">commit</a></h4>
+<pre><code class="language-pepper">commit(): SqliteResult&lt;void&gt;
+</code></pre>
+<p>Commits the open transaction (<code>COMMIT</code>).</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>nothing, or the error (<code>SQLITE_ERROR</code> with no transaction open, <code>SQLITE_BUSY</code> when another connection holds a lock, and the transaction stays open)</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the database is closed</li>
+</ul>
+<h4 id="rollback"><a class="header" href="#rollback">rollback</a></h4>
+<pre><code class="language-pepper">rollback(): SqliteResult&lt;void&gt;
+</code></pre>
+<p>Rolls the open transaction back (<code>ROLLBACK</code>).</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>nothing, or the error (<code>SQLITE_ERROR</code> with no transaction open)</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the database is closed</li>
+</ul>
+<h4 id="transaction"><a class="header" href="#transaction">transaction</a></h4>
+<pre><code class="language-pepper">transaction&lt;T&gt;(body: () =&gt; SqliteResult&lt;T&gt;): SqliteResult&lt;T&gt;
+</code></pre>
+<p>Runs <code>body</code> inside a transaction: commits when it returns Ok, and
+rolls back when it returns an error or the commit fails.</p>
+<p><strong>Type parameters</strong></p>
+<ul>
+<li><code>T</code> — what <code>body</code> returns on success</li>
+</ul>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>body</code> — the work to do; return its errors (with <code>?</code>) to roll back</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li><code>body</code>'s result, or the error of <code>begin</code> or <code>commit</code></li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the database is closed</li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import sqlite;
+
+var db = sqlite.Database.open_in_memory().value();
+db.execute("CREATE TABLE accounts (id INTEGER, balance INTEGER)").value();
+var moved = db.transaction&lt;void&gt;((): sqlite.SqliteResult&lt;void&gt; =&gt; {
+    db.execute("UPDATE accounts SET balance = balance - 10 WHERE id = 1")?;
+    db.execute("UPDATE accounts SET balance = balance + 10 WHERE id = 2")?;
+    return sqlite.SqliteResult&lt;void&gt;.ok();
+});
+</code></pre>
+<h2 id="version"><a class="header" href="#version">version</a></h2>
+<pre><code class="language-pepper">version(): String
+</code></pre>
+<p>Returns the version of the SQLite library the program runs against.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the version, such as <code>3.45.1</code></li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="module.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="error.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="module.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="error.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>
