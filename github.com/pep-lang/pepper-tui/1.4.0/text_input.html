@@ -1,0 +1,426 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>text_input.pep - tui</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">tui</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <!-- Generated from text_input.pep by `pep-doc package`. Do not edit. -->
+<h1 id="text_inputpep"><a class="header" href="#text_inputpep">text_input.pep</a></h1>
+<p><code>TextInput</code>: an editable field of text, on one row or wrapped over
+many, with a cursor, a selection and pastes; <code>TextInputState</code> holds the
+text and the cursor from frame to frame.</p>
+<p>Source: <code>text_input.pep</code></p>
+<h2 id="textinputstate"><a class="header" href="#textinputstate">TextInputState</a></h2>
+<pre><code class="language-pepper">struct TextInputState
+</code></pre>
+<p>The state of a <code>TextInput</code>: the text, the cursor, the selection and the
+scroll. Feed it the app's events with <code>handle_event</code>; drawing scrolls it
+to keep the cursor in view.</p>
+<p>The cursor and the selection move a character at a time: a code point
+with the combining marks after it. Widths are display widths, so a wide
+character takes two columns.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import tui;
+
+var state = tui.TextInputState();
+state.set_text("hello");
+state.paste("\nworld");   # one row: the line end becomes a space
+assert(state.text == "hello world", "pasted at the cursor");
+</code></pre>
+<h3 id="fields"><a class="header" href="#fields">Fields</a></h3>
+<h4 id="multiline"><a class="header" href="#multiline">multiline</a></h4>
+<pre><code class="language-pepper">var multiline: bool
+</code></pre>
+<p>Whether the field takes line ends, from Enter and pastes, and wraps
+its text over the rows of its area; otherwise it is one row that
+scrolls sideways.</p>
+<h4 id="keep_newlines"><a class="header" href="#keep_newlines">keep_newlines</a></h4>
+<pre><code class="language-pepper">var keep_newlines: bool
+</code></pre>
+<p>For a one-row field, whether a paste keeps its line ends, each shown
+as "⏎", rather than turning each into a space.</p>
+<h4 id="paste_truncated"><a class="header" href="#paste_truncated">paste_truncated</a></h4>
+<pre><code class="language-pepper">var paste_truncated: bool
+</code></pre>
+<p>Whether the last paste was cut short: pepper-term keeps only the
+start of a paste past its limit (a megabyte).</p>
+<h4 id="scroll"><a class="header" href="#scroll">scroll</a></h4>
+<pre><code class="language-pepper">var scroll: int
+</code></pre>
+<p>The first column (one row) or the first row (multiline) shown.</p>
+<h3 id="properties"><a class="header" href="#properties">Properties</a></h3>
+<h4 id="text"><a class="header" href="#text">text</a></h4>
+<pre><code class="language-pepper">var text: String { get; }
+</code></pre>
+<p>The text.</p>
+<h4 id="cursor"><a class="header" href="#cursor">cursor</a></h4>
+<pre><code class="language-pepper">var cursor: ulong { get; }
+</code></pre>
+<p>The cursor, as a byte offset into <code>text</code>.</p>
+<h3 id="constructor"><a class="header" href="#constructor">Constructor</a></h3>
+<h4 id="textinputstate-1"><a class="header" href="#textinputstate-1">TextInputState()</a></h4>
+<pre><code class="language-pepper">construct(multiline: bool = false, keep_newlines: bool = false)
+</code></pre>
+<p>Makes an empty field.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>multiline</code> — whether it takes line ends and wraps</li>
+<li><code>keep_newlines</code> — for one row, whether pastes keep line ends</li>
+</ul>
+<h3 id="methods"><a class="header" href="#methods">Methods</a></h3>
+<h4 id="set_text"><a class="header" href="#set_text">set_text</a></h4>
+<pre><code class="language-pepper">set_text(value: String)
+</code></pre>
+<p>Replaces the text, putting the cursor at its end and selecting
+nothing.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the new text</li>
+</ul>
+<h4 id="select_all"><a class="header" href="#select_all">select_all</a></h4>
+<pre><code class="language-pepper">select_all()
+</code></pre>
+<p>Selects the whole text, with the cursor at its end.</p>
+<h4 id="selected_text"><a class="header" href="#selected_text">selected_text</a></h4>
+<pre><code class="language-pepper">selected_text(): String
+</code></pre>
+<p>Returns the selected text, for copying to the clipboard.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the text between the selection's ends, or "" when nothing is selected</li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import tui;
+
+var state = tui.TextInputState();
+state.set_text("hello");
+state.select_all();
+assert(state.selected_text() == "hello", "all of it");
+</code></pre>
+<h4 id="insert"><a class="header" href="#insert">insert</a></h4>
+<pre><code class="language-pepper">insert(value: String)
+</code></pre>
+<p>Puts <code>value</code> in at the cursor, in place of the selection, and moves
+the cursor past it. Line ends go in as they are, even in a one-row
+field (which shows each as "⏎"); <code>paste</code> turns them into spaces
+there.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the text to put in</li>
+</ul>
+<h4 id="paste"><a class="header" href="#paste">paste</a></h4>
+<pre><code class="language-pepper">paste(value: String, truncated: bool = false)
+</code></pre>
+<p>Puts a paste in at the cursor, as <code>Event.Paste</code> gives it: in a
+one-row field without <code>keep_newlines</code>, each line end becomes a
+space. Sets <code>paste_truncated</code> to <code>truncated</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the pasted text, with "\n" line ends</li>
+<li><code>truncated</code> — whether the paste was cut short</li>
+</ul>
+<h4 id="handle_event"><a class="header" href="#handle_event">handle_event</a></h4>
+<pre><code class="language-pepper">handle_event(event: Event): bool
+</code></pre>
+<p>Acts on an event: a key (see <code>handle_key</code>) or a paste.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>event</code> — the event, as <code>Events.next</code> gives it</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>true when it acted on the event; the app handles the rest</li>
+</ul>
+<h4 id="handle_key"><a class="header" href="#handle_key">handle_key</a></h4>
+<pre><code class="language-pepper">handle_key(key: term.KeyEvent): bool
+</code></pre>
+<p>Acts on a key as a text field does: a character goes in at the
+cursor; Backspace and Delete remove the selection or the character
+before or after the cursor; Left, Right, Home and End move the
+cursor (to the start or end of its line), selecting with Shift held;
+in a multiline field Enter puts in a line end, and Up and Down move
+a row as the last draw wrapped it.</p>
+<p>Keys with Ctrl or Alt, Tab, Escape, and Enter in a one-row field are
+left to the app.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>key</code> — the key, as <code>Event.Key</code> gives it</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>true when it acted on the key</li>
+</ul>
+<h2 id="textinput"><a class="header" href="#textinput">TextInput</a></h2>
+<pre><code class="language-pepper">struct TextInput
+</code></pre>
+<p>An editable field of text, drawn from a <code>TextInputState</code>: the text,
+the selection in <code>selection_style</code>, and the cursor as a cell in
+<code>cursor_style</code>. A one-row field scrolls sideways to keep the cursor in
+view; a multiline one wraps at the area's width, keeps its line ends,
+and scrolls down.</p>
+<p>Text that could move the cursor or send the terminal a sequence shows
+harmlessly: a line end in a one-row field as "⏎", and any other control
+character (C0, DEL and C1) as U+FFFD.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import tui;
+import [Block, TextInput, TextInputState] from tui;
+
+var input = TextInput(block = Block(title = "Name"));
+var state = TextInputState();
+# in the event loop: state.handle_event(event.value());
+# in a frame: frame.render_stateful_widget(input, area, state);
+</code></pre>
+<h3 id="fields-1"><a class="header" href="#fields-1">Fields</a></h3>
+<h4 id="block"><a class="header" href="#block">block</a></h4>
+<pre><code class="language-pepper">var block: Block
+</code></pre>
+<p>The block around the field; borderless by default.</p>
+<h4 id="style"><a class="header" href="#style">style</a></h4>
+<pre><code class="language-pepper">var style: Style
+</code></pre>
+<p>The style of the whole area.</p>
+<h4 id="selection_style"><a class="header" href="#selection_style">selection_style</a></h4>
+<pre><code class="language-pepper">var selection_style: Style
+</code></pre>
+<p>The style laid over the selected text.</p>
+<h4 id="cursor_style"><a class="header" href="#cursor_style">cursor_style</a></h4>
+<pre><code class="language-pepper">var cursor_style: Style
+</code></pre>
+<p>The style laid over the cell at the cursor; <code>Style()</code> hides the
+cursor, as for a field without focus.</p>
+<h3 id="constructor-1"><a class="header" href="#constructor-1">Constructor</a></h3>
+<h4 id="textinput-1"><a class="header" href="#textinput-1">TextInput()</a></h4>
+<pre><code class="language-pepper">construct( block: Block = Block(borders = BORDER_NONE), style: Style = Style(), selection_style: Style = Style(reverse = true), cursor_style: Style = Style(reverse = true) )
+</code></pre>
+<p>Makes a text field.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>block</code> — the block around it</li>
+<li><code>style</code> — the style of the whole area</li>
+<li><code>selection_style</code> — the style of the selected text</li>
+<li><code>cursor_style</code> — the style of the cell at the cursor</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="text.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="widget.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="text.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="widget.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

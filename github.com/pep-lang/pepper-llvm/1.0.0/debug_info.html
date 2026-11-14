@@ -1,0 +1,504 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>debug_info.pep - llvm</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">llvm</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <!-- Generated from debug_info.pep by `pep-doc package`. Do not edit. -->
+<h1 id="debug_infopep"><a class="header" href="#debug_infopep">debug_info.pep</a></h1>
+<p><code>DebugBuilder</code>: debug info (DWARF, or CodeView on Windows) for a module,
+so debuggers can map machine code back to source lines, functions,
+types and variables.</p>
+<p>Source: <code>debug_info.pep</code></p>
+<h2 id="debugbuilder"><a class="header" href="#debugbuilder">DebugBuilder</a></h2>
+<pre><code class="language-pepper">struct DebugBuilder
+</code></pre>
+<p>Makes the debug info of one module (<code>LLVMDIBuilderRef</code>). Make one per
+module, describe the compile unit, then each function, type and
+variable, attach locations to instructions, and call <code>finalize()</code>
+before verifying or emitting the module.</p>
+<p>It adds the <code>Debug Info Version</code> module flag, which LLVM needs to keep
+the debug info; <code>set_dwarf_version</code> and <code>use_codeview</code> add the others a
+platform's debugger expects.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">var debug = llvm.DebugBuilder(module);
+var file = debug.file("main.pep", "/src");
+var unit = debug.compile_unit(file, "pepper 0.2");
+var int_type = debug.basic_type("int", 32, llvm.DwarfEncoding.Signed);
+var signature = debug.subroutine_type(file, int_type, [int_type]);
+var info = debug.function(unit, "twice", file, 3, signature);
+function.set_subprogram(info);
+builder.set_location(debug.location(4, 12, info));
+# ... build the body ...
+debug.finalize();
+</code></pre>
+<h3 id="properties"><a class="header" href="#properties">Properties</a></h3>
+<h4 id="module"><a class="header" href="#module">module</a></h4>
+<pre><code class="language-pepper">var module: Module { get; }
+</code></pre>
+<p>The module the debug info belongs to.</p>
+<h4 id="ref"><a class="header" href="#ref">ref</a></h4>
+<pre><code class="language-pepper">var ref: __ptr&lt;void&gt; { get; }
+</code></pre>
+<p>The LLVM-C handle, for calls into <code>llvm_c</code>.</p>
+<h3 id="constructor"><a class="header" href="#constructor">Constructor</a></h3>
+<h4 id="debugbuilder-1"><a class="header" href="#debugbuilder-1">DebugBuilder()</a></h4>
+<pre><code class="language-pepper">construct(module: Module)
+</code></pre>
+<p>Creates a debug info builder for <code>module</code>, and adds the
+<code>Debug Info Version</code> module flag.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>module</code> — the module</li>
+</ul>
+<h3 id="methods"><a class="header" href="#methods">Methods</a></h3>
+<h4 id="set_dwarf_version"><a class="header" href="#set_dwarf_version">set_dwarf_version</a></h4>
+<pre><code class="language-pepper">set_dwarf_version(version: uint)
+</code></pre>
+<p>Sets the DWARF version to emit (the <code>Dwarf Version</code> module flag), as
+Linux and macOS debuggers expect; 5 is current, 4 the most widely read.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>version</code> — the DWARF version</li>
+</ul>
+<h4 id="use_codeview"><a class="header" href="#use_codeview">use_codeview</a></h4>
+<pre><code class="language-pepper">use_codeview()
+</code></pre>
+<p>Emits CodeView, which Windows debuggers read, instead of DWARF (the
+<code>CodeView</code> module flag).</p>
+<h4 id="finalize"><a class="header" href="#finalize">finalize</a></h4>
+<pre><code class="language-pepper">finalize()
+</code></pre>
+<p>Resolves the debug info made so far. Call it once, after the last
+function is described and before the module is verified or emitted.</p>
+<h4 id="file"><a class="header" href="#file">file</a></h4>
+<pre><code class="language-pepper">file(name: String, directory: String): Metadata
+</code></pre>
+<p>Describes a source file.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>name</code> — the file's name, as the compiler was given it</li>
+<li><code>directory</code> — the directory the name is relative to</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the file</li>
+</ul>
+<h4 id="compile_unit"><a class="header" href="#compile_unit">compile_unit</a></h4>
+<pre><code class="language-pepper">compile_unit( file: Metadata, producer: String, language: DwarfLanguage = DwarfLanguage.C, optimized: bool = false, emission: DebugEmission = DebugEmission.Full ): Metadata
+</code></pre>
+<p>Describes the compile unit: the whole module's source. Make exactly
+one per module.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>file</code> — the main source file</li>
+<li><code>producer</code> — the compiler's name and version</li>
+<li><code>language</code> — the source language debuggers should assume</li>
+<li><code>optimized</code> — whether the code is optimized</li>
+<li><code>emission</code> — how much debug info to emit</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the compile unit, the scope of top-level functions</li>
+</ul>
+<h4 id="function"><a class="header" href="#function">function</a></h4>
+<pre><code class="language-pepper">function( scope: Metadata, name: String, file: Metadata, line: uint, subroutine_type: Metadata, linkage_name: String = "", local: bool = false, scope_line: uint = 0, optimized: bool = false ): Metadata
+</code></pre>
+<p>Describes a function definition. Attach the result to the function
+with <code>Value.set_subprogram</code>; it is also the scope of the locations
+and variables inside the function.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>scope</code> — the enclosing scope: the compile unit, or a file</li>
+<li><code>name</code> — the function's source name</li>
+<li><code>file</code> — the file it is in</li>
+<li><code>line</code> — the line it is declared on</li>
+<li><code>subroutine_type</code> — its type, from <code>subroutine_type</code></li>
+<li><code>linkage_name</code> — its symbol name, when it differs from <code>name</code></li>
+<li><code>local</code> — whether it is private to the compile unit</li>
+<li><code>scope_line</code> — the line its body starts on; 0 for <code>line</code></li>
+<li><code>optimized</code> — whether it is optimized</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the function's debug info</li>
+</ul>
+<h4 id="subroutine_type"><a class="header" href="#subroutine_type">subroutine_type</a></h4>
+<pre><code class="language-pepper">subroutine_type(file: Metadata, result: Metadata, params: Metadata[]): Metadata
+</code></pre>
+<p>Describes a function type.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>file</code> — the file</li>
+<li><code>result</code> — the return type; a null <code>Metadata()</code> for <code>void</code></li>
+<li><code>params</code> — the parameter types</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the type</li>
+</ul>
+<h4 id="basic_type"><a class="header" href="#basic_type">basic_type</a></h4>
+<pre><code class="language-pepper">basic_type(name: String, size_in_bits: ulong, encoding: DwarfEncoding): Metadata
+</code></pre>
+<p>Describes a basic type, such as <code>int</code> or <code>double</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>name</code> — the type's source name</li>
+<li><code>size_in_bits</code> — its size in bits</li>
+<li><code>encoding</code> — how its bits are read</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the type</li>
+</ul>
+<h4 id="pointer_type"><a class="header" href="#pointer_type">pointer_type</a></h4>
+<pre><code class="language-pepper">pointer_type(pointee: Metadata, size_in_bits: ulong, name: String = ""): Metadata
+</code></pre>
+<p>Describes a pointer type.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>pointee</code> — the type pointed to</li>
+<li><code>size_in_bits</code> — the pointer's size in bits</li>
+<li><code>name</code> — the type's name, if it has one</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the type</li>
+</ul>
+<h4 id="member_type"><a class="header" href="#member_type">member_type</a></h4>
+<pre><code class="language-pepper">member_type( scope: Metadata, name: String, file: Metadata, line: uint, size_in_bits: ulong, align_in_bits: uint, offset_in_bits: ulong, member_type: Metadata ): Metadata
+</code></pre>
+<p>Describes a member of a struct, for <code>struct_type</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>scope</code> — the file the struct is declared in</li>
+<li><code>name</code> — the member's name</li>
+<li><code>file</code> — the file</li>
+<li><code>line</code> — the line it is declared on</li>
+<li><code>size_in_bits</code> — its size in bits</li>
+<li><code>align_in_bits</code> — its alignment in bits</li>
+<li><code>offset_in_bits</code> — its offset in bits from the start of the struct</li>
+<li><code>member_type</code> — its type</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the member</li>
+</ul>
+<h4 id="struct_type"><a class="header" href="#struct_type">struct_type</a></h4>
+<pre><code class="language-pepper">struct_type( scope: Metadata, name: String, file: Metadata, line: uint, size_in_bits: ulong, align_in_bits: uint, members: Metadata[] ): Metadata
+</code></pre>
+<p>Describes a struct type.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>scope</code> — the enclosing scope: the compile unit, or a file</li>
+<li><code>name</code> — the struct's name</li>
+<li><code>file</code> — the file</li>
+<li><code>line</code> — the line it is declared on</li>
+<li><code>size_in_bits</code> — its size in bits</li>
+<li><code>align_in_bits</code> — its alignment in bits</li>
+<li><code>members</code> — its members, from <code>member_type</code></li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the type</li>
+</ul>
+<h4 id="lexical_block"><a class="header" href="#lexical_block">lexical_block</a></h4>
+<pre><code class="language-pepper">lexical_block(scope: Metadata, file: Metadata, line: uint, column: uint): Metadata
+</code></pre>
+<p>Describes a block scope (<code>{ ... }</code>) inside a function, for the
+variables declared in it.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>scope</code> — the enclosing function or block</li>
+<li><code>file</code> — the file</li>
+<li><code>line</code> — the line it starts on</li>
+<li><code>column</code> — the column it starts on</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the block</li>
+</ul>
+<h4 id="local_variable"><a class="header" href="#local_variable">local_variable</a></h4>
+<pre><code class="language-pepper">local_variable(scope: Metadata, name: String, file: Metadata, line: uint, variable_type: Metadata): Metadata
+</code></pre>
+<p>Describes a local variable; give it an address with <code>declare</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>scope</code> — the function or block it is declared in</li>
+<li><code>name</code> — its name</li>
+<li><code>file</code> — the file</li>
+<li><code>line</code> — the line it is declared on</li>
+<li><code>variable_type</code> — its type</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the variable</li>
+</ul>
+<h4 id="parameter_variable"><a class="header" href="#parameter_variable">parameter_variable</a></h4>
+<pre><code class="language-pepper">parameter_variable( scope: Metadata, name: String, number: uint, file: Metadata, line: uint, variable_type: Metadata ): Metadata
+</code></pre>
+<p>Describes a function parameter; give it an address with <code>declare</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>scope</code> — the function</li>
+<li><code>name</code> — its name</li>
+<li><code>number</code> — its position, counting from 1</li>
+<li><code>file</code> — the file</li>
+<li><code>line</code> — the line it is declared on</li>
+<li><code>variable_type</code> — its type</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the variable</li>
+</ul>
+<h4 id="declare"><a class="header" href="#declare">declare</a></h4>
+<pre><code class="language-pepper">declare(storage: Value, variable: Metadata, location: Metadata, block: BasicBlock)
+</code></pre>
+<p>Records that a variable lives at <code>storage</code> (usually its <code>alloca</code>),
+at the end of <code>block</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>storage</code> — the variable's address</li>
+<li><code>variable</code> — the variable, from <code>local_variable</code> or <code>parameter_variable</code></li>
+<li><code>location</code> — where it is declared, from <code>location</code></li>
+<li><code>block</code> — the block to record it in</li>
+</ul>
+<h4 id="location"><a class="header" href="#location">location</a></h4>
+<pre><code class="language-pepper">location(line: uint, column: uint, scope: Metadata): Metadata
+</code></pre>
+<p>Returns a source location, for <code>Builder.set_location</code> and
+<code>Value.set_location</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>line</code> — the line, counting from 1</li>
+<li><code>column</code> — the column, counting from 1; 0 for none</li>
+<li><code>scope</code> — the function or block it is in</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the location</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="context.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="enums.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="context.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="enums.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

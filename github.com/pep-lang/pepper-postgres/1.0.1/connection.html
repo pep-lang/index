@@ -1,0 +1,615 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>connection.pep - postgres</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">postgres</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <!-- Generated from connection.pep by `pep-doc package`. Do not edit. -->
+<h1 id="connectionpep"><a class="header" href="#connectionpep">connection.pep</a></h1>
+<p><code>Connection</code>: a session with a PostgreSQL server, its queries and
+transactions, <code>Statement</code>, a prepared statement, and <code>Notification</code>.</p>
+<p>Source: <code>connection.pep</code></p>
+<h2 id="notification"><a class="header" href="#notification">Notification</a></h2>
+<pre><code class="language-pepper">struct Notification
+</code></pre>
+<p>A message <code>NOTIFY</code> sent to a channel this connection is listening on
+(<code>LISTEN channel</code>).</p>
+<h3 id="fields"><a class="header" href="#fields">Fields</a></h3>
+<h4 id="process_id"><a class="header" href="#process_id">process_id</a></h4>
+<pre><code class="language-pepper">var process_id: int
+</code></pre>
+<p>The process ID of the server session that sent it.</p>
+<h4 id="channel"><a class="header" href="#channel">channel</a></h4>
+<pre><code class="language-pepper">var channel: String
+</code></pre>
+<p>The channel it was sent to.</p>
+<h4 id="payload"><a class="header" href="#payload">payload</a></h4>
+<pre><code class="language-pepper">var payload: String
+</code></pre>
+<p>The payload; empty when <code>NOTIFY</code> gave none.</p>
+<h3 id="constructor"><a class="header" href="#constructor">Constructor</a></h3>
+<h4 id="notification-1"><a class="header" href="#notification-1">Notification()</a></h4>
+<pre><code class="language-pepper">construct(process_id: int, channel: String, payload: String)
+</code></pre>
+<p>Creates a notification; the connection makes them.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>process_id</code> — the sending session's process ID</li>
+<li><code>channel</code> — the channel</li>
+<li><code>payload</code> — the payload</li>
+</ul>
+<h2 id="connection"><a class="header" href="#connection">Connection</a></h2>
+<pre><code class="language-pepper">struct Connection
+</code></pre>
+<p>A session with a PostgreSQL server.</p>
+<p>Open one with <code>connect</code>. <code>query</code> and <code>execute</code> run one SQL statement
+with <code>$1</code>, <code>$2</code>, ... parameters through the extended protocol, so a
+parameter's value never becomes SQL; <code>prepare</code> keeps a statement on the
+server to run again; <code>query_as&lt;T&gt;</code> decodes each row into a struct.
+<code>execute_script</code> runs several statements through the simple protocol,
+with no parameters: never build its text from untrusted input.</p>
+<p>A connection runs one query at a time and belongs to one thread or task
+at a time; share connections through a <code>Pool</code>. Inside <code>async.run</code>, a
+call that waits for the server parks only its task. The session ends
+with <code>close()</code>, or when the last reference to the connection goes away.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import postgres;
+
+struct User {
+    var id: long;
+    var name: String;
+}
+
+main(): int {
+    var db = postgres.Connection.connect("postgres://app:secret@localhost/app").value();
+    db.execute("INSERT INTO users (name) VALUES ($1)", [postgres.Value.Text("Ada")]).value();
+    for (var user in db.query_as&lt;User&gt;("SELECT id, name FROM users").value()) {
+        print($"{user.id}: {user.name}");
+    }
+    db.close();
+    return 0;
+}
+</code></pre>
+<h3 id="constructor-1"><a class="header" href="#constructor-1">Constructor</a></h3>
+<h4 id="connection-1"><a class="header" href="#connection-1">Connection()</a></h4>
+<pre><code class="language-pepper">construct(tcp: io.TcpStream)
+</code></pre>
+<p>Wraps a connected socket; use <code>connect</code> instead.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>tcp</code> — the socket, connected to the server</li>
+</ul>
+<h3 id="static-methods"><a class="header" href="#static-methods">Static methods</a></h3>
+<h4 id="connect"><a class="header" href="#connect">connect</a></h4>
+<pre><code class="language-pepper">static connect(config: Config): PgResult&lt;Connection&gt;
+</code></pre>
+<p>Connects and logs in to the server <code>config</code> names.</p>
+<p>The login answers what the server asks for: SCRAM-SHA-256 (the
+default since PostgreSQL 14) or a cleartext password. MD5 is not
+supported. The session's <code>client_encoding</code> is UTF-8.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>config</code> — the server, login, database and TLS settings</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the connection, or the error: <code>08006</code> when the server cannot be reached or TLS fails, <code>28000</code> or <code>28P01</code> when the login fails, <code>3D000</code> when the database does not exist</li>
+</ul>
+<h4 id="connect-1"><a class="header" href="#connect-1">connect</a></h4>
+<pre><code class="language-pepper">static connect(url: String): PgResult&lt;Connection&gt;
+</code></pre>
+<p>Connects to the server a connection URL names, as
+<code>Config.parse(url)</code> reads it.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>url</code> — the connection URL, <code>postgres://user:password@host/database</code></li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the connection, or the error, as for <code>connect(Config)</code></li>
+</ul>
+<h3 id="methods"><a class="header" href="#methods">Methods</a></h3>
+<h4 id="is_open"><a class="header" href="#is_open">is_open</a></h4>
+<pre><code class="language-pepper">is_open(): bool
+</code></pre>
+<p>Reports whether the connection is open: false after <code>close()</code>, or
+once a read or write to the server has failed.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>true while the connection can run queries</li>
+</ul>
+<h4 id="in_transaction"><a class="header" href="#in_transaction">in_transaction</a></h4>
+<pre><code class="language-pepper">in_transaction(): bool
+</code></pre>
+<p>Reports whether a transaction is open, as of the last query: true
+after <code>begin()</code> until <code>commit()</code> or <code>rollback()</code>, also when a
+statement in it failed.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>true inside a transaction</li>
+</ul>
+<h4 id="server_parameter"><a class="header" href="#server_parameter">server_parameter</a></h4>
+<pre><code class="language-pepper">server_parameter(name: String): String?
+</code></pre>
+<p>Returns a setting the server reported, such as <code>server_version</code>,
+<code>TimeZone</code> or <code>server_encoding</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>name</code> — the setting's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>its value, or none when the server has not reported it</li>
+</ul>
+<h4 id="close"><a class="header" href="#close">close</a></h4>
+<pre><code class="language-pepper">close()
+</code></pre>
+<p>Ends the session: tells the server and closes the socket. Calling it
+again does nothing.</p>
+<h4 id="query"><a class="header" href="#query">query</a></h4>
+<pre><code class="language-pepper">query(sql: String, parameters: Value[] = []): PgResult&lt;Row[]&gt;
+</code></pre>
+<p>Runs one statement with parameters and returns its rows.</p>
+<p><code>$1</code> in <code>sql</code> is the first parameter, <code>$2</code> the second, and so on;
+each one's type is the one the server infers from its use. The
+parameters travel apart from the SQL, so they cannot change what it
+does.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>sql</code> — one SQL statement</li>
+<li><code>parameters</code> — its parameters, in order</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the rows (none for a statement that returns none), or the server's error</li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">var rows = db.query("SELECT name FROM users WHERE id = $1", [postgres.Value.Integer(7)]).value();
+</code></pre>
+<h4 id="query_as"><a class="header" href="#query_as">query_as</a></h4>
+<pre><code class="language-pepper">query_as&lt;T&gt;(sql: String, parameters: Value[] = []): PgResult&lt;T[]&gt;
+</code></pre>
+<p>Runs one statement with parameters and decodes each row into a <code>T</code>,
+as <code>Row.read&lt;T&gt;</code> does.</p>
+<p><strong>Type parameters</strong></p>
+<ul>
+<li><code>T</code> — the struct each row decodes into</li>
+</ul>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>sql</code> — one SQL statement</li>
+<li><code>parameters</code> — its parameters, in order</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the decoded rows, or the first error</li>
+</ul>
+<h4 id="execute"><a class="header" href="#execute">execute</a></h4>
+<pre><code class="language-pepper">execute(sql: String, parameters: Value[] = []): PgResult&lt;ulong&gt;
+</code></pre>
+<p>Runs one statement with parameters and returns how many rows it
+changed or returned.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>sql</code> — one SQL statement, such as an <code>INSERT</code>, <code>UPDATE</code> or <code>DELETE</code></li>
+<li><code>parameters</code> — its parameters, in order</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the row count the server reports (0 for a statement such as <code>CREATE TABLE</code>), or the server's error</li>
+</ul>
+<h4 id="execute_script"><a class="header" href="#execute_script">execute_script</a></h4>
+<pre><code class="language-pepper">execute_script(sql: String): PgResult&lt;void&gt;
+</code></pre>
+<p>Runs <code>sql</code>, which may hold several statements separated by <code>;</code>,
+through the simple query protocol, and discards any rows.</p>
+<p>It takes no parameters: the text goes to the server as it is, so
+never build it from input you do not control. Use <code>execute</code> with
+parameters for that. Unless <code>sql</code> starts a transaction itself, its
+statements run in one implicit transaction, which a failure rolls
+back.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>sql</code> — the statements, such as a schema</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>nothing, or the first statement's error</li>
+</ul>
+<h4 id="prepare"><a class="header" href="#prepare">prepare</a></h4>
+<pre><code class="language-pepper">prepare(sql: String): PgResult&lt;Statement&gt;
+</code></pre>
+<p>Prepares <code>sql</code> on the server as a named statement to run many times.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>sql</code> — one SQL statement with <code>$1</code>, <code>$2</code>, ... parameters</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the statement, or the server's error (a syntax error shows here)</li>
+</ul>
+<h4 id="begin"><a class="header" href="#begin">begin</a></h4>
+<pre><code class="language-pepper">begin(): PgResult&lt;void&gt;
+</code></pre>
+<p>Starts a transaction (<code>BEGIN</code>).</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>nothing, or the server's error</li>
+</ul>
+<h4 id="commit"><a class="header" href="#commit">commit</a></h4>
+<pre><code class="language-pepper">commit(): PgResult&lt;void&gt;
+</code></pre>
+<p>Commits the open transaction (<code>COMMIT</code>). A transaction in which a
+statement failed rolls back instead, and <code>commit</code> returns an error
+with code <code>25P02</code>.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>nothing, or the error</li>
+</ul>
+<h4 id="rollback"><a class="header" href="#rollback">rollback</a></h4>
+<pre><code class="language-pepper">rollback(): PgResult&lt;void&gt;
+</code></pre>
+<p>Rolls back the open transaction (<code>ROLLBACK</code>).</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>nothing, or the server's error</li>
+</ul>
+<h4 id="transaction"><a class="header" href="#transaction">transaction</a></h4>
+<pre><code class="language-pepper">transaction&lt;T&gt;(body: (Connection) =&gt; PgResult&lt;T&gt;): PgResult&lt;T&gt;
+</code></pre>
+<p>Runs <code>body</code> in a transaction: commits it when <code>body</code> returns a
+value, and rolls it back when <code>body</code> returns an error, which it then
+returns.</p>
+<p><strong>Type parameters</strong></p>
+<ul>
+<li><code>T</code> — what <code>body</code> returns</li>
+</ul>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>body</code> — the work to do; it gets this connection</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>what <code>body</code> returned, or the error of <code>body</code> or the commit</li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">db.transaction&lt;void&gt;((db): postgres.PgResult&lt;void&gt; =&gt; {
+    db.execute("UPDATE accounts SET balance = balance - 10 WHERE id = 1")?;
+    db.execute("UPDATE accounts SET balance = balance + 10 WHERE id = 2")?;
+    return postgres.PgResult&lt;void&gt;.ok();
+}).value();
+</code></pre>
+<h4 id="notifications"><a class="header" href="#notifications">notifications</a></h4>
+<pre><code class="language-pepper">notifications(): Notification[]
+</code></pre>
+<p>Returns the notifications that have arrived, oldest first, and
+forgets them. They arrive while the connection reads from the
+server, so this returns those that came with earlier queries;
+<code>wait_for_notification</code> waits for one. A connection keeps at most
+<code>Config.max_notifications</code> of them (10,000 by default): past that,
+each new one drops the oldest, which <code>dropped_notifications()</code>
+counts.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the notifications, possibly none</li>
+</ul>
+<h4 id="dropped_notifications"><a class="header" href="#dropped_notifications">dropped_notifications</a></h4>
+<pre><code class="language-pepper">dropped_notifications(): ulong
+</code></pre>
+<p>Returns how many notifications this connection has dropped, since it
+connected, because <code>Config.max_notifications</code> were already waiting.
+A count that grows means <code>notifications()</code> is not called often
+enough.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the number dropped</li>
+</ul>
+<h4 id="wait_for_notification"><a class="header" href="#wait_for_notification">wait_for_notification</a></h4>
+<pre><code class="language-pepper">wait_for_notification(): PgResult&lt;Notification&gt;
+</code></pre>
+<p>Waits until a notification arrives on a channel this connection
+listens on, and returns it; returns at once when one is queued.
+Inside <code>async.run</code> the wait parks only this task.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the oldest notification, or the error that ended the wait</li>
+</ul>
+<h2 id="statement"><a class="header" href="#statement">Statement</a></h2>
+<pre><code class="language-pepper">struct Statement
+</code></pre>
+<p>A statement prepared on the server with <code>Connection.prepare</code>, to run
+many times with different parameters.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">var insert = db.prepare("INSERT INTO hits (path) VALUES ($1)").value();
+for (var path in paths) {
+    insert.execute([postgres.Value.Text(path)]).value();
+}
+insert.close().value();
+</code></pre>
+<h3 id="constructor-2"><a class="header" href="#constructor-2">Constructor</a></h3>
+<h4 id="statement-1"><a class="header" href="#statement-1">Statement()</a></h4>
+<pre><code class="language-pepper">construct(connection: Connection, name: String, columns: _Column[])
+</code></pre>
+<p>Wraps a prepared statement; use <code>Connection.prepare</code> instead.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>connection</code> — the connection it was prepared on</li>
+<li><code>name</code> — its name on the server</li>
+<li><code>columns</code> — the columns of its result</li>
+</ul>
+<h3 id="methods-1"><a class="header" href="#methods-1">Methods</a></h3>
+<h4 id="query-1"><a class="header" href="#query-1">query</a></h4>
+<pre><code class="language-pepper">query(parameters: Value[] = []): PgResult&lt;Row[]&gt;
+</code></pre>
+<p>Runs the statement with <code>parameters</code> and returns its rows.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>parameters</code> — its parameters, in order</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the rows, or the server's error</li>
+</ul>
+<h4 id="query_as-1"><a class="header" href="#query_as-1">query_as</a></h4>
+<pre><code class="language-pepper">query_as&lt;T&gt;(parameters: Value[] = []): PgResult&lt;T[]&gt;
+</code></pre>
+<p>Runs the statement with <code>parameters</code> and decodes each row into a
+<code>T</code>, as <code>Row.read&lt;T&gt;</code> does.</p>
+<p><strong>Type parameters</strong></p>
+<ul>
+<li><code>T</code> — the struct each row decodes into</li>
+</ul>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>parameters</code> — its parameters, in order</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the decoded rows, or the first error</li>
+</ul>
+<h4 id="execute-1"><a class="header" href="#execute-1">execute</a></h4>
+<pre><code class="language-pepper">execute(parameters: Value[] = []): PgResult&lt;ulong&gt;
+</code></pre>
+<p>Runs the statement with <code>parameters</code> and returns how many rows it
+changed or returned.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>parameters</code> — its parameters, in order</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the row count the server reports, or the server's error</li>
+</ul>
+<h4 id="close-1"><a class="header" href="#close-1">close</a></h4>
+<pre><code class="language-pepper">close(): PgResult&lt;void&gt;
+</code></pre>
+<p>Frees the statement on the server. The server frees it anyway when
+the session ends.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>nothing, or the server's error</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="config.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="error.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="config.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="error.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

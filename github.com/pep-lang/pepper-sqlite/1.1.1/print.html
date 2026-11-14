@@ -1,0 +1,1361 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>sqlite</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">sqlite</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <!-- Generated from pep.toml by `pep-doc package`. Do not edit. -->
+<h1 id="sqlite-111"><a class="header" href="#sqlite-111">sqlite 1.1.1</a></h1>
+<p>SQLite bindings: prepared statements, typed rows, struct decoding and transactions</p>
+<h2 id="pages"><a class="header" href="#pages">Pages</a></h2>
+<ul>
+<li><a href="module.html">sqlite</a>: SQLite bindings: open a database, run SQL, prepare statements with bound parameters, read typed rows or decode them into structs, and run transactions.</li>
+<li><a href="database.html">database.pep</a>: <code>Database</code>: a connection to an SQLite database, and its transactions.</li>
+<li><a href="error.html">error.pep</a>: <code>SqliteError</code>, what a failed call returns, and <code>SqliteResult&lt;T&gt;</code>.</li>
+<li><a href="pool.html">pool.pep</a>: <code>Pool</code>: connections to one database that any thread may use.</li>
+<li><a href="sqlite3.html">sqlite3.pep</a>: The parts of SQLite's C API (<code>sqlite3.h</code>) the module calls, private to the module.</li>
+<li><a href="statement.html">statement.pep</a>: <code>Statement</code>: a prepared SQL statement, its parameters and its rows.</li>
+<li><a href="value.html">value.pep</a>: <code>Value</code>: one SQLite value of any storage class.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from module.pep by `pep-doc package`. Do not edit. -->
+<h1 id="sqlite"><a class="header" href="#sqlite">sqlite</a></h1>
+<p>SQLite bindings: open a database, run SQL, prepare statements with bound
+parameters, read typed rows or decode them into structs, and run
+transactions.</p>
+<p>Bring it in with <code>import sqlite</code>. It links the system's SQLite:
+<code>libsqlite3</code> on Linux (<code>apt install libsqlite3-dev</code>) and macOS, and
+<code>winsqlite3</code>, part of Windows 10 and later, on Windows. Every call that
+can fail returns a <code>SqliteResult&lt;T&gt;</code>, whose error holds SQLite's result
+code and message.</p>
+<ul>
+<li><code>Database</code>: a connection: <code>open</code>, <code>execute</code>, <code>prepare</code>, <code>query&lt;T&gt;</code>,
+<code>begin</code>/<code>commit</code>/<code>rollback</code> and <code>transaction</code></li>
+<li><code>Statement</code>: a prepared statement: <code>bind</code>, <code>step</code>, the <code>column_</code>
+readers, <code>read&lt;T&gt;</code>, <code>reset</code>, <code>finalize</code></li>
+<li><code>Pool</code>, <code>PooledConnection</code>: connections that threads share</li>
+<li><code>Value</code>: one value of any of SQLite's storage classes</li>
+<li><code>SqliteError</code>, <code>SqliteResult&lt;T&gt;</code>: errors</li>
+<li><code>OPEN_READ_ONLY</code> and the other <code>OPEN_</code> flags, <code>version</code></li>
+</ul>
+<p>A <code>Database</code> belongs to one thread at a time; threads share a <code>Pool</code>, or
+open a connection each.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import sqlite;
+
+struct Book {
+    var title: String;
+    var year: int;
+}
+
+main(): int {
+    var db = sqlite.Database.open_in_memory().value();
+    db.execute("CREATE TABLE books (title TEXT NOT NULL, year INTEGER)").value();
+    var insert = db.prepare("INSERT INTO books VALUES (:title, :year)").value();
+    insert.bind(":title", "Dune").value();
+    insert.bind(":year", 1965).value();
+    insert.step().value();
+    for (var book in db.query&lt;Book&gt;("SELECT title, year FROM books").value()) {
+        print($"{book.title} ({book.year})");   # Dune (1965)
+    }
+    return 0;
+}
+</code></pre>
+<p>Source: <code>module.pep</code></p>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from database.pep by `pep-doc package`. Do not edit. -->
+<h1 id="databasepep"><a class="header" href="#databasepep">database.pep</a></h1>
+<p><code>Database</code>: a connection to an SQLite database, and its transactions.</p>
+<p>Source: <code>database.pep</code></p>
+<h2 id="open_read_only"><a class="header" href="#open_read_only">OPEN_READ_ONLY</a></h2>
+<pre><code class="language-pepper">const OPEN_READ_ONLY = 0x1
+</code></pre>
+<p>Opens the database for reading only; it must exist.</p>
+<h2 id="open_read_write"><a class="header" href="#open_read_write">OPEN_READ_WRITE</a></h2>
+<pre><code class="language-pepper">const OPEN_READ_WRITE = 0x2
+</code></pre>
+<p>Opens the database for reading and writing.</p>
+<h2 id="open_create"><a class="header" href="#open_create">OPEN_CREATE</a></h2>
+<pre><code class="language-pepper">const OPEN_CREATE = 0x4
+</code></pre>
+<p>With <code>OPEN_READ_WRITE</code>, creates the database when it does not exist.</p>
+<h2 id="open_uri"><a class="header" href="#open_uri">OPEN_URI</a></h2>
+<pre><code class="language-pepper">const OPEN_URI = 0x40
+</code></pre>
+<p>Reads the path as a URI (<code>file:data.db?mode=ro</code>).</p>
+<h2 id="open_memory"><a class="header" href="#open_memory">OPEN_MEMORY</a></h2>
+<pre><code class="language-pepper">const OPEN_MEMORY = 0x80
+</code></pre>
+<p>Opens an in-memory database, whatever the path says.</p>
+<h2 id="open_no_mutex"><a class="header" href="#open_no_mutex">OPEN_NO_MUTEX</a></h2>
+<pre><code class="language-pepper">const OPEN_NO_MUTEX = 0x8000
+</code></pre>
+<p>Leaves out the connection's own lock: a connection used by one thread
+at a time needs none. Ignored when SQLite was built single-threaded.</p>
+<h2 id="open_full_mutex"><a class="header" href="#open_full_mutex">OPEN_FULL_MUTEX</a></h2>
+<pre><code class="language-pepper">const OPEN_FULL_MUTEX = 0x10000
+</code></pre>
+<p>Serializes every call on the connection with its own lock, whatever
+SQLite's default threading mode is.</p>
+<h2 id="database"><a class="header" href="#database">Database</a></h2>
+<pre><code class="language-pepper">struct Database
+</code></pre>
+<p>A connection to an SQLite database.</p>
+<p>Open one with <code>open</code> (a file) or <code>open_in_memory</code>. <code>execute</code> runs SQL
+that returns no rows; <code>prepare</code> makes a <code>Statement</code> for SQL with
+parameters or rows; <code>query&lt;T&gt;</code> runs a query and decodes every row into a
+struct. <code>transaction</code> runs a function inside a transaction that it
+commits, or rolls back when the function fails.</p>
+<p>The connection is closed when the last reference to it, and to every
+statement prepared on it, goes away, or earlier with <code>close()</code>. It
+belongs to one thread at a time: hand it to another thread whole with
+<code>Channel.send(move(db))</code>, or share connections through a <code>Pool</code>.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import sqlite;
+
+struct User {
+    var id: long;
+    var name: String;
+}
+
+main(): int {
+    var db = sqlite.Database.open("app.db").value();
+    db.execute("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY, name TEXT)").value();
+    db.execute("INSERT INTO users (name) VALUES (?)", [sqlite.Value.Text("Ada")]).value();
+    for (var user in db.query&lt;User&gt;("SELECT id, name FROM users").value()) {
+        print($"{user.id}: {user.name}");
+    }
+    return 0;
+}
+</code></pre>
+<h3 id="constructor"><a class="header" href="#constructor">Constructor</a></h3>
+<h4 id="database-1"><a class="header" href="#database-1">Database()</a></h4>
+<pre><code class="language-pepper">construct(handle: __ptr&lt;void&gt;)
+</code></pre>
+<p>Wraps a connection <code>open</code> made; use <code>open</code> instead.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>handle</code> — the <code>sqlite3*</code>, which the database takes over</li>
+</ul>
+<h3 id="static-methods"><a class="header" href="#static-methods">Static methods</a></h3>
+<h4 id="open"><a class="header" href="#open">open</a></h4>
+<pre><code class="language-pepper">static open(path: String, flags: int = OPEN_READ_WRITE | OPEN_CREATE): SqliteResult&lt;Database&gt;
+</code></pre>
+<p>Opens (by default, creating) the database file at <code>path</code>.</p>
+<p><code>":memory:"</code> and an empty path open a private in-memory database,
+and a temporary on-disk one, as SQLite documents.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>path</code> — the database file</li>
+<li><code>flags</code> — <code>OPEN_READ_ONLY</code>, or <code>OPEN_READ_WRITE</code> with or without <code>OPEN_CREATE</code>, plus <code>OPEN_URI</code> or <code>OPEN_MEMORY</code></li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the connection, or the error (<code>SQLITE_CANTOPEN</code>, 14, when the file cannot be opened)</li>
+</ul>
+<h4 id="open_in_memory"><a class="header" href="#open_in_memory">open_in_memory</a></h4>
+<pre><code class="language-pepper">static open_in_memory(): SqliteResult&lt;Database&gt;
+</code></pre>
+<p>Opens a new, private in-memory database, gone when it is closed.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the connection, or the error</li>
+</ul>
+<h3 id="methods"><a class="header" href="#methods">Methods</a></h3>
+<h4 id="is_open"><a class="header" href="#is_open">is_open</a></h4>
+<pre><code class="language-pepper">is_open(): bool
+</code></pre>
+<p>Reports whether the connection is open: false after <code>close()</code>.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>true until the connection is closed</li>
+</ul>
+<h4 id="close"><a class="header" href="#close">close</a></h4>
+<pre><code class="language-pepper">close()
+</code></pre>
+<p>Closes the connection now rather than when the last reference to it
+goes away. Statements prepared on it keep it open until they are
+finalized, but no longer through this <code>Database</code>. Calling it again
+does nothing.</p>
+<h4 id="execute"><a class="header" href="#execute">execute</a></h4>
+<pre><code class="language-pepper">execute(sql: String): SqliteResult&lt;void&gt;
+</code></pre>
+<p>Runs <code>sql</code>, which may hold several statements separated by <code>;</code>, and
+discards any rows.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>sql</code> — the SQL</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>nothing, or the error of the first statement that fails; the statements before it have run</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the database is closed</li>
+</ul>
+<h4 id="execute-1"><a class="header" href="#execute-1">execute</a></h4>
+<pre><code class="language-pepper">execute(sql: String, parameters: Value[]): SqliteResult&lt;long&gt;
+</code></pre>
+<p>Runs one statement with <code>parameters</code> bound to it in order, and
+discards any rows.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>sql</code> — one SQL statement</li>
+<li><code>parameters</code> — one value per parameter</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the number of rows it inserted, changed or deleted (0 for any other statement, such as a <code>SELECT</code> or <code>CREATE TABLE</code>), or the error</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the database is closed</li>
+</ul>
+<h4 id="prepare"><a class="header" href="#prepare">prepare</a></h4>
+<pre><code class="language-pepper">prepare(sql: String): SqliteResult&lt;Statement&gt;
+</code></pre>
+<p>Compiles the first statement in <code>sql</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>sql</code> — the SQL; anything after its first statement is ignored</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the statement, or the error (<code>SQLITE_ERROR</code> for a syntax error or an unknown table, <code>SQLITE_MISUSE</code> for SQL that holds no statement)</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the database is closed</li>
+</ul>
+<h4 id="query"><a class="header" href="#query">query</a></h4>
+<pre><code class="language-pepper">query&lt;T&gt;(sql: String, parameters: Value[] = Array&lt;Value&gt;()): SqliteResult&lt;T[]&gt;
+</code></pre>
+<p>Runs a query with <code>parameters</code> bound to it in order, and decodes
+each row into a <code>T</code> as <code>Statement.read&lt;T&gt;()</code> does.</p>
+<p><strong>Type parameters</strong></p>
+<ul>
+<li><code>T</code> — the struct each row decodes into</li>
+</ul>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>sql</code> — one SQL query</li>
+<li><code>parameters</code> — one value per parameter</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the rows, or the first error</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the database is closed</li>
+</ul>
+<h4 id="changes"><a class="header" href="#changes">changes</a></h4>
+<pre><code class="language-pepper">changes(): long
+</code></pre>
+<p>Returns the number of rows the last <code>INSERT</code>, <code>UPDATE</code> or <code>DELETE</code>
+changed.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the row count</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the database is closed</li>
+</ul>
+<h4 id="last_insert_rowid"><a class="header" href="#last_insert_rowid">last_insert_rowid</a></h4>
+<pre><code class="language-pepper">last_insert_rowid(): long
+</code></pre>
+<p>Returns the rowid of the last row inserted, 0 before any.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the rowid</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the database is closed</li>
+</ul>
+<h4 id="set_busy_timeout"><a class="header" href="#set_busy_timeout">set_busy_timeout</a></h4>
+<pre><code class="language-pepper">set_busy_timeout(milliseconds: int)
+</code></pre>
+<p>Sets how long a statement waits for a lock another connection holds
+before it fails with <code>SQLITE_BUSY</code> (5). The default is not to wait.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>milliseconds</code> — the longest wait; 0 or less turns waiting off</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the database is closed</li>
+</ul>
+<h4 id="in_transaction"><a class="header" href="#in_transaction">in_transaction</a></h4>
+<pre><code class="language-pepper">in_transaction(): bool
+</code></pre>
+<p>Reports whether a transaction is open.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>true between <code>begin</code> and <code>commit</code> or <code>rollback</code></li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the database is closed</li>
+</ul>
+<h4 id="begin"><a class="header" href="#begin">begin</a></h4>
+<pre><code class="language-pepper">begin(): SqliteResult&lt;void&gt;
+</code></pre>
+<p>Starts a transaction (<code>BEGIN</code>).</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>nothing, or the error (<code>SQLITE_ERROR</code> inside a transaction: transactions do not nest)</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the database is closed</li>
+</ul>
+<h4 id="commit"><a class="header" href="#commit">commit</a></h4>
+<pre><code class="language-pepper">commit(): SqliteResult&lt;void&gt;
+</code></pre>
+<p>Commits the open transaction (<code>COMMIT</code>).</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>nothing, or the error (<code>SQLITE_ERROR</code> with no transaction open, <code>SQLITE_BUSY</code> when another connection holds a lock, and the transaction stays open)</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the database is closed</li>
+</ul>
+<h4 id="rollback"><a class="header" href="#rollback">rollback</a></h4>
+<pre><code class="language-pepper">rollback(): SqliteResult&lt;void&gt;
+</code></pre>
+<p>Rolls the open transaction back (<code>ROLLBACK</code>).</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>nothing, or the error (<code>SQLITE_ERROR</code> with no transaction open)</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the database is closed</li>
+</ul>
+<h4 id="transaction"><a class="header" href="#transaction">transaction</a></h4>
+<pre><code class="language-pepper">transaction&lt;T&gt;(body: () =&gt; SqliteResult&lt;T&gt;): SqliteResult&lt;T&gt;
+</code></pre>
+<p>Runs <code>body</code> inside a transaction: commits when it returns Ok, and
+rolls back when it returns an error or the commit fails.</p>
+<p><strong>Type parameters</strong></p>
+<ul>
+<li><code>T</code> — what <code>body</code> returns on success</li>
+</ul>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>body</code> — the work to do; return its errors (with <code>?</code>) to roll back</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li><code>body</code>'s result, or the error of <code>begin</code> or <code>commit</code></li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the database is closed</li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import sqlite;
+
+var db = sqlite.Database.open_in_memory().value();
+db.execute("CREATE TABLE accounts (id INTEGER, balance INTEGER)").value();
+var moved = db.transaction&lt;void&gt;((): sqlite.SqliteResult&lt;void&gt; =&gt; {
+    db.execute("UPDATE accounts SET balance = balance - 10 WHERE id = 1")?;
+    db.execute("UPDATE accounts SET balance = balance + 10 WHERE id = 2")?;
+    return sqlite.SqliteResult&lt;void&gt;.ok();
+});
+</code></pre>
+<h2 id="version"><a class="header" href="#version">version</a></h2>
+<pre><code class="language-pepper">version(): String
+</code></pre>
+<p>Returns the version of the SQLite library the program runs against.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the version, such as <code>3.45.1</code></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from error.pep by `pep-doc package`. Do not edit. -->
+<h1 id="errorpep"><a class="header" href="#errorpep">error.pep</a></h1>
+<p><code>SqliteError</code>, what a failed call returns, and <code>SqliteResult&lt;T&gt;</code>.</p>
+<p>Source: <code>error.pep</code></p>
+<h2 id="sqliteerror"><a class="header" href="#sqliteerror">SqliteError</a></h2>
+<pre><code class="language-pepper">struct SqliteError
+</code></pre>
+<p>An error SQLite reported: its result code and its message.</p>
+<p><code>code</code> is SQLite's extended result code, such as 2067
+(<code>SQLITE_CONSTRAINT_UNIQUE</code>); <code>primary_code()</code> is its low byte, the
+primary code, such as 19 (<code>SQLITE_CONSTRAINT</code>). See
+&lt;https://sqlite.org/rescode.html&gt; for the codes.</p>
+<h3 id="fields"><a class="header" href="#fields">Fields</a></h3>
+<h4 id="code"><a class="header" href="#code">code</a></h4>
+<pre><code class="language-pepper">var code: int
+</code></pre>
+<p>SQLite's extended result code.</p>
+<h4 id="message"><a class="header" href="#message">message</a></h4>
+<pre><code class="language-pepper">var message: String
+</code></pre>
+<p>What went wrong, as SQLite words it (<code>UNIQUE constraint failed: users.name</code>).</p>
+<h3 id="constructor-1"><a class="header" href="#constructor-1">Constructor</a></h3>
+<h4 id="sqliteerror-1"><a class="header" href="#sqliteerror-1">SqliteError()</a></h4>
+<pre><code class="language-pepper">construct(code: int, message: String)
+</code></pre>
+<p>Creates an error from a result code and a message.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>code</code> — SQLite's extended result code</li>
+<li><code>message</code> — what went wrong</li>
+</ul>
+<h3 id="methods-1"><a class="header" href="#methods-1">Methods</a></h3>
+<h4 id="primary_code"><a class="header" href="#primary_code">primary_code</a></h4>
+<pre><code class="language-pepper">primary_code(): int
+</code></pre>
+<p>Returns the primary result code: the low byte of <code>code</code>.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the primary code, such as 19 for any constraint failure</li>
+</ul>
+<h4 id="to_string"><a class="header" href="#to_string">to_string</a></h4>
+<pre><code class="language-pepper">to_string(): String
+</code></pre>
+<p>Returns the message and the code, as <code>message (code N)</code>.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the error as text</li>
+</ul>
+<h2 id="sqliteresult"><a class="header" href="#sqliteresult">SqliteResult</a></h2>
+<pre><code class="language-pepper">type SqliteResult&lt;T&gt; = Result&lt;T, SqliteError&gt;
+</code></pre>
+<p>The result of a call that can fail: its value, or a <code>SqliteError</code>.</p>
+<p><strong>Type parameters</strong></p>
+<ul>
+<li><code>T</code> — the value on success</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from pool.pep by `pep-doc package`. Do not edit. -->
+<h1 id="poolpep"><a class="header" href="#poolpep">pool.pep</a></h1>
+<p><code>Pool</code>: connections to one database that any thread may use.</p>
+<p>Source: <code>pool.pep</code></p>
+<h2 id="pool"><a class="header" href="#pool">Pool</a></h2>
+<pre><code class="language-pepper">[Shared] struct Pool
+</code></pre>
+<p>A fixed set of connections to one database, shared between threads.</p>
+<p>A <code>Database</code> belongs to one thread, so threads that use one database
+either open a connection each or share a <code>Pool</code>. The pool is <code>[Shared]</code>:
+a closure passed to <code>async.Thread.spawn</code> may capture it.
+<code>connection()</code> lends one connection to one thread at a time, and waits
+while every connection is in use. Each connection sits in an
+<code>async.Mutex</code>, so the compiler checks the block that locks it as it
+checks any <code>with</code> over a lock: nothing made from the <code>Database</code>, such as
+a <code>Statement</code>, can outlive the block.</p>
+<p>Every connection waits up to <code>busy_timeout</code> milliseconds for a lock
+another connection holds. For a file database, the write-ahead log
+(<code>PRAGMA journal_mode=WAL</code>, which <code>open</code> sets unless asked not to) lets
+readers run alongside one writer. An in-memory database (<code>":memory:"</code>)
+is private to each connection, so a pool of them is a set of separate
+databases; use a file.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import async;
+import sqlite;
+
+main(): int {
+    var pool = sqlite.Pool.open("app.db", 4).value();
+    with (var lease = pool.connection()) {
+        with (var db = lease.lock()) {
+            db.execute("CREATE TABLE IF NOT EXISTS hits (n INTEGER)").value();
+        }
+    }
+    var workers = Array&lt;async.Thread&gt;();
+    for (var i in 0..4) {
+        workers.append(async.Thread.spawn(() =&gt; {
+            with (var lease = pool.connection()) {
+                with (var db = lease.lock()) {
+                    db.execute("INSERT INTO hits VALUES (1)").value();
+                }
+            }
+        }));
+    }
+    for (var worker in workers) {
+        worker.join();
+    }
+    return 0;
+}
+</code></pre>
+<h3 id="fields-1"><a class="header" href="#fields-1">Fields</a></h3>
+<h4 id="size"><a class="header" href="#size">size</a></h4>
+<pre><code class="language-pepper">const size: ulong
+</code></pre>
+<p>The number of connections.</p>
+<h3 id="constructor-2"><a class="header" href="#constructor-2">Constructor</a></h3>
+<h4 id="pool-1"><a class="header" href="#pool-1">Pool()</a></h4>
+<pre><code class="language-pepper">construct(idle: async.Channel&lt;async.Mutex&lt;Database&gt;&gt;, size: ulong)
+</code></pre>
+<p>Wraps connections <code>open</code> made; use <code>open</code> instead.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>idle</code> — a channel holding every connection, each in its own lock</li>
+<li><code>size</code> — the number of connections in <code>idle</code></li>
+</ul>
+<h3 id="static-methods-1"><a class="header" href="#static-methods-1">Static methods</a></h3>
+<h4 id="open-1"><a class="header" href="#open-1">open</a></h4>
+<pre><code class="language-pepper">static open( path: String, size: ulong, flags: int = OPEN_READ_WRITE | OPEN_CREATE, busy_timeout: int = 5000, write_ahead_log: bool = true ): SqliteResult&lt;Pool&gt;
+</code></pre>
+<p>Opens <code>size</code> connections to the database at <code>path</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>path</code> — the database file</li>
+<li><code>size</code> — the number of connections, at least 1</li>
+<li><code>flags</code> — the flags each connection opens with, as for <code>Database.open</code></li>
+<li><code>busy_timeout</code> — how long, in milliseconds, a statement waits for a lock another connection holds before it fails with <code>SQLITE_BUSY</code></li>
+<li><code>write_ahead_log</code> — whether to switch the database to the write-ahead log, so readers do not wait for a writer; a read-only pool leaves the file as it is</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the pool, or the first error; <code>SQLITE_MISUSE</code> (21) when the SQLite library was built without thread support</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if <code>size</code> is 0</li>
+</ul>
+<h3 id="methods-2"><a class="header" href="#methods-2">Methods</a></h3>
+<h4 id="connection"><a class="header" href="#connection">connection</a></h4>
+<pre><code class="language-pepper">connection(): PooledConnection
+</code></pre>
+<p>Takes a connection no other thread is using, waiting while all are
+in use, for a <code>with</code> header. The block's binding is the connection's
+lock; lock it with an inner <code>with</code> to reach the <code>Database</code>. The
+connection goes back to the pool when the outer block ends, by any
+path.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the lease on one connection</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the pool's connections are gone, which cannot happen while the pool is alive</li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">with (var lease = pool.connection()) {
+    with (var db = lease.lock()) {
+        db.execute("DELETE FROM sessions WHERE expired").value();
+    }
+}   # the connection is back in the pool
+</code></pre>
+<h2 id="pooledconnection"><a class="header" href="#pooledconnection">PooledConnection</a></h2>
+<pre><code class="language-pepper">[Isolated] struct PooledConnection
+</code></pre>
+<p>One connection of a <code>Pool</code>, lent to the thread that took it with
+<code>Pool.connection()</code>, which a <code>with</code> block holds.</p>
+<p><code>enter()</code> hands the block the connection's <code>async.Mutex&lt;Database&gt;</code>;
+destroying the lease gives the connection back to the pool. It is
+<code>[Isolated]</code>: it can only be the scope of a <code>with</code> header, so it cannot
+be kept past the block.</p>
+<h3 id="constructor-3"><a class="header" href="#constructor-3">Constructor</a></h3>
+<h4 id="pooledconnection-1"><a class="header" href="#pooledconnection-1">PooledConnection()</a></h4>
+<pre><code class="language-pepper">construct(idle: async.Channel&lt;async.Mutex&lt;Database&gt;&gt;, connection: async.Mutex&lt;Database&gt;)
+</code></pre>
+<p>Takes over a connection <code>Pool.connection()</code> received; use that
+instead.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>idle</code> — the pool's channel, which gets the connection back</li>
+<li><code>connection</code> — the connection lent</li>
+</ul>
+<h3 id="methods-3"><a class="header" href="#methods-3">Methods</a></h3>
+<h4 id="enter"><a class="header" href="#enter">enter</a></h4>
+<pre><code class="language-pepper">enter(): async.Mutex&lt;Database&gt;
+</code></pre>
+<p>Returns the connection, for the <code>with</code> header to bind; lock it to
+reach the <code>Database</code>.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the connection's lock</li>
+</ul>
+<h4 id="exit"><a class="header" href="#exit">exit</a></h4>
+<pre><code class="language-pepper">exit()
+</code></pre>
+<p>Gives the connection back to the pool. The destructor calls it;
+calling it again does nothing.</p>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from sqlite3.pep by `pep-doc package`. Do not edit. -->
+<h1 id="sqlite3pep"><a class="header" href="#sqlite3pep">sqlite3.pep</a></h1>
+<p>The parts of SQLite's C API (<code>sqlite3.h</code>) the module calls, private to
+the module. Each declaration is the C function of the same name, with
+C's types: <code>sqlite3*</code> and <code>sqlite3_stmt*</code> are <code>void*</code>, <code>sqlite3_int64</code>
+is <code>long</code>.</p>
+<p>Which library is linked, per platform:</p>
+<ul>
+<li><strong>Linux:</strong> <code>libsqlite3.so</code> (<code>apt install libsqlite3-dev</code>).</li>
+<li><strong>macOS:</strong> <code>libsqlite3.dylib</code>, which the SDK provides.</li>
+<li><strong>Windows:</strong> <code>winsqlite3.dll</code>, which Windows 10 and later ship in
+<code>System32</code>, through <code>winsqlite3.lib</code> from the Windows SDK.</li>
+</ul>
+<p>Source: <code>sqlite3.pep</code></p>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from statement.pep by `pep-doc package`. Do not edit. -->
+<h1 id="statementpep"><a class="header" href="#statementpep">statement.pep</a></h1>
+<p><code>Statement</code>: a prepared SQL statement, its parameters and its rows.</p>
+<p>Source: <code>statement.pep</code></p>
+<h2 id="statement"><a class="header" href="#statement">Statement</a></h2>
+<pre><code class="language-pepper">struct Statement
+</code></pre>
+<p>A prepared SQL statement, made by <code>Database.prepare</code>.</p>
+<p>Bind its parameters with <code>bind</code>, then call <code>step</code> until it returns
+false: each true is a row, read with the <code>column_</code> methods or decoded
+into a struct with <code>read&lt;T&gt;()</code>. <code>reset</code> runs it again, keeping the
+bindings; <code>clear_bindings</code> sets every parameter back to <code>NULL</code>.</p>
+<p>Parameters are numbered from 1, as SQLite numbers them (<code>?</code>, <code>?1</code>), or
+named (<code>:name</code>, <code>@name</code>, <code>$name</code>, with the prefix in the name you
+bind). Columns are numbered from 0.</p>
+<p>The statement keeps its database open. It is finalized when the last
+reference to it goes away, or earlier with <code>finalize()</code>.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import sqlite;
+
+var db = sqlite.Database.open_in_memory().value();
+db.execute("CREATE TABLE t (n INTEGER, name TEXT)").value();
+var insert = db.prepare("INSERT INTO t VALUES (?, :name)").value();
+insert.bind(1, 7).value();
+insert.bind(":name", "seven").value();
+insert.step().value();
+var query = db.prepare("SELECT n, name FROM t").value();
+while (query.step().value()) {
+    print($"{query.column_long(0).value()} {query.column_text(1).value()}");
+}
+</code></pre>
+<h3 id="constructor-4"><a class="header" href="#constructor-4">Constructor</a></h3>
+<h4 id="statement-1"><a class="header" href="#statement-1">Statement()</a></h4>
+<pre><code class="language-pepper">construct(handle: __ptr&lt;void&gt;, database: Handle&lt;__ptr&lt;void&gt;&gt;)
+</code></pre>
+<p>Wraps a statement <code>Database.prepare</code> made; use that instead.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>handle</code> — the <code>sqlite3_stmt*</code>, which the statement takes over</li>
+<li><code>database</code> — the connection's handle, kept open while the statement lives</li>
+</ul>
+<h3 id="methods-4"><a class="header" href="#methods-4">Methods</a></h3>
+<h4 id="is_open-1"><a class="header" href="#is_open-1">is_open</a></h4>
+<pre><code class="language-pepper">is_open(): bool
+</code></pre>
+<p>Reports whether the statement is still usable: false after
+<code>finalize()</code>.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>true until the statement is finalized</li>
+</ul>
+<h4 id="finalize"><a class="header" href="#finalize">finalize</a></h4>
+<pre><code class="language-pepper">finalize()
+</code></pre>
+<p>Frees the statement now rather than when the last reference to it
+goes away. Calling it again does nothing.</p>
+<h4 id="parameter_count"><a class="header" href="#parameter_count">parameter_count</a></h4>
+<pre><code class="language-pepper">parameter_count(): int
+</code></pre>
+<p>Returns the number of parameters: the largest parameter index.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the parameter count</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the statement is finalized</li>
+</ul>
+<h4 id="parameter_index"><a class="header" href="#parameter_index">parameter_index</a></h4>
+<pre><code class="language-pepper">parameter_index(name: String): int?
+</code></pre>
+<p>Returns the index of the parameter named <code>name</code>, prefix included
+(<code>:id</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>name</code> — the parameter's name, with its <code>:</code>, <code>@</code> or <code>$</code></li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the index, from 1, or none when no parameter has that name</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the statement is finalized</li>
+</ul>
+<h4 id="bind"><a class="header" href="#bind">bind</a></h4>
+<pre><code class="language-pepper">bind(index: int, value: long): SqliteResult&lt;void&gt;
+</code></pre>
+<p>Binds an integer to the parameter at <code>index</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>index</code> — the parameter's index, from 1</li>
+<li><code>value</code> — the integer</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>nothing, or the error (<code>SQLITE_RANGE</code> for a bad index)</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the statement is finalized</li>
+</ul>
+<h4 id="bind-1"><a class="header" href="#bind-1">bind</a></h4>
+<pre><code class="language-pepper">bind(index: int, value: double): SqliteResult&lt;void&gt;
+</code></pre>
+<p>Binds a floating-point number to the parameter at <code>index</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>index</code> — the parameter's index, from 1</li>
+<li><code>value</code> — the number</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>nothing, or the error (<code>SQLITE_RANGE</code> for a bad index)</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the statement is finalized</li>
+</ul>
+<h4 id="bind-2"><a class="header" href="#bind-2">bind</a></h4>
+<pre><code class="language-pepper">bind(index: int, value: String): SqliteResult&lt;void&gt;
+</code></pre>
+<p>Binds text to the parameter at <code>index</code>. SQLite copies it.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>index</code> — the parameter's index, from 1</li>
+<li><code>value</code> — the text; empty text binds <code>''</code>, not <code>NULL</code></li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>nothing, or the error (<code>SQLITE_RANGE</code> for a bad index, <code>SQLITE_TOOBIG</code> for text of 2 GiB or more)</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the statement is finalized</li>
+</ul>
+<h4 id="bind-3"><a class="header" href="#bind-3">bind</a></h4>
+<pre><code class="language-pepper">bind(index: int, bytes: u8[]): SqliteResult&lt;void&gt;
+</code></pre>
+<p>Binds a blob to the parameter at <code>index</code>. SQLite copies it.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>index</code> — the parameter's index, from 1</li>
+<li><code>bytes</code> — the bytes; an empty array binds an empty blob, not <code>NULL</code></li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>nothing, or the error (<code>SQLITE_RANGE</code> for a bad index, <code>SQLITE_TOOBIG</code> for 2 GiB or more)</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the statement is finalized</li>
+</ul>
+<h4 id="bind-4"><a class="header" href="#bind-4">bind</a></h4>
+<pre><code class="language-pepper">bind(index: int, value: Value): SqliteResult&lt;void&gt;
+</code></pre>
+<p>Binds any <code>Value</code> to the parameter at <code>index</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>index</code> — the parameter's index, from 1</li>
+<li><code>value</code> — the value</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>nothing, or the error, as the <code>bind</code> for its type</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the statement is finalized</li>
+</ul>
+<h4 id="bind_null"><a class="header" href="#bind_null">bind_null</a></h4>
+<pre><code class="language-pepper">bind_null(index: int): SqliteResult&lt;void&gt;
+</code></pre>
+<p>Binds <code>NULL</code> to the parameter at <code>index</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>index</code> — the parameter's index, from 1</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>nothing, or the error (<code>SQLITE_RANGE</code> for a bad index)</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the statement is finalized</li>
+</ul>
+<h4 id="bind-5"><a class="header" href="#bind-5">bind</a></h4>
+<pre><code class="language-pepper">bind(name: String, value: long): SqliteResult&lt;void&gt;
+</code></pre>
+<p>Binds an integer to the parameter named <code>name</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>name</code> — the parameter's name, with its prefix (<code>:id</code>)</li>
+<li><code>value</code> — the integer</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>nothing, or the error (<code>SQLITE_RANGE</code> for an unknown name)</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the statement is finalized</li>
+</ul>
+<h4 id="bind-6"><a class="header" href="#bind-6">bind</a></h4>
+<pre><code class="language-pepper">bind(name: String, value: double): SqliteResult&lt;void&gt;
+</code></pre>
+<p>Binds a floating-point number to the parameter named <code>name</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>name</code> — the parameter's name, with its prefix (<code>:id</code>)</li>
+<li><code>value</code> — the number</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>nothing, or the error (<code>SQLITE_RANGE</code> for an unknown name)</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the statement is finalized</li>
+</ul>
+<h4 id="bind-7"><a class="header" href="#bind-7">bind</a></h4>
+<pre><code class="language-pepper">bind(name: String, value: String): SqliteResult&lt;void&gt;
+</code></pre>
+<p>Binds text to the parameter named <code>name</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>name</code> — the parameter's name, with its prefix (<code>:id</code>)</li>
+<li><code>value</code> — the text</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>nothing, or the error (<code>SQLITE_RANGE</code> for an unknown name)</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the statement is finalized</li>
+</ul>
+<h4 id="bind-8"><a class="header" href="#bind-8">bind</a></h4>
+<pre><code class="language-pepper">bind(name: String, bytes: u8[]): SqliteResult&lt;void&gt;
+</code></pre>
+<p>Binds a blob to the parameter named <code>name</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>name</code> — the parameter's name, with its prefix (<code>:id</code>)</li>
+<li><code>bytes</code> — the bytes</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>nothing, or the error (<code>SQLITE_RANGE</code> for an unknown name)</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the statement is finalized</li>
+</ul>
+<h4 id="bind-9"><a class="header" href="#bind-9">bind</a></h4>
+<pre><code class="language-pepper">bind(name: String, value: Value): SqliteResult&lt;void&gt;
+</code></pre>
+<p>Binds any <code>Value</code> to the parameter named <code>name</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>name</code> — the parameter's name, with its prefix (<code>:id</code>)</li>
+<li><code>value</code> — the value</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>nothing, or the error (<code>SQLITE_RANGE</code> for an unknown name)</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the statement is finalized</li>
+</ul>
+<h4 id="bind_null-1"><a class="header" href="#bind_null-1">bind_null</a></h4>
+<pre><code class="language-pepper">bind_null(name: String): SqliteResult&lt;void&gt;
+</code></pre>
+<p>Binds <code>NULL</code> to the parameter named <code>name</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>name</code> — the parameter's name, with its prefix (<code>:id</code>)</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>nothing, or the error (<code>SQLITE_RANGE</code> for an unknown name)</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the statement is finalized</li>
+</ul>
+<h4 id="bind_all"><a class="header" href="#bind_all">bind_all</a></h4>
+<pre><code class="language-pepper">bind_all(values: Value[]): SqliteResult&lt;void&gt;
+</code></pre>
+<p>Binds <code>values</code> to the parameters 1, 2, ... in order.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>values</code> — one value per parameter</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>nothing, or the first error (<code>SQLITE_RANGE</code> when there are more values than parameters)</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the statement is finalized</li>
+</ul>
+<h4 id="clear_bindings"><a class="header" href="#clear_bindings">clear_bindings</a></h4>
+<pre><code class="language-pepper">clear_bindings()
+</code></pre>
+<p>Sets every parameter back to <code>NULL</code>.</p>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the statement is finalized</li>
+</ul>
+<h4 id="step"><a class="header" href="#step">step</a></h4>
+<pre><code class="language-pepper">step(): SqliteResult&lt;bool&gt;
+</code></pre>
+<p>Runs the statement to its next row.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>true when a row is ready to read, false when the statement is done, or the error; after false or an error, <code>reset</code> runs it again</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the statement is finalized</li>
+</ul>
+<h4 id="reset"><a class="header" href="#reset">reset</a></h4>
+<pre><code class="language-pepper">reset()
+</code></pre>
+<p>Sets the statement back to its start, to run it again. The bindings
+stay.</p>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the statement is finalized</li>
+</ul>
+<h4 id="column_count"><a class="header" href="#column_count">column_count</a></h4>
+<pre><code class="language-pepper">column_count(): int
+</code></pre>
+<p>Returns the number of columns in the statement's rows.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the column count, 0 for a statement that returns no rows</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the statement is finalized</li>
+</ul>
+<h4 id="column_name"><a class="header" href="#column_name">column_name</a></h4>
+<pre><code class="language-pepper">column_name(index: int): String
+</code></pre>
+<p>Returns the name of a column: its <code>AS</code> name, or SQLite's.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>index</code> — the column's index, from 0</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the name</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if the statement is finalized or <code>index</code> is out of range</li>
+</ul>
+<h4 id="column_is_null"><a class="header" href="#column_is_null">column_is_null</a></h4>
+<pre><code class="language-pepper">column_is_null(index: int): bool
+</code></pre>
+<p>Reports whether a column of the current row is <code>NULL</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>index</code> — the column's index, from 0</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>true for <code>NULL</code></li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if there is no current row or <code>index</code> is out of range</li>
+</ul>
+<h4 id="column_int"><a class="header" href="#column_int">column_int</a></h4>
+<pre><code class="language-pepper">column_int(index: int): int?
+</code></pre>
+<p>Reads a column of the current row as an <code>int</code>, converting as SQLite
+does (text is parsed, a real truncated) and keeping the low 32 bits.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>index</code> — the column's index, from 0</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the integer, or none for <code>NULL</code></li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if there is no current row or <code>index</code> is out of range</li>
+</ul>
+<h4 id="column_long"><a class="header" href="#column_long">column_long</a></h4>
+<pre><code class="language-pepper">column_long(index: int): long?
+</code></pre>
+<p>Reads a column of the current row as a <code>long</code>, converting as SQLite
+does (text is parsed, a real truncated).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>index</code> — the column's index, from 0</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the integer, or none for <code>NULL</code></li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if there is no current row or <code>index</code> is out of range</li>
+</ul>
+<h4 id="column_double"><a class="header" href="#column_double">column_double</a></h4>
+<pre><code class="language-pepper">column_double(index: int): double?
+</code></pre>
+<p>Reads a column of the current row as a <code>double</code>, converting as
+SQLite does.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>index</code> — the column's index, from 0</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the number, or none for <code>NULL</code></li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if there is no current row or <code>index</code> is out of range</li>
+</ul>
+<h4 id="column_text"><a class="header" href="#column_text">column_text</a></h4>
+<pre><code class="language-pepper">column_text(index: int): String?
+</code></pre>
+<p>Reads a column of the current row as text: a number as SQLite
+writes it, a blob's bytes as they are.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>index</code> — the column's index, from 0</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the text, or none for <code>NULL</code></li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if there is no current row or <code>index</code> is out of range</li>
+</ul>
+<h4 id="column_blob"><a class="header" href="#column_blob">column_blob</a></h4>
+<pre><code class="language-pepper">column_blob(index: int): u8[]?
+</code></pre>
+<p>Reads a column of the current row as bytes: a blob as stored, text
+as its UTF-8 bytes.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>index</code> — the column's index, from 0</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the bytes, or none for <code>NULL</code></li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if there is no current row or <code>index</code> is out of range</li>
+</ul>
+<h4 id="column"><a class="header" href="#column">column</a></h4>
+<pre><code class="language-pepper">column(index: int): Value
+</code></pre>
+<p>Reads a column of the current row as the <code>Value</code> of its storage
+class.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>index</code> — the column's index, from 0</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the value</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if there is no current row or <code>index</code> is out of range</li>
+</ul>
+<h4 id="read"><a class="header" href="#read">read</a></h4>
+<pre><code class="language-pepper">read&lt;T&gt;(): SqliteResult&lt;T&gt;
+</code></pre>
+<p>Decodes the current row into a <code>T</code>, as <code>json.from_json</code> decodes an
+object whose keys are the column names.</p>
+<p>A column fills the property of its name (or of its
+<code>[Name("...")]</code>); a <code>NULL</code> column is <code>null</code>, so it fills an
+<code>Optional</code> property as none. Integers fill number properties, text
+<code>String</code>s and blobs <code>u8[]</code> properties. A column no property names is
+ignored, and a property no column names keeps its default, unless it
+is <code>[Required]</code>.</p>
+<p><strong>Type parameters</strong></p>
+<ul>
+<li><code>T</code> — the struct to decode into</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the decoded row, or an error with code <code>SQLITE_MISMATCH</code> (20) whose message is the conversion's (<code>$.age: expected a number, found a string</code>)</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if there is no current row</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from value.pep by `pep-doc package`. Do not edit. -->
+<h1 id="valuepep"><a class="header" href="#valuepep">value.pep</a></h1>
+<p><code>Value</code>: one SQLite value of any storage class.</p>
+<p>Source: <code>value.pep</code></p>
+<h2 id="value"><a class="header" href="#value">Value</a></h2>
+<pre><code class="language-pepper">enum Value
+</code></pre>
+<p>A value as SQLite stores it: <code>NULL</code>, an integer, a floating-point
+number, text or a blob. <code>Statement.column</code> reads one, <code>Statement.bind</code>
+binds one, and <code>Database.execute</code> takes them as parameters.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import sqlite;
+
+var parameters = [sqlite.Value.Integer(1), sqlite.Value.Text("Ada"), sqlite.Value.Null];
+</code></pre>
+<h3 id="cases"><a class="header" href="#cases">Cases</a></h3>
+<h4 id="null"><a class="header" href="#null">Null</a></h4>
+<pre><code class="language-pepper">Null
+</code></pre>
+<p>SQL <code>NULL</code>.</p>
+<h4 id="integer"><a class="header" href="#integer">Integer</a></h4>
+<pre><code class="language-pepper">Integer(value: long)
+</code></pre>
+<p>A 64-bit signed integer.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the integer</li>
+</ul>
+<h4 id="real"><a class="header" href="#real">Real</a></h4>
+<pre><code class="language-pepper">Real(value: double)
+</code></pre>
+<p>An 8-byte IEEE floating-point number.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the number</li>
+</ul>
+<h4 id="text"><a class="header" href="#text">Text</a></h4>
+<pre><code class="language-pepper">Text(value: String)
+</code></pre>
+<p>Text, stored as UTF-8.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the text</li>
+</ul>
+<h4 id="blob"><a class="header" href="#blob">Blob</a></h4>
+<pre><code class="language-pepper">Blob(bytes: u8[])
+</code></pre>
+<p>Bytes, stored exactly as given.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>bytes</code> — the bytes</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+
+    </div>
+    </body>
+</html>

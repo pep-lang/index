@@ -1,0 +1,391 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>clipboard.pep - term</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">term</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <!-- Generated from clipboard.pep by `pep-doc package`. Do not edit. -->
+<h1 id="clipboardpep"><a class="header" href="#clipboardpep">clipboard.pep</a></h1>
+<p>The clipboard: <code>Clipboard</code> copies text to it and reads text from it,
+through the OS's clipboard where the program runs locally, or through
+the terminal (OSC 52), which reaches the clipboard of the machine the
+user sits at, over SSH too.</p>
+<p>Source: <code>clipboard.pep</code></p>
+<h2 id="clipboardbackend"><a class="header" href="#clipboardbackend">ClipboardBackend</a></h2>
+<pre><code class="language-pepper">enum ClipboardBackend
+</code></pre>
+<p>Where a <code>Clipboard</code> copies to and reads from.</p>
+<h3 id="cases"><a class="header" href="#cases">Cases</a></h3>
+<h4 id="auto"><a class="header" href="#auto">Auto</a></h4>
+<pre><code class="language-pepper">Auto
+</code></pre>
+<p><code>System</code> when the program runs locally and the OS has a clipboard it
+can reach, else <code>Osc52</code>. Locally means none of <code>SSH_CONNECTION</code>,
+<code>SSH_CLIENT</code> and <code>SSH_TTY</code> is set: over SSH the OS's clipboard is
+the remote machine's, which the user cannot paste from.</p>
+<h4 id="system"><a class="header" href="#system">System</a></h4>
+<pre><code class="language-pepper">System
+</code></pre>
+<p>The OS's clipboard: on Windows, its own (<code>CF_UNICODETEXT</code>); on
+macOS, <code>pbcopy</code> and <code>pbpaste</code>; on Linux, <code>wl-copy</code> and <code>wl-paste</code>
+when <code>WAYLAND_DISPLAY</code> is set, else <code>xclip</code> or else <code>xsel</code> when
+<code>DISPLAY</code> is, each found on the <code>PATH</code>.</p>
+<h4 id="osc52"><a class="header" href="#osc52">Osc52</a></h4>
+<pre><code class="language-pepper">Osc52
+</code></pre>
+<p>The terminal's: OSC 52 sequences written to standard output, which
+the terminal acts on, so it reaches the user's clipboard over SSH.</p>
+<h2 id="clipboarderror"><a class="header" href="#clipboarderror">ClipboardError</a></h2>
+<pre><code class="language-pepper">[Value] enum ClipboardError
+</code></pre>
+<p>Why a <code>Clipboard</code> could not copy or read. None of them holds the
+clipboard's text, so they are safe to show or log.</p>
+<h3 id="cases-1"><a class="header" href="#cases-1">Cases</a></h3>
+<h4 id="nobackend"><a class="header" href="#nobackend">NoBackend</a></h4>
+<pre><code class="language-pepper">NoBackend(reason: String)
+</code></pre>
+<p>There is no clipboard to use; <code>reason</code> says why, such as no
+<code>wl-copy</code>, <code>xclip</code> or <code>xsel</code> on the <code>PATH</code>, or standard output not
+a terminal for OSC 52.</p>
+<h4 id="toolarge"><a class="header" href="#toolarge">TooLarge</a></h4>
+<pre><code class="language-pepper">TooLarge(limit: ulong)
+</code></pre>
+<p>The text is longer than <code>limit</code> bytes: a copy past the
+<code>Clipboard</code>'s <code>osc52_limit</code>, or a reply past the reader's
+<code>clipboard_limit</code>.</p>
+<h4 id="timedout"><a class="header" href="#timedout">TimedOut</a></h4>
+<pre><code class="language-pepper">TimedOut
+</code></pre>
+<p>The terminal did not answer an OSC 52 read in time. Most terminals
+turn reading the clipboard off, and answer nothing.</p>
+<h4 id="failed"><a class="header" href="#failed">Failed</a></h4>
+<pre><code class="language-pepper">Failed(reason: String)
+</code></pre>
+<p>The OS's clipboard, or the program reaching it, refused; <code>reason</code>
+says how.</p>
+<h3 id="methods"><a class="header" href="#methods">Methods</a></h3>
+<h4 id="to_string"><a class="header" href="#to_string">to_string</a></h4>
+<pre><code class="language-pepper">to_string(): String
+</code></pre>
+<p>Returns what went wrong, as a sentence fragment for a message.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the description</li>
+</ul>
+<h2 id="clipboard"><a class="header" href="#clipboard">Clipboard</a></h2>
+<pre><code class="language-pepper">struct Clipboard
+</code></pre>
+<p>Copies text to the clipboard, and reads it, through the backend
+<code>backend</code> says (see <code>ClipboardBackend</code>): the OS's clipboard, or the
+terminal's through OSC 52. <code>Auto</code>, the default, is resolved once, when
+the <code>Clipboard</code> is made, so <code>backend</code> says which is in use.</p>
+<p>Through OSC 52, <code>copy</code> writes <code>ESC ] 52 ; c ; &lt;base64&gt; BEL</code> to standard
+output, and the terminal sets its clipboard; nothing comes back to say
+whether it did. Most terminals allow it, some only after the user turns
+it on, and some cap its length (<code>osc52_limit</code>). <code>read</code> asks with
+<code>ESC ] 52 ; c ; ? BEL</code>, which most terminals refuse by not answering, so
+it waits at most <code>timeout_ms</code> and then fails with
+<code>ClipboardError.TimedOut</code>; it never hangs.</p>
+<p>Inside tmux, the sequence reaches tmux, not the terminal: with
+<code>set -g set-clipboard on</code> in <code>.tmux.conf</code>, tmux sets its own buffer and
+passes the copy on to the terminal. GNU screen passes OSC 52 on only
+inside its own escape (<code>ESC P</code> ... <code>ESC \</code>) and cuts long ones short.
+This package writes the plain sequence and wraps it for neither, since
+tmux's <code>set-clipboard</code> makes that unneeded; under screen, use <code>System</code>.</p>
+<p>The text copied or read is never put in an error or a log.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import term;
+import [ClipboardBackend] from term;
+
+main(): int {
+    var clipboard = term.Clipboard();
+    var copied = clipboard.copy("hello");
+    if (copied.is_err()) {
+        print($"could not copy: {copied.error()}");
+        return 1;
+    }
+    print(clipboard.backend == ClipboardBackend.System ? "copied" : "asked the terminal to copy");
+    return 0;
+}
+</code></pre>
+<h3 id="fields"><a class="header" href="#fields">Fields</a></h3>
+<h4 id="backend"><a class="header" href="#backend">backend</a></h4>
+<pre><code class="language-pepper">const backend: ClipboardBackend
+</code></pre>
+<p>The backend in use: <code>System</code> or <code>Osc52</code>, <code>Auto</code> resolved.</p>
+<h4 id="osc52_limit"><a class="header" href="#osc52_limit">osc52_limit</a></h4>
+<pre><code class="language-pepper">const osc52_limit: ulong
+</code></pre>
+<p>The most bytes of text <code>copy</code> sends through OSC 52; longer text
+fails with <code>ClipboardError.TooLarge</code> rather than being cut.</p>
+<h3 id="constructor"><a class="header" href="#constructor">Constructor</a></h3>
+<h4 id="clipboard-1"><a class="header" href="#clipboard-1">Clipboard()</a></h4>
+<pre><code class="language-pepper">construct(backend: ClipboardBackend = ClipboardBackend.Auto, osc52_limit: ulong = 74994)
+</code></pre>
+<p>Makes a clipboard, choosing its backend.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>backend</code> — the backend; <code>Auto</code> picks one as <code>ClipboardBackend</code> says</li>
+<li><code>osc52_limit</code> — the most bytes of text to copy through OSC 52: 74,994 unless said, whose base64 is just under the 100,000 bytes some terminals (hterm, for one) take at most</li>
+</ul>
+<h3 id="methods-1"><a class="header" href="#methods-1">Methods</a></h3>
+<h4 id="copy"><a class="header" href="#copy">copy</a></h4>
+<pre><code class="language-pepper">copy(text: String): Result&lt;void, ClipboardError&gt;
+</code></pre>
+<p>Copies <code>text</code> to the clipboard.</p>
+<p>Through OSC 52 the terminal does not say whether it copied, so
+success means the request was written.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>text</code> — the text to copy</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>nothing; <code>NoBackend</code> when the OS has no clipboard to reach or, for OSC 52, standard output is not a terminal, <code>TooLarge</code> past <code>osc52_limit</code>, or <code>Failed</code> when the OS refused</li>
+</ul>
+<h4 id="read"><a class="header" href="#read">read</a></h4>
+<pre><code class="language-pepper">read(timeout_ms: int = 1000, input: InputReader = InputReader()): Result&lt;String, ClipboardError&gt;
+</code></pre>
+<p>Returns the text on the clipboard.</p>
+<p>Through OSC 52 it asks the terminal, in raw mode (turned on while it
+waits, if it is not on), and waits at most <code>timeout_ms</code> for the
+answer, which <code>input</code> decodes. Other input that comes meanwhile,
+such as keys, stays in <code>input</code> for its next <code>read</code>, so pass the
+program's own <code>InputReader</code>. An answer that comes after the wait
+arrives there as an <code>Event.ClipboardReply</code>. A terminal that asks the
+user first (kitty can) may answer after the wait; with raw mode off
+by then the terminal shows the answer as typed text, so for such a
+terminal keep a <code>RawMode</code> on and pass a longer <code>timeout_ms</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>timeout_ms</code> — how long to wait for the terminal's answer, in milliseconds; the OS's clipboard answers at once</li>
+<li><code>input</code> — the reader the terminal's answer is read through</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the text, empty when the clipboard holds none; <code>NoBackend</code> when there is no clipboard or, for OSC 52, standard input or output is not a terminal, <code>TimedOut</code> when the terminal does not answer, <code>TooLarge</code> past <code>input</code>'s <code>clipboard_limit</code>, or <code>Failed</code> when the OS refused</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="module.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="keys.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="module.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="keys.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

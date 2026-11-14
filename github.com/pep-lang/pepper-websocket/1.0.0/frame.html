@@ -1,0 +1,371 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>frame.pep - websocket</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">websocket</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <!-- Generated from frame.pep by `pep-doc package`. Do not edit. -->
+<h1 id="framepep"><a class="header" href="#framepep">frame.pep</a></h1>
+<p>WebSocket frames (RFC 6455, section 5): <code>Opcode</code>, <code>Frame</code>, and the wire
+format with <code>encode_frame</code> and <code>decode_frame</code>.</p>
+<p>Source: <code>frame.pep</code></p>
+<h2 id="opcode"><a class="header" href="#opcode">Opcode</a></h2>
+<pre><code class="language-pepper">enum Opcode: u8
+</code></pre>
+<p>What a frame carries (RFC 6455, section 5.2).</p>
+<h3 id="cases"><a class="header" href="#cases">Cases</a></h3>
+<h4 id="continuation"><a class="header" href="#continuation">Continuation</a></h4>
+<pre><code class="language-pepper">Continuation = 0
+</code></pre>
+<p>A later fragment of a message that a <code>Text</code> or <code>Binary</code> frame began.</p>
+<h4 id="text"><a class="header" href="#text">Text</a></h4>
+<pre><code class="language-pepper">Text = 1
+</code></pre>
+<p>A UTF-8 text message, or its first fragment.</p>
+<h4 id="binary"><a class="header" href="#binary">Binary</a></h4>
+<pre><code class="language-pepper">Binary = 2
+</code></pre>
+<p>A binary message, or its first fragment.</p>
+<h4 id="close"><a class="header" href="#close">Close</a></h4>
+<pre><code class="language-pepper">Close = 8
+</code></pre>
+<p>The closing handshake: an optional status code and reason.</p>
+<h4 id="ping"><a class="header" href="#ping">Ping</a></h4>
+<pre><code class="language-pepper">Ping = 9
+</code></pre>
+<p>A ping, which the peer answers with a <code>Pong</code> carrying the same bytes.</p>
+<h4 id="pong"><a class="header" href="#pong">Pong</a></h4>
+<pre><code class="language-pepper">Pong = 10
+</code></pre>
+<p>The answer to a <code>Ping</code>, or an unasked heartbeat.</p>
+<h2 id="max_control_payload"><a class="header" href="#max_control_payload">MAX_CONTROL_PAYLOAD</a></h2>
+<pre><code class="language-pepper">const MAX_CONTROL_PAYLOAD: ulong = 125
+</code></pre>
+<p>The most bytes a control frame (<code>Close</code>, <code>Ping</code>, <code>Pong</code>) may carry.</p>
+<h2 id="frame"><a class="header" href="#frame">Frame</a></h2>
+<pre><code class="language-pepper">struct Frame
+</code></pre>
+<p>One frame: an opcode, the payload, and whether it ends its message.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">var frame = websocket.Frame(websocket.Opcode.Text, "hi".bytes());
+var bytes = websocket.encode_frame(frame);   # 81 02 68 69
+</code></pre>
+<h3 id="fields"><a class="header" href="#fields">Fields</a></h3>
+<h4 id="fin"><a class="header" href="#fin">fin</a></h4>
+<pre><code class="language-pepper">var fin: bool
+</code></pre>
+<p>Whether this is the last frame of its message (the FIN bit).</p>
+<h4 id="opcode-1"><a class="header" href="#opcode-1">opcode</a></h4>
+<pre><code class="language-pepper">var opcode: Opcode
+</code></pre>
+<p>What the frame carries.</p>
+<h4 id="payload"><a class="header" href="#payload">payload</a></h4>
+<pre><code class="language-pepper">var payload: u8[]
+</code></pre>
+<p>The payload, unmasked.</p>
+<h4 id="masked"><a class="header" href="#masked">masked</a></h4>
+<pre><code class="language-pepper">var masked: bool
+</code></pre>
+<p>Whether the frame arrived masked. <code>decode_frame</code> sets it;
+<code>encode_frame</code> masks by its <code>mask</code> argument instead.</p>
+<h3 id="constructor"><a class="header" href="#constructor">Constructor</a></h3>
+<h4 id="frame-1"><a class="header" href="#frame-1">Frame()</a></h4>
+<pre><code class="language-pepper">construct(opcode: Opcode, payload: u8[], fin: bool = true)
+</code></pre>
+<p>Creates a frame.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>opcode</code> — what the frame carries</li>
+<li><code>payload</code> — the payload, unmasked</li>
+<li><code>fin</code> — false for a fragment that more frames of its message follow</li>
+</ul>
+<h3 id="methods"><a class="header" href="#methods">Methods</a></h3>
+<h4 id="is_control"><a class="header" href="#is_control">is_control</a></h4>
+<pre><code class="language-pepper">is_control(): bool
+</code></pre>
+<p>Returns whether this is a control frame: <code>Close</code>, <code>Ping</code> or <code>Pong</code>.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>true for an opcode of 8 or more</li>
+</ul>
+<h2 id="encode_frame"><a class="header" href="#encode_frame">encode_frame</a></h2>
+<pre><code class="language-pepper">encode_frame(frame: Frame): u8[]
+</code></pre>
+<p>Encodes <code>frame</code> unmasked, as a server sends it.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>frame</code> — the frame to encode</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the frame's bytes: header, then payload</li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">var bytes = websocket.encode_frame(websocket.Frame(websocket.Opcode.Ping, Array&lt;u8&gt;()));
+# bytes holds 89 00
+</code></pre>
+<h2 id="encode_frame-1"><a class="header" href="#encode_frame-1">encode_frame</a></h2>
+<pre><code class="language-pepper">encode_frame(frame: Frame, mask: u8[]): u8[]
+</code></pre>
+<p>Encodes <code>frame</code> masked with <code>mask</code>, as a client sends it: each payload
+byte is XORed with <code>mask[i % 4]</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>frame</code> — the frame to encode</li>
+<li><code>mask</code> — the four-byte masking key; a client picks a new random one for each frame</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the frame's bytes: header, masking key, then masked payload</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if <code>mask</code> does not hold exactly 4 bytes</li>
+</ul>
+<h2 id="decode_frame"><a class="header" href="#decode_frame">decode_frame</a></h2>
+<pre><code class="language-pepper">decode_frame(bytes: u8[], max_payload: ulong): Result&lt;(Frame, ulong)?&gt;
+</code></pre>
+<p>Decodes the frame at the start of <code>bytes</code>.</p>
+<p>Checks what RFC 6455 requires of every frame: no reserved bits (this
+package negotiates no extensions), a known opcode, and a control frame
+that is not fragmented and carries at most <code>MAX_CONTROL_PAYLOAD</code> bytes.
+Whether a frame must be masked depends on who sent it, so that is left to
+the caller (see <code>Frame.masked</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>bytes</code> — the received bytes, starting at a frame</li>
+<li><code>max_payload</code> — the largest payload to accept</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the frame and how many bytes of <code>bytes</code> it took; Empty when <code>bytes</code> does not hold the whole frame yet; an error when the frame breaks the protocol or its payload is over <code>max_payload</code></li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">var bytes = [0x81 as u8, 0x02, 0x68, 0x69];   # "hi", unmasked
+var (frame, used) = websocket.decode_frame(bytes, 1024).value().value();
+# frame.opcode == websocket.Opcode.Text, used == 4
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="module.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="handshake.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="module.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="handshake.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

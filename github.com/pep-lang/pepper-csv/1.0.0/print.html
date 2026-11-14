@@ -1,0 +1,687 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>csv</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">csv</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <!-- Generated from pep.toml by `pep-doc package`. Do not edit. -->
+<h1 id="csv-100"><a class="header" href="#csv-100">csv 1.0.0</a></h1>
+<p>CSV (RFC 4180): streaming reader, writer, and struct conversion</p>
+<h2 id="pages"><a class="header" href="#pages">Pages</a></h2>
+<ul>
+<li><a href="module.html">csv</a>: CSV (RFC 4180): read records from a stream or a text, write them back, and convert structs to records and back.</li>
+<li><a href="convert.html">convert.pep</a>: Struct conversion: <code>decode</code> reads CSV records into structs and <code>encode</code> writes structs as CSV records, through reflection, with no per-type code to write.</li>
+<li><a href="read.html">read.pep</a>: Reading CSV: <code>Reader</code>, which reads records from a stream as they are asked for; <code>parse</code>, which reads a whole text; and <code>CsvError</code>, what they report when the text is not CSV.</li>
+<li><a href="write.html">write.pep</a>: Writing CSV: <code>Writer</code>, which writes records to a stream, and <code>write_all</code>, which writes records into text.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from module.pep by `pep-doc package`. Do not edit. -->
+<h1 id="csv"><a class="header" href="#csv">csv</a></h1>
+<p>CSV (RFC 4180): read records from a stream or a text, write them back,
+and convert structs to records and back.</p>
+<p>Bring it in with <code>import csv</code>. Reading is strict and safe for untrusted
+text: a malformed record is an error with its line and column, like a
+compiler's, and a record may not pass a set size, so a quote that never
+closes cannot fill memory. A <code>Reader</code> reads a record at a time, so a
+large file is never held whole.</p>
+<ul>
+<li><code>Reader</code>, <code>parse</code>, <code>CsvError</code>: reading</li>
+<li><code>Writer</code>, <code>write_all</code>: writing</li>
+<li><code>decode</code>, <code>encode</code>, <code>Reader.read</code>, <code>Writer.write</code>: struct conversion,
+with the attributes of the <code>serialize</code> module, as <code>json</code> converts
+structs</li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import csv;
+
+main(): int {
+    var parsed = csv.parse("name,tags\nada,\"cli, csv\"\n", path = "people.csv");
+    if (parsed.is_err()) {
+        print(parsed.error().to_string());
+        return 1;
+    }
+    var rows = parsed.value();
+    assert(rows[1][1] == "cli, csv", "a quoted field");
+    rows[1][0] = "bob";
+    print(csv.write_all(rows));
+    return 0;
+}
+</code></pre>
+<p>Source: <code>module.pep</code></p>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from convert.pep by `pep-doc package`. Do not edit. -->
+<h1 id="convertpep"><a class="header" href="#convertpep">convert.pep</a></h1>
+<p>Struct conversion: <code>decode</code> reads CSV records into structs and <code>encode</code>
+writes structs as CSV records, through reflection, with no per-type code
+to write.</p>
+<p>A record is a struct; the header names its properties. Conversion goes
+through <code>json</code>'s, so the <code>serialize</code> attributes (<code>[Name]</code>, <code>[Ignore]</code>,
+<code>[Required]</code>) work as they do for <code>json</code> and <code>toml</code>.</p>
+<p>Source: <code>convert.pep</code></p>
+<h2 id="decode"><a class="header" href="#decode">decode</a></h2>
+<pre><code class="language-pepper">decode&lt;T&gt;( text: String, delimiter: String = ",", path: String = "", unknown_keys: json.UnknownKeys = json.UnknownKeys.Ignore ): Result&lt;Array&lt;T&gt;, CsvError&gt;
+</code></pre>
+<p>Reads every record of a CSV text into a <code>T</code>, a struct, matching the
+header record's names to its properties.</p>
+<p>A property takes its column from <code>[Name("column")]</code> when it has one, and
+is skipped when marked <code>[Ignore]</code>. A <code>String</code> property takes the field as
+it is, even empty. For any other property an empty field counts as
+missing, which leaves the property at its default, makes an <code>Optional</code>
+(<code>String?</code> included) empty, and is an error for a <code>[Required]</code> one;
+otherwise a <code>String?</code> takes the field as it is, and the rest read it as
+a JSON value (<code>42</code>, <code>2.5</code>, <code>true</code>) or, failing that, as a string, so an
+enum takes a case's name. A column that names no property is skipped, or with
+<code>unknown_keys = json.UnknownKeys.Reject</code> is an error.</p>
+<p>Every record must have as many fields as the header, and the header may
+not name a column twice.</p>
+<p><strong>Type parameters</strong></p>
+<ul>
+<li><code>T</code> — the struct to read into</li>
+</ul>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>text</code> — the CSV text, its first record the header</li>
+<li><code>delimiter</code> — the one-byte text between fields: <code>","</code>, <code>"\t"</code>, <code>";"</code></li>
+<li><code>path</code> — the name of the text (a file name, say), which errors put first</li>
+<li><code>unknown_keys</code> — what to do with a column that names no property</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the values in order, or the first error, at the line and column of the field it is about</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if <code>delimiter</code> is not one byte, or is <code>"</code>, <code>\r</code> or <code>\n</code></li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import csv;
+import serialize;
+
+struct Person {
+    [Required]
+    var name: String;
+    var age: int;
+    [Name("e-mail")]
+    var email: String?;
+}
+
+main(): int {
+    var people = csv.decode&lt;Person&gt;("name,age,e-mail\nada,36,ada@example.com\nbob,,\n").value();
+    assert(people[0].age == 36, "a number");
+    assert(people[1].email.is_empty(), "an empty field");
+
+    var bad = csv.decode&lt;Person&gt;("name,age\nada,old\n", path = "people.csv");
+    assert(bad.error().to_string() == "people.csv:2:5: error: column 'age': expected a number, found a string", "where");
+    return 0;
+}
+</code></pre>
+<h2 id="encode"><a class="header" href="#encode">encode</a></h2>
+<pre><code class="language-pepper">encode&lt;T&gt;(values: Array&lt;T&gt;, delimiter: String = ",", line_ending: String = "\n"): String
+</code></pre>
+<p>Writes <code>values</code>, structs, as CSV: a header record of their property
+names, then one record per value, as <code>Writer.write</code> writes them.</p>
+<p><strong>Type parameters</strong></p>
+<ul>
+<li><code>T</code> — the struct to write</li>
+</ul>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>values</code> — the values to write</li>
+<li><code>delimiter</code> — the one-byte text between fields</li>
+<li><code>line_ending</code> — the text after each record: <code>"\n"</code>, or <code>"\r\n"</code> as RFC 4180 says</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the CSV text; empty when <code>values</code> is</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if <code>delimiter</code> is not one byte, or is <code>"</code>, <code>\r</code> or <code>\n</code></li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import csv;
+
+struct Point {
+    var x: int;
+    var label: String;
+}
+
+main(): int {
+    var p = Point();
+    p.x = 1;
+    p.label = "a, b";
+    assert(csv.encode([p]) == "x,label\n1,\"a, b\"\n", "a header and a record");
+    return 0;
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from read.pep by `pep-doc package`. Do not edit. -->
+<h1 id="readpep"><a class="header" href="#readpep">read.pep</a></h1>
+<p>Reading CSV: <code>Reader</code>, which reads records from a stream as they are
+asked for; <code>parse</code>, which reads a whole text; and <code>CsvError</code>, what they
+report when the text is not CSV.</p>
+<p>Source: <code>read.pep</code></p>
+<h2 id="csverror"><a class="header" href="#csverror">CsvError</a></h2>
+<pre><code class="language-pepper">struct CsvError
+</code></pre>
+<p>What reading reports when the text is not CSV, and what <code>Reader.read</code>
+and <code>decode</code> report when a field does not fit its property: what is
+wrong, and the line and column where it is.</p>
+<p><code>to_string()</code> renders it like a compiler error:
+<code>people.csv:4:12: error: unterminated quoted field</code>.</p>
+<h3 id="fields"><a class="header" href="#fields">Fields</a></h3>
+<h4 id="message"><a class="header" href="#message">message</a></h4>
+<pre><code class="language-pepper">var message: String
+</code></pre>
+<p>What is wrong, worded like a compiler error (<code>expected ',' or a line break after the closing '"'</code>).</p>
+<h4 id="path"><a class="header" href="#path">path</a></h4>
+<pre><code class="language-pepper">var path: String
+</code></pre>
+<p>The path given to the reader, which names the text in <code>to_string()</code>;
+empty when none was given.</p>
+<h4 id="line"><a class="header" href="#line">line</a></h4>
+<pre><code class="language-pepper">var line: ulong
+</code></pre>
+<p>The line of the error, from 1; 0 for an error with no place in the
+text, such as a failed read of the stream.</p>
+<h4 id="column"><a class="header" href="#column">column</a></h4>
+<pre><code class="language-pepper">var column: ulong
+</code></pre>
+<p>The column of the error, from 1, counting bytes as clang does; 0
+when <code>line</code> is.</p>
+<h3 id="constructor"><a class="header" href="#constructor">Constructor</a></h3>
+<h4 id="csverror-1"><a class="header" href="#csverror-1">CsvError()</a></h4>
+<pre><code class="language-pepper">construct(message: String = "", path: String = "", line: ulong = 1, column: ulong = 1)
+</code></pre>
+<p>Creates an error.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>message</code> — what is wrong</li>
+<li><code>path</code> — the name of the text, or empty</li>
+<li><code>line</code> — the line of the error, from 1</li>
+<li><code>column</code> — the column of the error, from 1</li>
+</ul>
+<h3 id="methods"><a class="header" href="#methods">Methods</a></h3>
+<h4 id="to_string"><a class="header" href="#to_string">to_string</a></h4>
+<pre><code class="language-pepper">to_string(): String
+</code></pre>
+<p>Returns the error as a compiler prints one:
+<code>path:line:column: error: message</code>, without the <code>path:</code> when there
+is no path and without <code>line:column:</code> when <code>line</code> is 0.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the rendered error</li>
+</ul>
+<h2 id="reader"><a class="header" href="#reader">Reader</a></h2>
+<pre><code class="language-pepper">struct Reader
+</code></pre>
+<p>Reads CSV records from a stream, one at a time, so a large file is never
+held whole.</p>
+<p>The format is RFC 4180's, read strictly: a field that holds the
+delimiter, a <code>"</code> or a line break is quoted, and a <code>"</code> inside it is
+doubled (<code>"say ""hi"""</code>). A record ends at <code>\n</code> or <code>\r\n</code>; a <code>\r</code> on its
+own is part of a field. A UTF-8 byte-order mark at the start is skipped,
+and blank lines are skipped, so a file that ends with a line break has no
+empty record after it. Anything else is an error that names its line
+and column: a <code>"</code> inside an unquoted field, text after a closing quote,
+a quoted field that never closes, or a field that is not UTF-8. The
+first error ends the reading.</p>
+<p>Records may have different numbers of fields; <code>read</code> is what checks
+them against the header.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import csv;
+import io;
+
+main(): int {
+    var reader = csv.Reader(io.ByteReader("name,note\nada,\"says \"\"hi\"\"\"\n".bytes()));
+    for (var record in reader) {
+        if (record.is_err()) {
+            print(record.error().to_string());
+            return 1;
+        }
+        print(record.value()[1]);   # note, then: says "hi"
+    }
+    return 0;
+}
+</code></pre>
+<h3 id="fields-1"><a class="header" href="#fields-1">Fields</a></h3>
+<h4 id="path-1"><a class="header" href="#path-1">path</a></h4>
+<pre><code class="language-pepper">var path: String
+</code></pre>
+<p>The name of the text, which errors carry; empty when none was given.</p>
+<h4 id="header"><a class="header" href="#header">header</a></h4>
+<pre><code class="language-pepper">var header: Array&lt;String&gt;
+</code></pre>
+<p>The names of the header record, which the first <code>read</code> reads; empty
+until then.</p>
+<h4 id="line-1"><a class="header" href="#line-1">line</a></h4>
+<pre><code class="language-pepper">var line: ulong
+</code></pre>
+<p>The line of the first field of the record read last, from 1.</p>
+<h3 id="constructor-1"><a class="header" href="#constructor-1">Constructor</a></h3>
+<h4 id="reader-1"><a class="header" href="#reader-1">Reader()</a></h4>
+<pre><code class="language-pepper">construct(source: io.Reader, delimiter: String = ",", path: String = "", max_record_bytes: ulong = 16777216)
+</code></pre>
+<p>Makes a reader of the records of <code>source</code>, from what it reads next.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>source</code> — the stream to read, such as an <code>io.File</code>, or an <code>io.ByteReader</code> over text in memory</li>
+<li><code>delimiter</code> — the one-byte text between fields: <code>","</code>, <code>"\t"</code>, <code>";"</code></li>
+<li><code>path</code> — the name of the text (a file name, say), which errors put first</li>
+<li><code>max_record_bytes</code> — the most bytes one record's fields may hold; a longer record is an error, so a quote that never closes cannot fill memory</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if <code>delimiter</code> is not one byte, or is <code>"</code>, <code>\r</code> or <code>\n</code> ("csv: the delimiter must be one byte other than '"', '\r' and '\n'")</li>
+</ul>
+<h3 id="methods-1"><a class="header" href="#methods-1">Methods</a></h3>
+<h4 id="read_row"><a class="header" href="#read_row">read_row</a></h4>
+<pre><code class="language-pepper">read_row(): Result&lt;Array&lt;String&gt;?, CsvError&gt;
+</code></pre>
+<p>Reads the next record.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the record's fields, none at the end of the stream, or the error that ends the reading (which every later call returns too)</li>
+</ul>
+<h4 id="read"><a class="header" href="#read">read</a></h4>
+<pre><code class="language-pepper">read&lt;T&gt;(): Result&lt;T?, CsvError&gt;
+</code></pre>
+<p>Reads the next record into a <code>T</code>, a struct, matching the header's
+names to its properties as <code>decode</code> does. The first call reads the
+header record first, into <code>header</code>.</p>
+<p>A column that names no property is skipped; the other <code>read</code> can
+reject it instead.</p>
+<p><strong>Type parameters</strong></p>
+<ul>
+<li><code>T</code> — the struct to read into</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the value, none at the end of the stream, or the first error, at the line and column of the field it is about</li>
+</ul>
+<h4 id="read-1"><a class="header" href="#read-1">read</a></h4>
+<pre><code class="language-pepper">read&lt;T&gt;(unknown_keys: json.UnknownKeys): Result&lt;T?, CsvError&gt;
+</code></pre>
+<p>Reads the next record into a <code>T</code>, as the other <code>read</code> does, with
+<code>unknown_keys</code> saying what to do with a column that names no
+property.</p>
+<p><strong>Type parameters</strong></p>
+<ul>
+<li><code>T</code> — the struct to read into</li>
+</ul>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>unknown_keys</code> — what to do with a column that names no property</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the value, none at the end of the stream, or the first error, at the line and column of the field it is about</li>
+</ul>
+<h4 id="next"><a class="header" href="#next">next</a></h4>
+<pre><code class="language-pepper">next(): bool
+</code></pre>
+<p>Moves to the next record, so a <code>for</code> loop reads the records in turn.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>true if there is a current element (a record, or the error that ends the reading), false at the end of the stream</li>
+</ul>
+<h4 id="current"><a class="header" href="#current">current</a></h4>
+<pre><code class="language-pepper">current(): Result&lt;Array&lt;String&gt;, CsvError&gt;
+</code></pre>
+<p>Returns the element the last successful <code>next()</code> moved to.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the current record, or the error that ended the reading</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if <code>next()</code> was never called, or already returned false ("csv.Reader.current() without a record")</li>
+</ul>
+<h2 id="parse"><a class="header" href="#parse">parse</a></h2>
+<pre><code class="language-pepper">parse(text: String, delimiter: String = ",", path: String = ""): Result&lt;Array&lt;Array&lt;String&gt;&gt;, CsvError&gt;
+</code></pre>
+<p>Reads every record of a CSV text, as <code>Reader</code> reads them.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>text</code> — the CSV text</li>
+<li><code>delimiter</code> — the one-byte text between fields: <code>","</code>, <code>"\t"</code>, <code>";"</code></li>
+<li><code>path</code> — the name of the text (a file name, say), which errors put first</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the records in order (none for empty text), or the first error</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if <code>delimiter</code> is not one byte, or is <code>"</code>, <code>\r</code> or <code>\n</code></li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import csv;
+
+main(): int {
+    var rows = csv.parse("a;b\n1;\"x;y\"\n", delimiter = ";").value();
+    assert(rows[1][1] == "x;y", "a quoted delimiter");
+    var bad = csv.parse("a,\"b\n", path = "bad.csv");
+    assert(bad.error().to_string() == "bad.csv:1:3: error: unterminated quoted field", "where");
+    return 0;
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from write.pep by `pep-doc package`. Do not edit. -->
+<h1 id="writepep"><a class="header" href="#writepep">write.pep</a></h1>
+<p>Writing CSV: <code>Writer</code>, which writes records to a stream, and
+<code>write_all</code>, which writes records into text.</p>
+<p>Source: <code>write.pep</code></p>
+<h2 id="writer"><a class="header" href="#writer">Writer</a></h2>
+<pre><code class="language-pepper">struct Writer
+</code></pre>
+<p>Writes CSV records to a stream.</p>
+<p>A field is quoted only when it must be: when it holds the delimiter, a
+<code>"</code>, <code>\r</code> or <code>\n</code>, or when it is a record's only field and empty (which
+would otherwise be a blank line, which a reader skips). A <code>"</code> inside a
+quoted field is doubled. What it writes, <code>Reader</code> reads back as it was.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import csv;
+import io;
+
+main(): int {
+    var out = io.ByteWriter();
+    var writer = csv.Writer(out);
+    writer.write_row(["name", "note"]);
+    writer.write_row(["ada", "says \"hi\""]);
+    assert(out.bytes == "name,note\nada,\"says \"\"hi\"\"\"\n".bytes(), "quoted where needed");
+    return 0;
+}
+</code></pre>
+<h3 id="constructor-2"><a class="header" href="#constructor-2">Constructor</a></h3>
+<h4 id="writer-1"><a class="header" href="#writer-1">Writer()</a></h4>
+<pre><code class="language-pepper">construct(sink: io.Writer, delimiter: String = ",", line_ending: String = "\n")
+</code></pre>
+<p>Makes a writer of records to <code>sink</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>sink</code> — the stream to write, such as an <code>io.File</code> or an <code>io.ByteWriter</code></li>
+<li><code>delimiter</code> — the one-byte text between fields: <code>","</code>, <code>"\t"</code>, <code>";"</code></li>
+<li><code>line_ending</code> — the text after each record: <code>"\n"</code>, or <code>"\r\n"</code> as RFC 4180 says</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if <code>delimiter</code> is not one byte, or is <code>"</code>, <code>\r</code> or <code>\n</code> ("csv: the delimiter must be one byte other than '"', '\r' and '\n'")</li>
+</ul>
+<h3 id="methods-2"><a class="header" href="#methods-2">Methods</a></h3>
+<h4 id="write_row"><a class="header" href="#write_row">write_row</a></h4>
+<pre><code class="language-pepper">write_row(fields: Array&lt;String&gt;): io.IoResult&lt;void&gt;
+</code></pre>
+<p>Writes one record.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>fields</code> — the record's fields</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>an Ok result once the record is written; an error when the stream fails</li>
+</ul>
+<h4 id="write"><a class="header" href="#write">write</a></h4>
+<pre><code class="language-pepper">write&lt;T&gt;(value: T): Result&lt;void, io.IoError&gt;
+</code></pre>
+<p>Writes <code>value</code>, a struct, as a record of its public properties, in
+the order they are declared. The first call writes a header record of
+their names first.</p>
+<p>Properties convert as <code>json.to_json</code> converts them, with the
+<code>serialize</code> attributes: <code>[Name("column")]</code> names a column and
+<code>[Ignore]</code> leaves a property out. A string is written as it is, an
+empty <code>Optional</code> as an empty field, and anything else as its JSON
+text (<code>42</code>, <code>true</code>), so <code>decode</code> reads it back.</p>
+<p><strong>Type parameters</strong></p>
+<ul>
+<li><code>T</code> — the struct to write</li>
+</ul>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the value to write</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>an Ok result once the record is written; an error when the stream fails</li>
+</ul>
+<h2 id="write_all"><a class="header" href="#write_all">write_all</a></h2>
+<pre><code class="language-pepper">write_all(rows: Array&lt;Array&lt;String&gt;&gt;, delimiter: String = ",", line_ending: String = "\n"): String
+</code></pre>
+<p>Writes records as CSV text, as <code>Writer</code> writes them.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>rows</code> — the records, each an array of fields</li>
+<li><code>delimiter</code> — the one-byte text between fields</li>
+<li><code>line_ending</code> — the text after each record: <code>"\n"</code>, or <code>"\r\n"</code> as RFC 4180 says</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the CSV text</li>
+</ul>
+<p><strong>Panics</strong></p>
+<ul>
+<li>if <code>delimiter</code> is not one byte, or is <code>"</code>, <code>\r</code> or <code>\n</code></li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import csv;
+
+main(): int {
+    var text = csv.write_all([["a", "b"], ["1", "x\ny"]], line_ending = "\r\n");
+    assert(text == "a,b\r\n1,\"x\ny\"\r\n", "RFC 4180 line endings");
+    return 0;
+}
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+
+    </div>
+    </body>
+</html>
