@@ -1,0 +1,620 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>llvm_c/target.pep - llvm</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">llvm</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <!-- Generated from llvm_c/target.pep by `pep-doc package`. Do not edit. -->
+<h1 id="llvm_ctargetpep"><a class="header" href="#llvm_ctargetpep">llvm_c/target.pep</a></h1>
+<p>The parts of <code>llvm-c/Target.h</code>, <code>TargetMachine.h</code>, <code>Error.h</code> and
+<code>Transforms/PassBuilder.h</code> that a compiler needs: registering the host's
+backend, target machines, object emission, data layouts and the
+optimization pipeline.</p>
+<p>LLVM's <code>LLVMInitializeNativeTarget</code> and <code>LLVMInitializeAll*</code> are inline
+functions in its headers, so they cannot be bound. The host's backend is
+declared here; every other backend's <code>LLVMInitialize&lt;Name&gt;*</code> functions
+exist only when LLVM was built with that backend, so <code>llvm</code> looks them
+up at run time instead (<code>llvm.initialize_target</code>).</p>
+<p>Source: <code>llvm_c/target.pep</code></p>
+<h2 id="llvminitializex86targetinfo"><a class="header" href="#llvminitializex86targetinfo">LLVMInitializeX86TargetInfo</a></h2>
+<pre><code class="language-pepper">[Target(Arch(x64))] extern void LLVMInitializeX86TargetInfo()
+</code></pre>
+<p>Registers the x86 target description.</p>
+<h2 id="llvminitializex86target"><a class="header" href="#llvminitializex86target">LLVMInitializeX86Target</a></h2>
+<pre><code class="language-pepper">[Target(Arch(x64))] extern void LLVMInitializeX86Target()
+</code></pre>
+<p>Registers the x86 target.</p>
+<h2 id="llvminitializex86targetmc"><a class="header" href="#llvminitializex86targetmc">LLVMInitializeX86TargetMC</a></h2>
+<pre><code class="language-pepper">[Target(Arch(x64))] extern void LLVMInitializeX86TargetMC()
+</code></pre>
+<p>Registers the x86 machine-code layer.</p>
+<h2 id="llvminitializex86asmprinter"><a class="header" href="#llvminitializex86asmprinter">LLVMInitializeX86AsmPrinter</a></h2>
+<pre><code class="language-pepper">[Target(Arch(x64))] extern void LLVMInitializeX86AsmPrinter()
+</code></pre>
+<p>Registers the x86 assembly printer, which object emission needs.</p>
+<h2 id="llvminitializeaarch64targetinfo"><a class="header" href="#llvminitializeaarch64targetinfo">LLVMInitializeAArch64TargetInfo</a></h2>
+<pre><code class="language-pepper">[Target(Arch(aarch64))] extern void LLVMInitializeAArch64TargetInfo()
+</code></pre>
+<p>Registers the AArch64 target description.</p>
+<h2 id="llvminitializeaarch64target"><a class="header" href="#llvminitializeaarch64target">LLVMInitializeAArch64Target</a></h2>
+<pre><code class="language-pepper">[Target(Arch(aarch64))] extern void LLVMInitializeAArch64Target()
+</code></pre>
+<p>Registers the AArch64 target.</p>
+<h2 id="llvminitializeaarch64targetmc"><a class="header" href="#llvminitializeaarch64targetmc">LLVMInitializeAArch64TargetMC</a></h2>
+<pre><code class="language-pepper">[Target(Arch(aarch64))] extern void LLVMInitializeAArch64TargetMC()
+</code></pre>
+<p>Registers the AArch64 machine-code layer.</p>
+<h2 id="llvminitializeaarch64asmprinter"><a class="header" href="#llvminitializeaarch64asmprinter">LLVMInitializeAArch64AsmPrinter</a></h2>
+<pre><code class="language-pepper">[Target(Arch(aarch64))] extern void LLVMInitializeAArch64AsmPrinter()
+</code></pre>
+<p>Registers the AArch64 assembly printer, which object emission needs.</p>
+<h2 id="llvmgetfirsttarget"><a class="header" href="#llvmgetfirsttarget">LLVMGetFirstTarget</a></h2>
+<pre><code class="language-pepper">extern void* LLVMGetFirstTarget()
+</code></pre>
+<p>Returns the first registered target, or null when none is registered.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the target</li>
+</ul>
+<h2 id="llvmgetnexttarget"><a class="header" href="#llvmgetnexttarget">LLVMGetNextTarget</a></h2>
+<pre><code class="language-pepper">extern void* LLVMGetNextTarget(void* target)
+</code></pre>
+<p>Returns the registered target after <code>target</code>, or null after the last.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>target</code> — a target</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the next target</li>
+</ul>
+<h2 id="llvmgettargetname"><a class="header" href="#llvmgettargetname">LLVMGetTargetName</a></h2>
+<pre><code class="language-pepper">extern char* LLVMGetTargetName(void* target)
+</code></pre>
+<p>Returns a target's short name, such as <code>x86-64</code> or <code>riscv64</code>; LLVM owns
+the string.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>target</code> — the target</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the name</li>
+</ul>
+<h2 id="llvmgettargetdescription"><a class="header" href="#llvmgettargetdescription">LLVMGetTargetDescription</a></h2>
+<pre><code class="language-pepper">extern char* LLVMGetTargetDescription(void* target)
+</code></pre>
+<p>Returns a target's description; LLVM owns the string.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>target</code> — the target</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the description</li>
+</ul>
+<h2 id="llvmgetdefaulttargettriple"><a class="header" href="#llvmgetdefaulttargettriple">LLVMGetDefaultTargetTriple</a></h2>
+<pre><code class="language-pepper">extern char* LLVMGetDefaultTargetTriple()
+</code></pre>
+<p>Returns the host's target triple; free it with <code>LLVMDisposeMessage</code>.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the triple</li>
+</ul>
+<h2 id="llvmgethostcpuname"><a class="header" href="#llvmgethostcpuname">LLVMGetHostCPUName</a></h2>
+<pre><code class="language-pepper">extern char* LLVMGetHostCPUName()
+</code></pre>
+<p>Returns the host CPU's name; free it with <code>LLVMDisposeMessage</code>.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the CPU name</li>
+</ul>
+<h2 id="llvmgethostcpufeatures"><a class="header" href="#llvmgethostcpufeatures">LLVMGetHostCPUFeatures</a></h2>
+<pre><code class="language-pepper">extern char* LLVMGetHostCPUFeatures()
+</code></pre>
+<p>Returns the host CPU's features (<code>+sse4.2,...</code>); free it with
+<code>LLVMDisposeMessage</code>.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the feature string</li>
+</ul>
+<h2 id="llvmnormalizetargettriple"><a class="header" href="#llvmnormalizetargettriple">LLVMNormalizeTargetTriple</a></h2>
+<pre><code class="language-pepper">extern char* LLVMNormalizeTargetTriple(char* triple)
+</code></pre>
+<p>Returns a triple in LLVM's normal form; free it with <code>LLVMDisposeMessage</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>triple</code> — the triple</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the normalized triple</li>
+</ul>
+<h2 id="llvmgettargetfromtriple"><a class="header" href="#llvmgettargetfromtriple">LLVMGetTargetFromTriple</a></h2>
+<pre><code class="language-pepper">extern int LLVMGetTargetFromTriple(char* triple, void** target, char** message)
+</code></pre>
+<p>Finds the registered target for a triple.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>triple</code> — the triple</li>
+<li><code>target</code> — receives the target</li>
+<li><code>message</code> — receives the reason on failure; free it with <code>LLVMDisposeMessage</code></li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>nonzero on failure</li>
+</ul>
+<h2 id="llvmcreatetargetmachine"><a class="header" href="#llvmcreatetargetmachine">LLVMCreateTargetMachine</a></h2>
+<pre><code class="language-pepper">extern void* LLVMCreateTargetMachine( void* target, char* triple, char* cpu, char* features, int level, int reloc, int code_model )
+</code></pre>
+<p>Creates a target machine.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>target</code> — the target from <code>LLVMGetTargetFromTriple</code></li>
+<li><code>triple</code> — the triple</li>
+<li><code>cpu</code> — the CPU name, or empty for the default</li>
+<li><code>features</code> — the feature string, or empty</li>
+<li><code>level</code> — the <code>LLVMCodeGenOptLevel</code></li>
+<li><code>reloc</code> — the <code>LLVMRelocMode</code></li>
+<li><code>code_model</code> — the <code>LLVMCodeModel</code></li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the target machine</li>
+</ul>
+<h2 id="llvmdisposetargetmachine"><a class="header" href="#llvmdisposetargetmachine">LLVMDisposeTargetMachine</a></h2>
+<pre><code class="language-pepper">extern void LLVMDisposeTargetMachine(void* machine)
+</code></pre>
+<p>Destroys a target machine.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>machine</code> — the target machine</li>
+</ul>
+<h2 id="llvmgettargetmachinetriple"><a class="header" href="#llvmgettargetmachinetriple">LLVMGetTargetMachineTriple</a></h2>
+<pre><code class="language-pepper">extern char* LLVMGetTargetMachineTriple(void* machine)
+</code></pre>
+<p>Returns a target machine's triple; free it with <code>LLVMDisposeMessage</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>machine</code> — the target machine</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the triple</li>
+</ul>
+<h2 id="llvmcreatetargetdatalayout"><a class="header" href="#llvmcreatetargetdatalayout">LLVMCreateTargetDataLayout</a></h2>
+<pre><code class="language-pepper">extern void* LLVMCreateTargetDataLayout(void* machine)
+</code></pre>
+<p>Creates the data layout a target machine uses; free it with
+<code>LLVMDisposeTargetData</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>machine</code> — the target machine</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the data layout</li>
+</ul>
+<h2 id="llvmdisposetargetdata"><a class="header" href="#llvmdisposetargetdata">LLVMDisposeTargetData</a></h2>
+<pre><code class="language-pepper">extern void LLVMDisposeTargetData(void* data)
+</code></pre>
+<p>Destroys a data layout.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>data</code> — the data layout</li>
+</ul>
+<h2 id="llvmcopystringrepoftargetdata"><a class="header" href="#llvmcopystringrepoftargetdata">LLVMCopyStringRepOfTargetData</a></h2>
+<pre><code class="language-pepper">extern char* LLVMCopyStringRepOfTargetData(void* data)
+</code></pre>
+<p>Returns a data layout as a string; free it with <code>LLVMDisposeMessage</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>data</code> — the data layout</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the layout string</li>
+</ul>
+<h2 id="llvmsetmoduledatalayout"><a class="header" href="#llvmsetmoduledatalayout">LLVMSetModuleDataLayout</a></h2>
+<pre><code class="language-pepper">extern void LLVMSetModuleDataLayout(void* module, void* data)
+</code></pre>
+<p>Sets a module's data layout.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>module</code> — the module</li>
+<li><code>data</code> — the data layout</li>
+</ul>
+<h2 id="llvmabisizeoftype"><a class="header" href="#llvmabisizeoftype">LLVMABISizeOfType</a></h2>
+<pre><code class="language-pepper">extern ulong LLVMABISizeOfType(void* data, void* llvm_type)
+</code></pre>
+<p>Returns a type's size in bytes, as an array element (with padding).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>data</code> — the data layout</li>
+<li><code>llvm_type</code> — the type</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the size</li>
+</ul>
+<h2 id="llvmabialignmentoftype"><a class="header" href="#llvmabialignmentoftype">LLVMABIAlignmentOfType</a></h2>
+<pre><code class="language-pepper">extern uint LLVMABIAlignmentOfType(void* data, void* llvm_type)
+</code></pre>
+<p>Returns a type's ABI alignment in bytes.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>data</code> — the data layout</li>
+<li><code>llvm_type</code> — the type</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the alignment</li>
+</ul>
+<h2 id="llvmoffsetofelement"><a class="header" href="#llvmoffsetofelement">LLVMOffsetOfElement</a></h2>
+<pre><code class="language-pepper">extern ulong LLVMOffsetOfElement(void* data, void* llvm_type, uint index)
+</code></pre>
+<p>Returns the byte offset of a struct's field.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>data</code> — the data layout</li>
+<li><code>llvm_type</code> — the struct type</li>
+<li><code>index</code> — the field's position</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the offset</li>
+</ul>
+<h2 id="llvmtargetmachineemittofile"><a class="header" href="#llvmtargetmachineemittofile">LLVMTargetMachineEmitToFile</a></h2>
+<pre><code class="language-pepper">extern int LLVMTargetMachineEmitToFile(void* machine, void* module, char* path, int kind, char** message)
+</code></pre>
+<p>Compiles a module to an object or assembly file.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>machine</code> — the target machine</li>
+<li><code>module</code> — the module</li>
+<li><code>path</code> — the file to write</li>
+<li><code>kind</code> — the <code>LLVMCodeGenFileType</code></li>
+<li><code>message</code> — receives the reason on failure; free it with <code>LLVMDisposeMessage</code></li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>nonzero on failure</li>
+</ul>
+<h2 id="llvmtargetmachineemittomemorybuffer"><a class="header" href="#llvmtargetmachineemittomemorybuffer">LLVMTargetMachineEmitToMemoryBuffer</a></h2>
+<pre><code class="language-pepper">extern int LLVMTargetMachineEmitToMemoryBuffer( void* machine, void* module, int kind, char** message, void** buffer )
+</code></pre>
+<p>Compiles a module to an object or assembly file in memory.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>machine</code> — the target machine</li>
+<li><code>module</code> — the module</li>
+<li><code>kind</code> — the <code>LLVMCodeGenFileType</code></li>
+<li><code>message</code> — receives the reason on failure; free it with <code>LLVMDisposeMessage</code></li>
+<li><code>buffer</code> — receives the output; free it with <code>LLVMDisposeMemoryBuffer</code></li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>nonzero on failure</li>
+</ul>
+<h2 id="llvmgetbufferstart"><a class="header" href="#llvmgetbufferstart">LLVMGetBufferStart</a></h2>
+<pre><code class="language-pepper">extern char* LLVMGetBufferStart(void* buffer)
+</code></pre>
+<p>Returns a memory buffer's first byte.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>buffer</code> — the buffer</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>its bytes</li>
+</ul>
+<h2 id="llvmgetbuffersize"><a class="header" href="#llvmgetbuffersize">LLVMGetBufferSize</a></h2>
+<pre><code class="language-pepper">extern ulong LLVMGetBufferSize(void* buffer)
+</code></pre>
+<p>Returns a memory buffer's size in bytes.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>buffer</code> — the buffer</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the size</li>
+</ul>
+<h2 id="llvmdisposememorybuffer"><a class="header" href="#llvmdisposememorybuffer">LLVMDisposeMemoryBuffer</a></h2>
+<pre><code class="language-pepper">extern void LLVMDisposeMemoryBuffer(void* buffer)
+</code></pre>
+<p>Destroys a memory buffer.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>buffer</code> — the buffer</li>
+</ul>
+<h2 id="llvmcreatepassbuilderoptions"><a class="header" href="#llvmcreatepassbuilderoptions">LLVMCreatePassBuilderOptions</a></h2>
+<pre><code class="language-pepper">extern void* LLVMCreatePassBuilderOptions()
+</code></pre>
+<p>Creates options for <code>LLVMRunPasses</code>.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the options</li>
+</ul>
+<h2 id="llvmdisposepassbuilderoptions"><a class="header" href="#llvmdisposepassbuilderoptions">LLVMDisposePassBuilderOptions</a></h2>
+<pre><code class="language-pepper">extern void LLVMDisposePassBuilderOptions(void* options)
+</code></pre>
+<p>Destroys pass builder options.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>options</code> — the options</li>
+</ul>
+<h2 id="llvmrunpasses"><a class="header" href="#llvmrunpasses">LLVMRunPasses</a></h2>
+<pre><code class="language-pepper">extern void* LLVMRunPasses(void* module, char* passes, void* machine, void* options)
+</code></pre>
+<p>Runs a pass pipeline (<code>opt -passes=</code> syntax, such as <code>default&lt;O2&gt;</code>) over
+a module.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>module</code> — the module</li>
+<li><code>passes</code> — the pipeline</li>
+<li><code>machine</code> — the target machine, or null</li>
+<li><code>options</code> — the options</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>null on success, else an error to read with <code>LLVMGetErrorMessage</code></li>
+</ul>
+<h2 id="llvmgeterrormessage"><a class="header" href="#llvmgeterrormessage">LLVMGetErrorMessage</a></h2>
+<pre><code class="language-pepper">extern char* LLVMGetErrorMessage(void* error)
+</code></pre>
+<p>Returns an error's message and frees the error; free the message with
+<code>LLVMDisposeErrorMessage</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>error</code> — the error</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the message</li>
+</ul>
+<h2 id="llvmdisposeerrormessage"><a class="header" href="#llvmdisposeerrormessage">LLVMDisposeErrorMessage</a></h2>
+<pre><code class="language-pepper">extern void LLVMDisposeErrorMessage(char* message)
+</code></pre>
+<p>Frees a message from <code>LLVMGetErrorMessage</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>message</code> — the message</li>
+</ul>
+<h2 id="llvmstoresizeoftype"><a class="header" href="#llvmstoresizeoftype">LLVMStoreSizeOfType</a></h2>
+<pre><code class="language-pepper">extern ulong LLVMStoreSizeOfType(void* data, void* llvm_type)
+</code></pre>
+<p>Returns how many bytes a store of a type writes.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>data</code> — the data layout</li>
+<li><code>llvm_type</code> — the type</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the size</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="llvm_c-orc.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="target.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="llvm_c-orc.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="target.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

@@ -1,0 +1,646 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>server.pep - lsp</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">lsp</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <!-- Generated from server.pep by `pep-doc package`. Do not edit. -->
+<h1 id="serverpep"><a class="header" href="#serverpep">server.pep</a></h1>
+<p>Source: <code>server.pep</code></p>
+<h2 id="languageserver"><a class="header" href="#languageserver">LanguageServer</a></h2>
+<pre><code class="language-pepper">trait LanguageServer
+</code></pre>
+<p>A language server: one method per request or notification of the
+protocol. Only <code>initialize</code> is required. Every other request answers
+<code>METHOD_NOT_FOUND</code> until the server defines it, and every other
+notification is ignored, so a server defines just what its
+<code>ServerCapabilities</code> promise.</p>
+<p><code>serve</code> calls the methods one at a time on one thread, in the order the
+messages arrive, so a server's state needs no locks: a <code>did_change</code> is
+always applied before the request that follows it. Slow work, such as
+analyzing a program, can run on another thread, which hands its result
+back through a channel and <code>Client.wake</code> (see <code>woken</code>).</p>
+<h3 id="methods"><a class="header" href="#methods">Methods</a></h3>
+<h4 id="initialize"><a class="header" href="#initialize">initialize</a></h4>
+<pre><code class="language-pepper">initialize(params: InitializeParams): Result&lt;InitializeResult, ResponseError&gt;
+</code></pre>
+<p><code>initialize</code>: the first request. Says what the server can do.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>params</code> — who the client is and what it supports</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the server's capabilities, or an error that ends the session</li>
+</ul>
+<h4 id="initialized"><a class="header" href="#initialized">initialized</a></h4>
+<pre><code class="language-pepper">initialized()
+</code></pre>
+<p><code>initialized</code>: the client has the server's capabilities.</p>
+<h4 id="shutdown"><a class="header" href="#shutdown">shutdown</a></h4>
+<pre><code class="language-pepper">shutdown(): Result&lt;void, ResponseError&gt;
+</code></pre>
+<p><code>shutdown</code>: the client is about to ask the server to exit; release
+what needs releasing.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>Ok, or an error the client reports</li>
+</ul>
+<h4 id="did_open"><a class="header" href="#did_open">did_open</a></h4>
+<pre><code class="language-pepper">did_open(params: DidOpenTextDocumentParams)
+</code></pre>
+<p><code>textDocument/didOpen</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>params</code> — the document opened</li>
+</ul>
+<h4 id="did_change"><a class="header" href="#did_change">did_change</a></h4>
+<pre><code class="language-pepper">did_change(params: DidChangeTextDocumentParams)
+</code></pre>
+<p><code>textDocument/didChange</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>params</code> — the document and its changes</li>
+</ul>
+<h4 id="did_save"><a class="header" href="#did_save">did_save</a></h4>
+<pre><code class="language-pepper">did_save(params: DidSaveTextDocumentParams)
+</code></pre>
+<p><code>textDocument/didSave</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>params</code> — the document saved</li>
+</ul>
+<h4 id="did_close"><a class="header" href="#did_close">did_close</a></h4>
+<pre><code class="language-pepper">did_close(params: DidCloseTextDocumentParams)
+</code></pre>
+<p><code>textDocument/didClose</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>params</code> — the document closed</li>
+</ul>
+<h4 id="did_change_watched_files"><a class="header" href="#did_change_watched_files">did_change_watched_files</a></h4>
+<pre><code class="language-pepper">did_change_watched_files(params: DidChangeWatchedFilesParams)
+</code></pre>
+<p><code>workspace/didChangeWatchedFiles</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>params</code> — the files that changed</li>
+</ul>
+<h4 id="did_change_configuration"><a class="header" href="#did_change_configuration">did_change_configuration</a></h4>
+<pre><code class="language-pepper">did_change_configuration(params: DidChangeConfigurationParams)
+</code></pre>
+<p><code>workspace/didChangeConfiguration</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>params</code> — the new settings</li>
+</ul>
+<h4 id="hover"><a class="header" href="#hover">hover</a></h4>
+<pre><code class="language-pepper">hover(params: TextDocumentPositionParams): Result&lt;Hover?, ResponseError&gt;
+</code></pre>
+<p><code>textDocument/hover</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>params</code> — the position hovered</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>what to show, or Empty for nothing</li>
+</ul>
+<h4 id="completion"><a class="header" href="#completion">completion</a></h4>
+<pre><code class="language-pepper">completion(params: CompletionParams): Result&lt;CompletionList?, ResponseError&gt;
+</code></pre>
+<p><code>textDocument/completion</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>params</code> — where completion was asked for</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the completions, or Empty for none</li>
+</ul>
+<h4 id="definition"><a class="header" href="#definition">definition</a></h4>
+<pre><code class="language-pepper">definition(params: TextDocumentPositionParams): Result&lt;Array&lt;Location&gt;, ResponseError&gt;
+</code></pre>
+<p><code>textDocument/definition</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>params</code> — the position of a name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>where it is declared; empty when nowhere known</li>
+</ul>
+<h4 id="references"><a class="header" href="#references">references</a></h4>
+<pre><code class="language-pepper">references(params: ReferenceParams): Result&lt;Array&lt;Location&gt;, ResponseError&gt;
+</code></pre>
+<p><code>textDocument/references</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>params</code> — the position of a name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>where it is used</li>
+</ul>
+<h4 id="document_symbol"><a class="header" href="#document_symbol">document_symbol</a></h4>
+<pre><code class="language-pepper">document_symbol(params: DocumentSymbolParams): Result&lt;Array&lt;DocumentSymbol&gt;, ResponseError&gt;
+</code></pre>
+<p><code>textDocument/documentSymbol</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>params</code> — the document</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>its outline</li>
+</ul>
+<h4 id="inlay_hint"><a class="header" href="#inlay_hint">inlay_hint</a></h4>
+<pre><code class="language-pepper">inlay_hint(params: InlayHintParams): Result&lt;Array&lt;InlayHint&gt;, ResponseError&gt;
+</code></pre>
+<p><code>textDocument/inlayHint</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>params</code> — the document and the range shown</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the hints in the range</li>
+</ul>
+<h4 id="code_action"><a class="header" href="#code_action">code_action</a></h4>
+<pre><code class="language-pepper">code_action(params: CodeActionParams): Result&lt;Array&lt;CodeAction&gt;, ResponseError&gt;
+</code></pre>
+<p><code>textDocument/codeAction</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>params</code> — the range and the diagnostics there</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the actions that apply</li>
+</ul>
+<h4 id="formatting"><a class="header" href="#formatting">formatting</a></h4>
+<pre><code class="language-pepper">formatting(params: DocumentFormattingParams): Result&lt;Array&lt;TextEdit&gt;, ResponseError&gt;
+</code></pre>
+<p><code>textDocument/formatting</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>params</code> — the document and how to format it</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the edits that format it</li>
+</ul>
+<h4 id="rename"><a class="header" href="#rename">rename</a></h4>
+<pre><code class="language-pepper">rename(params: RenameParams): Result&lt;WorkspaceEdit?, ResponseError&gt;
+</code></pre>
+<p><code>textDocument/rename</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>params</code> — the name and its new spelling</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the edits that rename it, or Empty when it cannot be renamed</li>
+</ul>
+<h4 id="request"><a class="header" href="#request">request</a></h4>
+<pre><code class="language-pepper">request(method: String, params: JsonValue): Result&lt;JsonValue, ResponseError&gt;
+</code></pre>
+<p>Any request this trait has no method for, with its parameters as
+JSON.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>method</code> — the request's method</li>
+<li><code>params</code> — its parameters</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the result, as JSON</li>
+</ul>
+<h4 id="woken"><a class="header" href="#woken">woken</a></h4>
+<pre><code class="language-pepper">woken()
+</code></pre>
+<p>Called on the server's thread after another thread called
+<code>Client.wake</code>: the time to take in what that thread left for the
+server.</p>
+<h4 id="notification"><a class="header" href="#notification">notification</a></h4>
+<pre><code class="language-pepper">notification(method: String, params: JsonValue)
+</code></pre>
+<p>Any notification this trait has no method for, with its parameters
+as JSON. <code>$/</code> notifications the server ignores arrive here too.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>method</code> — the notification's method</li>
+<li><code>params</code> — its parameters</li>
+</ul>
+<h2 id="inbound"><a class="header" href="#inbound">Inbound</a></h2>
+<pre><code class="language-pepper">enum Inbound
+</code></pre>
+<p>What arrives at the server's message loop: a client message, the end of
+the input, or a wake from <code>Client.wake</code>.</p>
+<h3 id="cases"><a class="header" href="#cases">Cases</a></h3>
+<h4 id="message"><a class="header" href="#message">Message</a></h4>
+<pre><code class="language-pepper">Message(message: JsonValue)
+</code></pre>
+<p>A message from the client, as JSON.</p>
+<h4 id="end"><a class="header" href="#end">End</a></h4>
+<pre><code class="language-pepper">End(error: String)
+</code></pre>
+<p>The input ended: empty when it ended cleanly, else what went wrong.</p>
+<h4 id="wake"><a class="header" href="#wake">Wake</a></h4>
+<pre><code class="language-pepper">Wake
+</code></pre>
+<p><code>Client.wake</code> was called.</p>
+<h2 id="client"><a class="header" href="#client">Client</a></h2>
+<pre><code class="language-pepper">[Shared] struct Client
+</code></pre>
+<p>The server's way to talk to the client: notifications it sends on its
+own, such as diagnostics, and <code>wake</code>, which brings work done on other
+threads back to the server's thread.</p>
+<p>A Client is <code>[Shared]</code>: keep it in the server and hand it to the threads
+the server starts. Each message it sends is queued, so sending never
+waits for the client to read.</p>
+<h3 id="constructor"><a class="header" href="#constructor">Constructor</a></h3>
+<h4 id="client-1"><a class="header" href="#client-1">Client()</a></h4>
+<pre><code class="language-pepper">construct(outgoing: Channel&lt;String&gt;, inbound: Channel&lt;Inbound&gt;)
+</code></pre>
+<p>Creates a client that queues messages on <code>outgoing</code> and wakes the
+loop through <code>inbound</code>; <code>serve</code> and <code>serve_stdio</code> make one.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>outgoing</code> — the messages for the client as JSON text, in order</li>
+<li><code>inbound</code> — the loop's queue</li>
+</ul>
+<h3 id="methods-1"><a class="header" href="#methods-1">Methods</a></h3>
+<h4 id="publish_diagnostics"><a class="header" href="#publish_diagnostics">publish_diagnostics</a></h4>
+<pre><code class="language-pepper">publish_diagnostics(uri: String, diagnostics: Array&lt;Diagnostic&gt;, version: int? = Optional&lt;int&gt;.Empty)
+</code></pre>
+<p>Sends <code>textDocument/publishDiagnostics</code>: the document's diagnostics,
+replacing those sent before.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>uri</code> — the document</li>
+<li><code>diagnostics</code> — every diagnostic of the document; empty clears them</li>
+<li><code>version</code> — the version they are about, if known</li>
+</ul>
+<h4 id="log_message"><a class="header" href="#log_message">log_message</a></h4>
+<pre><code class="language-pepper">log_message(kind: int, message: String)
+</code></pre>
+<p>Sends <code>window/logMessage</code>: a line for the client's log.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>kind</code> — one of the <code>MESSAGE_</code> constants</li>
+<li><code>message</code> — the line</li>
+</ul>
+<h4 id="show_message"><a class="header" href="#show_message">show_message</a></h4>
+<pre><code class="language-pepper">show_message(kind: int, message: String)
+</code></pre>
+<p>Sends <code>window/showMessage</code>: a message the client shows its user.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>kind</code> — one of the <code>MESSAGE_</code> constants</li>
+<li><code>message</code> — the message</li>
+</ul>
+<h4 id="send_notification"><a class="header" href="#send_notification">send_notification</a></h4>
+<pre><code class="language-pepper">send_notification(method: String, params: JsonValue)
+</code></pre>
+<p>Sends any notification.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>method</code> — the method</li>
+<li><code>params</code> — its parameters</li>
+</ul>
+<h4 id="send_request"><a class="header" href="#send_request">send_request</a></h4>
+<pre><code class="language-pepper">send_request(method: String, params: JsonValue)
+</code></pre>
+<p>Sends a request to the client, such as <code>client/registerCapability</code>
+or <code>workspace/inlayHint/refresh</code>, without waiting for its answer: the
+client's response is dropped, and an error in it is logged.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>method</code> — the method</li>
+<li><code>params</code> — its parameters</li>
+</ul>
+<h4 id="watch_files"><a class="header" href="#watch_files">watch_files</a></h4>
+<pre><code class="language-pepper">watch_files(id: String, glob: String)
+</code></pre>
+<p>Asks the client to send <code>workspace/didChangeWatchedFiles</code> for the
+files matching <code>glob</code>, such as <code>**/*.pep</code>. Clients that support
+dynamic registration (see <code>InitializeParams.capabilities</code>) honor it.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>id</code> — a name for the registration</li>
+<li><code>glob</code> — the files to watch</li>
+</ul>
+<h4 id="refresh_inlay_hints"><a class="header" href="#refresh_inlay_hints">refresh_inlay_hints</a></h4>
+<pre><code class="language-pepper">refresh_inlay_hints()
+</code></pre>
+<p>Makes the editor <code>workspace/inlayHint/refresh</code>: ask again for the
+inlay hints of the documents it shows, after an analysis changed
+them.</p>
+<h4 id="wake-1"><a class="header" href="#wake-1">wake</a></h4>
+<pre><code class="language-pepper">wake()
+</code></pre>
+<p>Makes the message loop call the server's <code>woken</code> on the server's
+thread, after the messages already queued. A thread that finished
+work for the server puts its result where the server will look (a
+<code>Channel</code> the server owns) and then calls <code>wake</code>, so the server's
+state is only ever touched on its own thread.</p>
+<h2 id="to_protocol_json"><a class="header" href="#to_protocol_json">to_protocol_json</a></h2>
+<pre><code class="language-pepper">to_protocol_json&lt;T&gt;(value: T): JsonValue
+</code></pre>
+<p>Converts a protocol value to JSON as the protocol expects it: as
+<code>json.to_json</code> does, but leaving out the members whose value is null (an
+Empty optional), which the protocol treats as absent.</p>
+<p><strong>Type parameters</strong></p>
+<ul>
+<li><code>T</code> — the protocol type</li>
+</ul>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — a value of one of the protocol's types</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>its JSON</li>
+</ul>
+<h2 id="without_nulls"><a class="header" href="#without_nulls">without_nulls</a></h2>
+<pre><code class="language-pepper">without_nulls(value: JsonValue): JsonValue
+</code></pre>
+<p>A copy of <code>value</code> without the object members whose value is null, at
+every depth. Array elements stay as they are.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the JSON</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the JSON without null members</li>
+</ul>
+<h2 id="serve_stdio"><a class="header" href="#serve_stdio">serve_stdio</a></h2>
+<pre><code class="language-pepper">serve_stdio&lt;S: LanguageServer&gt;(make: (Client) =&gt; S): int
+</code></pre>
+<p>Runs a language server over standard input and output until the client
+sends <code>exit</code> or the input ends.</p>
+<p>A thread reads standard input and another writes standard output, so
+the server's thread only handles messages, and a message sent from any
+thread goes out without waiting for the server.</p>
+<p><strong>Type parameters</strong></p>
+<ul>
+<li><code>S</code> — the server type</li>
+</ul>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>make</code> — creates the server, given the client it talks back through</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the process's exit code: 0 after <code>shutdown</code> then <code>exit</code>, 1 otherwise</li>
+</ul>
+<h2 id="serve"><a class="header" href="#serve">serve</a></h2>
+<pre><code class="language-pepper">serve&lt;S: LanguageServer&gt;(make: (Client) =&gt; S, inbound: Channel&lt;Inbound&gt;, outgoing: Channel&lt;String&gt;): int
+</code></pre>
+<p>Runs a language server on the calling thread until the client sends
+<code>exit</code> or <code>inbound</code> delivers <code>End</code>.</p>
+<p>Handles one inbound item at a time, in order: messages go to the
+server's method for them, and each <code>Wake</code> calls <code>woken</code>. Answers requests
+before <code>initialize</code> with <code>SERVER_NOT_INITIALIZED</code> and requests after
+<code>shutdown</code> with <code>INVALID_REQUEST</code>. <code>serve_stdio</code> connects the channels to
+standard input and output; tests can fill and read them directly.</p>
+<p><strong>Type parameters</strong></p>
+<ul>
+<li><code>S</code> — the server type</li>
+</ul>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>make</code> — creates the server, given the client it talks back through</li>
+<li><code>inbound</code> — the client's messages, then <code>End</code></li>
+<li><code>outgoing</code> — where messages for the client go, as JSON text, in order</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the process's exit code: 0 after <code>shutdown</code> then <code>exit</code>, 1 otherwise</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="jsonrpc.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="transport.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="jsonrpc.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="transport.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

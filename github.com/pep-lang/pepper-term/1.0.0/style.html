@@ -1,0 +1,544 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>style.pep - term</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">term</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <!-- Generated from style.pep by `pep-doc package`. Do not edit. -->
+<h1 id="stylepep"><a class="header" href="#stylepep">style.pep</a></h1>
+<p>Colors, text styles and cursor control, as the ANSI (ECMA-48) escape
+sequences every modern terminal reads, Windows' console included once
+virtual terminal processing is on (<code>colors_enabled</code> turns it on). Each
+function returns the sequence as a <code>String</code> to write; none writes
+anything itself.</p>
+<p>Source: <code>style.pep</code></p>
+<h2 id="basiccolor"><a class="header" href="#basiccolor">BasicColor</a></h2>
+<pre><code class="language-pepper">enum BasicColor
+</code></pre>
+<p>The 16 colors every color terminal has. Terminals choose the exact
+shades, and users often retheme them.</p>
+<h3 id="cases"><a class="header" href="#cases">Cases</a></h3>
+<h4 id="black"><a class="header" href="#black">Black</a></h4>
+<pre><code class="language-pepper">Black
+</code></pre>
+<p>Black.</p>
+<h4 id="red"><a class="header" href="#red">Red</a></h4>
+<pre><code class="language-pepper">Red
+</code></pre>
+<p>Red.</p>
+<h4 id="green"><a class="header" href="#green">Green</a></h4>
+<pre><code class="language-pepper">Green
+</code></pre>
+<p>Green.</p>
+<h4 id="yellow"><a class="header" href="#yellow">Yellow</a></h4>
+<pre><code class="language-pepper">Yellow
+</code></pre>
+<p>Yellow.</p>
+<h4 id="blue"><a class="header" href="#blue">Blue</a></h4>
+<pre><code class="language-pepper">Blue
+</code></pre>
+<p>Blue.</p>
+<h4 id="magenta"><a class="header" href="#magenta">Magenta</a></h4>
+<pre><code class="language-pepper">Magenta
+</code></pre>
+<p>Magenta.</p>
+<h4 id="cyan"><a class="header" href="#cyan">Cyan</a></h4>
+<pre><code class="language-pepper">Cyan
+</code></pre>
+<p>Cyan.</p>
+<h4 id="white"><a class="header" href="#white">White</a></h4>
+<pre><code class="language-pepper">White
+</code></pre>
+<p>White (light gray on many terminals).</p>
+<h4 id="brightblack"><a class="header" href="#brightblack">BrightBlack</a></h4>
+<pre><code class="language-pepper">BrightBlack
+</code></pre>
+<p>Bright black (dark gray).</p>
+<h4 id="brightred"><a class="header" href="#brightred">BrightRed</a></h4>
+<pre><code class="language-pepper">BrightRed
+</code></pre>
+<p>Bright red.</p>
+<h4 id="brightgreen"><a class="header" href="#brightgreen">BrightGreen</a></h4>
+<pre><code class="language-pepper">BrightGreen
+</code></pre>
+<p>Bright green.</p>
+<h4 id="brightyellow"><a class="header" href="#brightyellow">BrightYellow</a></h4>
+<pre><code class="language-pepper">BrightYellow
+</code></pre>
+<p>Bright yellow.</p>
+<h4 id="brightblue"><a class="header" href="#brightblue">BrightBlue</a></h4>
+<pre><code class="language-pepper">BrightBlue
+</code></pre>
+<p>Bright blue.</p>
+<h4 id="brightmagenta"><a class="header" href="#brightmagenta">BrightMagenta</a></h4>
+<pre><code class="language-pepper">BrightMagenta
+</code></pre>
+<p>Bright magenta.</p>
+<h4 id="brightcyan"><a class="header" href="#brightcyan">BrightCyan</a></h4>
+<pre><code class="language-pepper">BrightCyan
+</code></pre>
+<p>Bright cyan.</p>
+<h4 id="brightwhite"><a class="header" href="#brightwhite">BrightWhite</a></h4>
+<pre><code class="language-pepper">BrightWhite
+</code></pre>
+<p>Bright white.</p>
+<h2 id="color"><a class="header" href="#color">Color</a></h2>
+<pre><code class="language-pepper">[Value] enum Color
+</code></pre>
+<p>A text or background color, in one of the three palettes terminals
+offer.</p>
+<h3 id="cases-1"><a class="header" href="#cases-1">Cases</a></h3>
+<h4 id="default"><a class="header" href="#default">Default</a></h4>
+<pre><code class="language-pepper">Default
+</code></pre>
+<p>The terminal's own color, which <code>Style</code> leaves alone.</p>
+<h4 id="basic"><a class="header" href="#basic">Basic</a></h4>
+<pre><code class="language-pepper">Basic(color: BasicColor)
+</code></pre>
+<p>One of the 16 basic colors, which every color terminal shows.</p>
+<h4 id="indexed"><a class="header" href="#indexed">Indexed</a></h4>
+<pre><code class="language-pepper">Indexed(index: u8)
+</code></pre>
+<p>One of the 256 colors of xterm's palette: 0 to 15 the basic ones,
+16 to 231 a 6x6x6 color cube, 232 to 255 a gray ramp.</p>
+<h4 id="rgb"><a class="header" href="#rgb">Rgb</a></h4>
+<pre><code class="language-pepper">Rgb(red: u8, green: u8, blue: u8)
+</code></pre>
+<p>A true (24-bit) color; most terminals show it, and others approximate
+it or ignore it.</p>
+<h2 id="style"><a class="header" href="#style">Style</a></h2>
+<pre><code class="language-pepper">struct Style
+</code></pre>
+<p>How text looks: its colors and attributes. <code>sequence</code> gives the escape
+sequence that sets it, and <code>paint</code> wraps text in it.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import term;
+import [BasicColor, Color, Style] from term;
+
+var warning = Style(foreground = Color.Basic(BasicColor.Yellow), bold = true);
+print(warning.paint("careful", true));   # "\x1B[1;33mcareful\x1B[0m"
+</code></pre>
+<h3 id="fields"><a class="header" href="#fields">Fields</a></h3>
+<h4 id="foreground"><a class="header" href="#foreground">foreground</a></h4>
+<pre><code class="language-pepper">var foreground: Color
+</code></pre>
+<p>The text color.</p>
+<h4 id="background"><a class="header" href="#background">background</a></h4>
+<pre><code class="language-pepper">var background: Color
+</code></pre>
+<p>The background color.</p>
+<h4 id="bold"><a class="header" href="#bold">bold</a></h4>
+<pre><code class="language-pepper">var bold: bool
+</code></pre>
+<p>Bold (on some terminals, bright).</p>
+<h4 id="dim"><a class="header" href="#dim">dim</a></h4>
+<pre><code class="language-pepper">var dim: bool
+</code></pre>
+<p>Dim (faint).</p>
+<h4 id="italic"><a class="header" href="#italic">italic</a></h4>
+<pre><code class="language-pepper">var italic: bool
+</code></pre>
+<p>Italic; not every terminal shows it.</p>
+<h4 id="underline"><a class="header" href="#underline">underline</a></h4>
+<pre><code class="language-pepper">var underline: bool
+</code></pre>
+<p>Underlined.</p>
+<h4 id="reverse"><a class="header" href="#reverse">reverse</a></h4>
+<pre><code class="language-pepper">var reverse: bool
+</code></pre>
+<p>Foreground and background swapped.</p>
+<h3 id="constructor"><a class="header" href="#constructor">Constructor</a></h3>
+<h4 id="style-1"><a class="header" href="#style-1">Style()</a></h4>
+<pre><code class="language-pepper">construct( foreground: Color = Color.Default, background: Color = Color.Default, bold: bool = false, dim: bool = false, italic: bool = false, underline: bool = false, reverse: bool = false )
+</code></pre>
+<p>Makes a style.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>foreground</code> — the text color</li>
+<li><code>background</code> — the background color</li>
+<li><code>bold</code> — whether the text is bold</li>
+<li><code>dim</code> — whether the text is dim</li>
+<li><code>italic</code> — whether the text is italic</li>
+<li><code>underline</code> — whether the text is underlined</li>
+<li><code>reverse</code> — whether the colors are swapped</li>
+</ul>
+<h3 id="methods"><a class="header" href="#methods">Methods</a></h3>
+<h4 id="sequence"><a class="header" href="#sequence">sequence</a></h4>
+<pre><code class="language-pepper">sequence(): String
+</code></pre>
+<p>Returns the escape sequence (SGR) that sets this style, or "" for a
+style that sets nothing. It changes only what the style sets, so
+follow the text with <code>RESET</code>.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the sequence</li>
+</ul>
+<h4 id="paint"><a class="header" href="#paint">paint</a></h4>
+<pre><code class="language-pepper">paint(text: String, enabled: bool): String
+</code></pre>
+<p>Returns <code>text</code> in this style: the style's sequence, the text, then
+<code>RESET</code>. With <code>enabled</code> false, or a style that sets nothing, it is
+<code>text</code> alone, so output to a file or a pipe stays plain.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>text</code> — the text to style</li>
+<li><code>enabled</code> — whether to style it; pass <code>colors_enabled()</code> to follow the terminal and <code>NO_COLOR</code></li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the styled text</li>
+</ul>
+<h2 id="reset"><a class="header" href="#reset">RESET</a></h2>
+<pre><code class="language-pepper">const RESET = "\x1B[0m"
+</code></pre>
+<p>The sequence that turns every style and color off.</p>
+<h2 id="clear_screen"><a class="header" href="#clear_screen">CLEAR_SCREEN</a></h2>
+<pre><code class="language-pepper">const CLEAR_SCREEN = "\x1B[2J"
+</code></pre>
+<p>The sequence that erases the whole screen. The cursor stays where it
+is; follow it with <code>move_to(0, 0)</code> to start at the top.</p>
+<h2 id="clear_line"><a class="header" href="#clear_line">CLEAR_LINE</a></h2>
+<pre><code class="language-pepper">const CLEAR_LINE = "\x1B[2K"
+</code></pre>
+<p>The sequence that erases the cursor's row.</p>
+<h2 id="clear_to_end_of_line"><a class="header" href="#clear_to_end_of_line">CLEAR_TO_END_OF_LINE</a></h2>
+<pre><code class="language-pepper">const CLEAR_TO_END_OF_LINE = "\x1B[K"
+</code></pre>
+<p>The sequence that erases from the cursor to the end of its row.</p>
+<h2 id="clear_to_end_of_screen"><a class="header" href="#clear_to_end_of_screen">CLEAR_TO_END_OF_SCREEN</a></h2>
+<pre><code class="language-pepper">const CLEAR_TO_END_OF_SCREEN = "\x1B[J"
+</code></pre>
+<p>The sequence that erases from the cursor to the end of the screen.</p>
+<h2 id="hide_cursor"><a class="header" href="#hide_cursor">HIDE_CURSOR</a></h2>
+<pre><code class="language-pepper">const HIDE_CURSOR = "\x1B[?25l"
+</code></pre>
+<p>The sequence that hides the cursor.</p>
+<h2 id="show_cursor"><a class="header" href="#show_cursor">SHOW_CURSOR</a></h2>
+<pre><code class="language-pepper">const SHOW_CURSOR = "\x1B[?25h"
+</code></pre>
+<p>The sequence that shows the cursor.</p>
+<h2 id="save_cursor"><a class="header" href="#save_cursor">SAVE_CURSOR</a></h2>
+<pre><code class="language-pepper">const SAVE_CURSOR = "\x1B7"
+</code></pre>
+<p>The sequence that saves the cursor's position, for <code>RESTORE_CURSOR</code>.</p>
+<h2 id="restore_cursor"><a class="header" href="#restore_cursor">RESTORE_CURSOR</a></h2>
+<pre><code class="language-pepper">const RESTORE_CURSOR = "\x1B8"
+</code></pre>
+<p>The sequence that moves the cursor back to where <code>SAVE_CURSOR</code> saved it.</p>
+<h2 id="enter_alternate_screen"><a class="header" href="#enter_alternate_screen">ENTER_ALTERNATE_SCREEN</a></h2>
+<pre><code class="language-pepper">const ENTER_ALTERNATE_SCREEN = "\x1B[?1049h"
+</code></pre>
+<p>The sequence that switches to the alternate screen, which full-screen
+programs draw on so that the shell's screen comes back when they leave.</p>
+<h2 id="leave_alternate_screen"><a class="header" href="#leave_alternate_screen">LEAVE_ALTERNATE_SCREEN</a></h2>
+<pre><code class="language-pepper">const LEAVE_ALTERNATE_SCREEN = "\x1B[?1049l"
+</code></pre>
+<p>The sequence that returns from the alternate screen.</p>
+<h2 id="move_to"><a class="header" href="#move_to">move_to</a></h2>
+<pre><code class="language-pepper">move_to(row: ulong, column: ulong): String
+</code></pre>
+<p>Returns the sequence that moves the cursor to <code>row</code> and <code>column</code>,
+counted from 0 at the top left.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>row</code> — the row, from 0</li>
+<li><code>column</code> — the column, from 0</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the sequence</li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import term;
+
+assert(term.move_to(0, 4) == "\x1B[1;5H", "the terminal counts from 1");
+</code></pre>
+<h2 id="move_up"><a class="header" href="#move_up">move_up</a></h2>
+<pre><code class="language-pepper">move_up(count: ulong = 1): String
+</code></pre>
+<p>Returns the sequence that moves the cursor up <code>count</code> rows, stopping at
+the top; "" for 0.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>count</code> — how many rows</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the sequence</li>
+</ul>
+<h2 id="move_down"><a class="header" href="#move_down">move_down</a></h2>
+<pre><code class="language-pepper">move_down(count: ulong = 1): String
+</code></pre>
+<p>Returns the sequence that moves the cursor down <code>count</code> rows, stopping
+at the bottom; "" for 0.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>count</code> — how many rows</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the sequence</li>
+</ul>
+<h2 id="move_right"><a class="header" href="#move_right">move_right</a></h2>
+<pre><code class="language-pepper">move_right(count: ulong = 1): String
+</code></pre>
+<p>Returns the sequence that moves the cursor right <code>count</code> columns,
+stopping at the edge; "" for 0.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>count</code> — how many columns</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the sequence</li>
+</ul>
+<h2 id="move_left"><a class="header" href="#move_left">move_left</a></h2>
+<pre><code class="language-pepper">move_left(count: ulong = 1): String
+</code></pre>
+<p>Returns the sequence that moves the cursor left <code>count</code> columns,
+stopping at the edge; "" for 0.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>count</code> — how many columns</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the sequence</li>
+</ul>
+<h2 id="move_to_column"><a class="header" href="#move_to_column">move_to_column</a></h2>
+<pre><code class="language-pepper">move_to_column(column: ulong): String
+</code></pre>
+<p>Returns the sequence that moves the cursor to <code>column</code> of its row,
+counted from 0.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>column</code> — the column, from 0</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the sequence</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="line.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="sys_posix.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="line.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="sys_posix.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

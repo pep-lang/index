@@ -1,0 +1,392 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>list.pep - tui</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">tui</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <!-- Generated from list.pep by `pep-doc package`. Do not edit. -->
+<h1 id="listpep"><a class="header" href="#listpep">list.pep</a></h1>
+<p><code>List</code>: items one under another, one of them selected, scrolled to keep
+the selection in view; <code>ListState</code> holds the selection and the scroll.</p>
+<p>Source: <code>list.pep</code></p>
+<h2 id="liststate"><a class="header" href="#liststate">ListState</a></h2>
+<pre><code class="language-pepper">struct ListState
+</code></pre>
+<p>The state of a <code>List</code> or a <code>Table</code> from frame to frame: which item is
+selected and how far it is scrolled. Drawing moves <code>offset</code> so the
+selected item shows, and keeps <code>selected</code> below the item count.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import tui;
+
+var state = tui.ListState();
+state.select_next();   # selects item 0
+state.select_next();   # item 1
+</code></pre>
+<h3 id="fields"><a class="header" href="#fields">Fields</a></h3>
+<h4 id="selected"><a class="header" href="#selected">selected</a></h4>
+<pre><code class="language-pepper">var selected: ulong?
+</code></pre>
+<p>The selected item, or Empty for none.</p>
+<h4 id="offset"><a class="header" href="#offset">offset</a></h4>
+<pre><code class="language-pepper">var offset: ulong
+</code></pre>
+<p>The first item shown.</p>
+<h3 id="constructor"><a class="header" href="#constructor">Constructor</a></h3>
+<h4 id="liststate-1"><a class="header" href="#liststate-1">ListState()</a></h4>
+<pre><code class="language-pepper">construct()
+</code></pre>
+<p>Makes a state with nothing selected and no scroll.</p>
+<h3 id="methods"><a class="header" href="#methods">Methods</a></h3>
+<h4 id="selected_text"><a class="header" href="#selected_text">selected_text</a></h4>
+<pre><code class="language-pepper">selected_text(): String
+</code></pre>
+<p>Returns the text of the selected item, as the last draw with this
+state found it, without styles, for copying to the clipboard: a
+<code>List</code> item's lines joined by "\n", or a <code>Table</code> row's cells joined
+by a tab.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the text, or "" when nothing was selected at the last draw</li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import tui;
+
+var state = tui.ListState();
+state.select_next();
+# after a frame draws a List with this state:
+var copied = state.selected_text();   # the first item's text
+</code></pre>
+<h4 id="handle_mouse"><a class="header" href="#handle_mouse">handle_mouse</a></h4>
+<pre><code class="language-pepper">handle_mouse(event: term.MouseEvent): bool
+</code></pre>
+<p>Acts on a mouse event as the <code>List</code> or <code>Table</code> last drawn with this
+state places it: a left click on an item selects it, a partly shown
+last item included, and the wheel over the widget moves the
+selection. Clicks on the borders and a table's header select
+nothing (see <code>header_clicked</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>event</code> — the mouse event, as <code>Event.Mouse</code> gives it</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>true when it acted on the event</li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import tui;
+import [Event] from tui;
+
+var state = tui.ListState();
+# in the event loop: if (event is Mouse(mouse)) { state.handle_mouse(mouse); }
+</code></pre>
+<h4 id="header_clicked"><a class="header" href="#header_clicked">header_clicked</a></h4>
+<pre><code class="language-pepper">header_clicked(event: term.MouseEvent): ulong?
+</code></pre>
+<p>Returns which column of a <code>Table</code>'s header a left click landed on,
+as the table last drawn with this state places it. The table does
+nothing with header clicks itself; an app may sort by the column.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>event</code> — the mouse event, as <code>Event.Mouse</code> gives it</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the column, from 0, or Empty when the event is not a left click on a header cell</li>
+</ul>
+<h4 id="select"><a class="header" href="#select">select</a></h4>
+<pre><code class="language-pepper">select(index: ulong?)
+</code></pre>
+<p>Selects <code>index</code>, or nothing for Empty.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>index</code> — the item to select</li>
+</ul>
+<h4 id="select_next"><a class="header" href="#select_next">select_next</a></h4>
+<pre><code class="language-pepper">select_next()
+</code></pre>
+<p>Selects the next item, or the first when none is; drawing keeps it
+at the last item.</p>
+<h4 id="select_previous"><a class="header" href="#select_previous">select_previous</a></h4>
+<pre><code class="language-pepper">select_previous()
+</code></pre>
+<p>Selects the item before, staying at the first; the first when none
+is selected.</p>
+<h2 id="tablestate"><a class="header" href="#tablestate">TableState</a></h2>
+<pre><code class="language-pepper">type TableState = ListState
+</code></pre>
+<p>The state of a <code>Table</code>: the selected row and the scroll.</p>
+<h2 id="list"><a class="header" href="#list">List</a></h2>
+<pre><code class="language-pepper">struct List
+</code></pre>
+<p>Items one under another, each a <code>Text</code> (one or more rows), with the
+selected one highlighted and marked with <code>highlight_symbol</code>.</p>
+<p>As a <code>StatefulWidget&lt;ListState&gt;</code> it draws the selection and scrolls to
+it; as a <code>Widget</code> it draws the items from the top with none selected.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import tui;
+import [Block, List, ListState, Style] from tui;
+
+var list = List(["one", "two", "three"], block = Block(title = "Items"), highlight_symbol = "&gt; ");
+var state = ListState();
+state.select_next();
+# in a frame: frame.render_stateful_widget(list, area, state);
+</code></pre>
+<h3 id="fields-1"><a class="header" href="#fields-1">Fields</a></h3>
+<h4 id="items"><a class="header" href="#items">items</a></h4>
+<pre><code class="language-pepper">var items: Text[]
+</code></pre>
+<p>The items, top to bottom.</p>
+<h4 id="block"><a class="header" href="#block">block</a></h4>
+<pre><code class="language-pepper">var block: Block
+</code></pre>
+<p>The block around the list; borderless by default.</p>
+<h4 id="style"><a class="header" href="#style">style</a></h4>
+<pre><code class="language-pepper">var style: Style
+</code></pre>
+<p>The style of the whole area.</p>
+<h4 id="highlight_style"><a class="header" href="#highlight_style">highlight_style</a></h4>
+<pre><code class="language-pepper">var highlight_style: Style
+</code></pre>
+<p>The style laid over the selected item's rows.</p>
+<h4 id="highlight_symbol"><a class="header" href="#highlight_symbol">highlight_symbol</a></h4>
+<pre><code class="language-pepper">var highlight_symbol: String
+</code></pre>
+<p>Drawn before the selected item; the other items are indented by its
+width while an item is selected.</p>
+<h3 id="constructor-1"><a class="header" href="#constructor-1">Constructor</a></h3>
+<h4 id="list-1"><a class="header" href="#list-1">List()</a></h4>
+<pre><code class="language-pepper">construct( items: Text[], block: Block = Block(borders = BORDER_NONE), style: Style = Style(), highlight_style: Style = Style(reverse = true), highlight_symbol: String = "" )
+</code></pre>
+<p>Makes a list.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>items</code> — the items, top to bottom</li>
+<li><code>block</code> — the block around the list</li>
+<li><code>style</code> — the style of the whole area</li>
+<li><code>highlight_style</code> — the style of the selected item</li>
+<li><code>highlight_symbol</code> — the mark before the selected item</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="layout.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="paragraph.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="layout.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="paragraph.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>
