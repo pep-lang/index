@@ -1,0 +1,371 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>scrollbar.pep - tui</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">tui</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <!-- Generated from scrollbar.pep by `pep-doc package`. Do not edit. -->
+<h1 id="scrollbarpep"><a class="header" href="#scrollbarpep">scrollbar.pep</a></h1>
+<p><code>Scrollbar</code>: a track along one edge of an area, with a thumb showing
+where the view is; <code>ScrollbarState</code> says how long the content is and
+where the view sits.</p>
+<p>Source: <code>scrollbar.pep</code></p>
+<h2 id="scrollbarorientation"><a class="header" href="#scrollbarorientation">ScrollbarOrientation</a></h2>
+<pre><code class="language-pepper">enum ScrollbarOrientation
+</code></pre>
+<p>Which edge of its area a <code>Scrollbar</code> is drawn along.</p>
+<h3 id="cases"><a class="header" href="#cases">Cases</a></h3>
+<h4 id="verticalright"><a class="header" href="#verticalright">VerticalRight</a></h4>
+<pre><code class="language-pepper">VerticalRight
+</code></pre>
+<p>Down the right edge.</p>
+<h4 id="verticalleft"><a class="header" href="#verticalleft">VerticalLeft</a></h4>
+<pre><code class="language-pepper">VerticalLeft
+</code></pre>
+<p>Down the left edge.</p>
+<h4 id="horizontalbottom"><a class="header" href="#horizontalbottom">HorizontalBottom</a></h4>
+<pre><code class="language-pepper">HorizontalBottom
+</code></pre>
+<p>Along the bottom edge.</p>
+<h4 id="horizontaltop"><a class="header" href="#horizontaltop">HorizontalTop</a></h4>
+<pre><code class="language-pepper">HorizontalTop
+</code></pre>
+<p>Along the top edge.</p>
+<h2 id="scrollbarstate"><a class="header" href="#scrollbarstate">ScrollbarState</a></h2>
+<pre><code class="language-pepper">struct ScrollbarState
+</code></pre>
+<p>How long the content a <code>Scrollbar</code> scrolls is, and where the view is.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import tui;
+
+var state = tui.ScrollbarState(100);   # 100 rows of content
+state.position = 40;                   # scrolled to row 40
+</code></pre>
+<h3 id="fields"><a class="header" href="#fields">Fields</a></h3>
+<h4 id="content_length"><a class="header" href="#content_length">content_length</a></h4>
+<pre><code class="language-pepper">var content_length: int
+</code></pre>
+<p>How long the content is, such as its number of rows; 0 draws no
+scrollbar.</p>
+<h4 id="position"><a class="header" href="#position">position</a></h4>
+<pre><code class="language-pepper">var position: int
+</code></pre>
+<p>The scroll position, such as the first row in view: from 0 to
+<code>content_length</code> less the rows in view.</p>
+<h4 id="viewport_content_length"><a class="header" href="#viewport_content_length">viewport_content_length</a></h4>
+<pre><code class="language-pepper">var viewport_content_length: int
+</code></pre>
+<p>How much of the content shows at once; 0 for the track's length.</p>
+<h3 id="constructor"><a class="header" href="#constructor">Constructor</a></h3>
+<h4 id="scrollbarstate-1"><a class="header" href="#scrollbarstate-1">ScrollbarState()</a></h4>
+<pre><code class="language-pepper">construct(content_length: int = 0, position: int = 0, viewport_content_length: int = 0)
+</code></pre>
+<p>Makes a state.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>content_length</code> — the number of positions</li>
+<li><code>position</code> — the current position</li>
+<li><code>viewport_content_length</code> — how many positions show at once</li>
+</ul>
+<h3 id="methods"><a class="header" href="#methods">Methods</a></h3>
+<h4 id="handle_mouse"><a class="header" href="#handle_mouse">handle_mouse</a></h4>
+<pre><code class="language-pepper">handle_mouse(event: term.MouseEvent, area: Rect): bool
+</code></pre>
+<p>Acts on a mouse event: the wheel over <code>area</code> scrolls by one, a left
+click on the track of the <code>Scrollbar</code> last drawn with this state
+moves the thumb there, and dragging the thumb moves it along. The
+position stays from 0 to <code>content_length</code> less the viewport.</p>
+<p>The state can scroll content with no scrollbar drawn, such as a
+<code>Paragraph</code> drawn with <code>scroll = state.position</code>; set
+<code>viewport_content_length</code> to the rows it shows.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>event</code> — the mouse event, as <code>Event.Mouse</code> gives it</li>
+<li><code>area</code> — where the wheel scrolls, such as the scrolled widget's area from <code>Terminal.area_of</code></li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>true when it acted on the event</li>
+</ul>
+<h2 id="scrollbar"><a class="header" href="#scrollbar">Scrollbar</a></h2>
+<pre><code class="language-pepper">struct Scrollbar
+</code></pre>
+<p>A scrollbar: arrows at the ends, a track between them, and a thumb as
+long as the share of the content in view, placed by the position.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import tui;
+import [Scrollbar, ScrollbarOrientation, ScrollbarState] from tui;
+
+var bar = Scrollbar(ScrollbarOrientation.VerticalRight);
+# in a frame: frame.render_stateful_widget(bar, area, ScrollbarState(100, 40));
+</code></pre>
+<h3 id="fields-1"><a class="header" href="#fields-1">Fields</a></h3>
+<h4 id="orientation"><a class="header" href="#orientation">orientation</a></h4>
+<pre><code class="language-pepper">var orientation: ScrollbarOrientation
+</code></pre>
+<p>The edge it is drawn along.</p>
+<h4 id="thumb_symbol"><a class="header" href="#thumb_symbol">thumb_symbol</a></h4>
+<pre><code class="language-pepper">var thumb_symbol: String
+</code></pre>
+<p>The thumb's symbol.</p>
+<h4 id="track_symbol"><a class="header" href="#track_symbol">track_symbol</a></h4>
+<pre><code class="language-pepper">var track_symbol: String
+</code></pre>
+<p>The track's symbol.</p>
+<h4 id="begin_symbol"><a class="header" href="#begin_symbol">begin_symbol</a></h4>
+<pre><code class="language-pepper">var begin_symbol: String
+</code></pre>
+<p>The symbol at the start (top or left); "" for none.</p>
+<h4 id="end_symbol"><a class="header" href="#end_symbol">end_symbol</a></h4>
+<pre><code class="language-pepper">var end_symbol: String
+</code></pre>
+<p>The symbol at the end (bottom or right); "" for none.</p>
+<h4 id="thumb_style"><a class="header" href="#thumb_style">thumb_style</a></h4>
+<pre><code class="language-pepper">var thumb_style: Style
+</code></pre>
+<p>The style of the thumb.</p>
+<h4 id="track_style"><a class="header" href="#track_style">track_style</a></h4>
+<pre><code class="language-pepper">var track_style: Style
+</code></pre>
+<p>The style of the track and the end symbols.</p>
+<h3 id="constructor-1"><a class="header" href="#constructor-1">Constructor</a></h3>
+<h4 id="scrollbar-1"><a class="header" href="#scrollbar-1">Scrollbar()</a></h4>
+<pre><code class="language-pepper">construct( orientation: ScrollbarOrientation = ScrollbarOrientation.VerticalRight, thumb_symbol: String = "█", track_symbol: String = "", begin_symbol: String = "", end_symbol: String = "", thumb_style: Style = Style(), track_style: Style = Style() )
+</code></pre>
+<p>Makes a scrollbar. Empty symbols take the defaults: "║", "▲" and "▼"
+for a vertical one, "═", "◄" and "►" for a horizontal one, and "█"
+for the thumb.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>orientation</code> — the edge it is drawn along</li>
+<li><code>thumb_symbol</code> — the thumb's symbol</li>
+<li><code>track_symbol</code> — the track's symbol</li>
+<li><code>begin_symbol</code> — the start symbol</li>
+<li><code>end_symbol</code> — the end symbol</li>
+<li><code>thumb_style</code> — the style of the thumb</li>
+<li><code>track_style</code> — the style of the track</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="restore.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="sparkline.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="restore.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="sparkline.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

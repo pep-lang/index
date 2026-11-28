@@ -1,0 +1,2151 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>lsp</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">lsp</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <!-- Generated from pep.toml by `pep-doc package`. Do not edit. -->
+<h1 id="lsp-100"><a class="header" href="#lsp-100">lsp 1.0.0</a></h1>
+<p>A Language Server Protocol framework: write a language server for any language in Pepper</p>
+<h2 id="pages"><a class="header" href="#pages">Pages</a></h2>
+<ul>
+<li><a href="module.html">lsp</a>: - Everything <a href="document.html"><code>document.pep</code></a> exports.</li>
+<li><a href="document.html">document.pep</a>: A document the client has open, as the server last heard of it.</li>
+<li><a href="jsonrpc.html">jsonrpc.pep</a>: The request was not valid JSON.</li>
+<li><a href="server.html">server.pep</a>: A language server: one method per request or notification of the protocol.</li>
+<li><a href="transport.html">transport.pep</a>: Reads framed messages from a stream, one at a time.</li>
+<li><a href="types.html">types.pep</a>: <code>TextDocumentSyncKind.None</code>: the server does not want document changes.</li>
+<li><a href="uri.html">uri.pep</a>: The path a <code>file:</code> URI names, with its <code>%XX</code> escapes decoded: <code>file:///home/me/a%20b.pep</code> is <code>/home/me/a b.pep</code>, and <code>file:///c%3A/src/a.pep</code> is <code>c:/src/a.pep</code>.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from module.pep by `pep-doc package`. Do not edit. -->
+<h1 id="lsp"><a class="header" href="#lsp">lsp</a></h1>
+<p>Source: <code>module.pep</code></p>
+<h2 id="re-exports"><a class="header" href="#re-exports">Re-exports</a></h2>
+<ul>
+<li>Everything <a href="document.html"><code>document.pep</code></a> exports.</li>
+<li>Everything <a href="jsonrpc.html"><code>jsonrpc.pep</code></a> exports.</li>
+<li>Everything <a href="server.html"><code>server.pep</code></a> exports.</li>
+<li>Everything <a href="transport.html"><code>transport.pep</code></a> exports.</li>
+<li>Everything <a href="types.html"><code>types.pep</code></a> exports.</li>
+<li>Everything <a href="uri.html"><code>uri.pep</code></a> exports.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from document.pep by `pep-doc package`. Do not edit. -->
+<h1 id="documentpep"><a class="header" href="#documentpep">document.pep</a></h1>
+<p>Source: <code>document.pep</code></p>
+<h2 id="textdocument"><a class="header" href="#textdocument">TextDocument</a></h2>
+<pre><code class="language-pepper">struct TextDocument
+</code></pre>
+<p>A document the client has open, as the server last heard of it.</p>
+<p>Positions in the protocol count UTF-16 code units from the start of a
+line, and a line ends at <code>\n</code>, <code>\r\n</code> or <code>\r</code>; <code>offset_at</code> and
+<code>position_at</code> convert them to and from byte offsets into <code>text</code>.</p>
+<h3 id="fields"><a class="header" href="#fields">Fields</a></h3>
+<h4 id="uri"><a class="header" href="#uri">uri</a></h4>
+<pre><code class="language-pepper">var uri: String
+</code></pre>
+<p>The document's URI.</p>
+<h4 id="language_id"><a class="header" href="#language_id">language_id</a></h4>
+<pre><code class="language-pepper">var language_id: String
+</code></pre>
+<p>The language, such as <code>pepper</code>.</p>
+<h4 id="version"><a class="header" href="#version">version</a></h4>
+<pre><code class="language-pepper">var version: int
+</code></pre>
+<p>The version of the last change applied.</p>
+<h4 id="text"><a class="header" href="#text">text</a></h4>
+<pre><code class="language-pepper">var text: String
+</code></pre>
+<p>The whole text.</p>
+<h3 id="properties"><a class="header" href="#properties">Properties</a></h3>
+<h4 id="line_count"><a class="header" href="#line_count">line_count</a></h4>
+<pre><code class="language-pepper">var line_count: ulong { get; }
+</code></pre>
+<p>The number of lines; a text ending in a line break has an empty last
+line.</p>
+<h3 id="constructor"><a class="header" href="#constructor">Constructor</a></h3>
+<h4 id="textdocument-1"><a class="header" href="#textdocument-1">TextDocument()</a></h4>
+<pre><code class="language-pepper">construct(uri: String = "", text: String = "", version: int = 0, language_id: String = "")
+</code></pre>
+<p>Creates a document.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>uri</code> — the document's URI</li>
+<li><code>text</code> — its text</li>
+<li><code>version</code> — its version</li>
+<li><code>language_id</code> — its language</li>
+</ul>
+<h3 id="static-methods"><a class="header" href="#static-methods">Static methods</a></h3>
+<h4 id="opened"><a class="header" href="#opened">opened</a></h4>
+<pre><code class="language-pepper">static opened(item: TextDocumentItem): TextDocument
+</code></pre>
+<p>Creates the document <code>textDocument/didOpen</code> describes.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>item</code> — the document opened</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the document</li>
+</ul>
+<h3 id="methods"><a class="header" href="#methods">Methods</a></h3>
+<h4 id="apply_changes"><a class="header" href="#apply_changes">apply_changes</a></h4>
+<pre><code class="language-pepper">apply_changes(params: DidChangeTextDocumentParams)
+</code></pre>
+<p>Applies the changes of a <code>textDocument/didChange</code>, in order, and
+takes its version.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>params</code> — the notification's parameters</li>
+</ul>
+<h4 id="apply"><a class="header" href="#apply">apply</a></h4>
+<pre><code class="language-pepper">apply(change: TextDocumentContentChangeEvent)
+</code></pre>
+<p>Applies one change: replaces its range, or the whole text when it
+has none.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>change</code> — the change</li>
+</ul>
+<h4 id="offset_at"><a class="header" href="#offset_at">offset_at</a></h4>
+<pre><code class="language-pepper">offset_at(position: Position): ulong
+</code></pre>
+<p>The byte offset of <code>position</code>. A line past the last gives the end of
+the text, and a column past the end of its line gives the line's end.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>position</code> — a protocol position</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the byte offset into <code>text</code></li>
+</ul>
+<h4 id="position_at"><a class="header" href="#position_at">position_at</a></h4>
+<pre><code class="language-pepper">position_at(offset: ulong): Position
+</code></pre>
+<p>The protocol position of byte offset <code>offset</code>; an offset past the
+end gives the end of the text.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>offset</code> — a byte offset into <code>text</code></li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the position</li>
+</ul>
+<h4 id="range_of"><a class="header" href="#range_of">range_of</a></h4>
+<pre><code class="language-pepper">range_of(start: ulong, end: ulong): Range
+</code></pre>
+<p>The range of bytes <code>start</code> up to <code>end</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>start</code> — the first byte offset</li>
+<li><code>end</code> — the offset past the last</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the protocol range</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from jsonrpc.pep by `pep-doc package`. Do not edit. -->
+<h1 id="jsonrpcpep"><a class="header" href="#jsonrpcpep">jsonrpc.pep</a></h1>
+<p>Source: <code>jsonrpc.pep</code></p>
+<h2 id="parse_error"><a class="header" href="#parse_error">PARSE_ERROR</a></h2>
+<pre><code class="language-pepper">const PARSE_ERROR = -32700
+</code></pre>
+<p>The request was not valid JSON.</p>
+<h2 id="invalid_request"><a class="header" href="#invalid_request">INVALID_REQUEST</a></h2>
+<pre><code class="language-pepper">const INVALID_REQUEST = -32600
+</code></pre>
+<p>The message was not a valid request.</p>
+<h2 id="method_not_found"><a class="header" href="#method_not_found">METHOD_NOT_FOUND</a></h2>
+<pre><code class="language-pepper">const METHOD_NOT_FOUND = -32601
+</code></pre>
+<p>No handler for the method.</p>
+<h2 id="invalid_params"><a class="header" href="#invalid_params">INVALID_PARAMS</a></h2>
+<pre><code class="language-pepper">const INVALID_PARAMS = -32602
+</code></pre>
+<p>The parameters did not match the method.</p>
+<h2 id="internal_error"><a class="header" href="#internal_error">INTERNAL_ERROR</a></h2>
+<pre><code class="language-pepper">const INTERNAL_ERROR = -32603
+</code></pre>
+<p>The server failed while handling the request.</p>
+<h2 id="server_not_initialized"><a class="header" href="#server_not_initialized">SERVER_NOT_INITIALIZED</a></h2>
+<pre><code class="language-pepper">const SERVER_NOT_INITIALIZED = -32002
+</code></pre>
+<p>A request other than <code>initialize</code> arrived before it.</p>
+<h2 id="request_cancelled"><a class="header" href="#request_cancelled">REQUEST_CANCELLED</a></h2>
+<pre><code class="language-pepper">const REQUEST_CANCELLED = -32800
+</code></pre>
+<p>The server cancelled the request.</p>
+<h2 id="content_modified"><a class="header" href="#content_modified">CONTENT_MODIFIED</a></h2>
+<pre><code class="language-pepper">const CONTENT_MODIFIED = -32801
+</code></pre>
+<p>The document changed while the request ran, so its answer is stale.</p>
+<h2 id="request_failed"><a class="header" href="#request_failed">REQUEST_FAILED</a></h2>
+<pre><code class="language-pepper">const REQUEST_FAILED = -32803
+</code></pre>
+<p>The request failed though it was valid.</p>
+<h2 id="responseerror"><a class="header" href="#responseerror">ResponseError</a></h2>
+<pre><code class="language-pepper">struct ResponseError
+</code></pre>
+<p>The error a request answers with instead of a result.</p>
+<h3 id="fields-1"><a class="header" href="#fields-1">Fields</a></h3>
+<h4 id="code"><a class="header" href="#code">code</a></h4>
+<pre><code class="language-pepper">var code: int
+</code></pre>
+<p>One of the codes above, or a server's own.</p>
+<h4 id="message"><a class="header" href="#message">message</a></h4>
+<pre><code class="language-pepper">var message: String
+</code></pre>
+<p>What went wrong, for a person to read.</p>
+<h4 id="data"><a class="header" href="#data">data</a></h4>
+<pre><code class="language-pepper">var data: JsonValue?
+</code></pre>
+<p>More about the error, sent as is; Empty sends none.</p>
+<h3 id="constructor-1"><a class="header" href="#constructor-1">Constructor</a></h3>
+<h4 id="responseerror-1"><a class="header" href="#responseerror-1">ResponseError()</a></h4>
+<pre><code class="language-pepper">construct(code: int = INTERNAL_ERROR, message: String = "")
+</code></pre>
+<p>Creates an error.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>code</code> — the error code</li>
+<li><code>message</code> — what went wrong</li>
+</ul>
+<h3 id="static-methods-1"><a class="header" href="#static-methods-1">Static methods</a></h3>
+<h4 id="method_not_found-1"><a class="header" href="#method_not_found-1">method_not_found</a></h4>
+<pre><code class="language-pepper">static method_not_found(method: String): ResponseError
+</code></pre>
+<p>The error for a method the server does not handle.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>method</code> — the method's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>a <code>METHOD_NOT_FOUND</code> error naming it</li>
+</ul>
+<h4 id="invalid_params-1"><a class="header" href="#invalid_params-1">invalid_params</a></h4>
+<pre><code class="language-pepper">static invalid_params(message: String): ResponseError
+</code></pre>
+<p>The error for parameters that do not match the method.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>message</code> — what is wrong with them</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>an <code>INVALID_PARAMS</code> error</li>
+</ul>
+<h4 id="internal"><a class="header" href="#internal">internal</a></h4>
+<pre><code class="language-pepper">static internal(message: String): ResponseError
+</code></pre>
+<p>The error for a request the server failed to handle.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>message</code> — what went wrong</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>an <code>INTERNAL_ERROR</code> error</li>
+</ul>
+<h3 id="methods-1"><a class="header" href="#methods-1">Methods</a></h3>
+<h4 id="to_json"><a class="header" href="#to_json">to_json</a></h4>
+<pre><code class="language-pepper">to_json(): JsonValue
+</code></pre>
+<p>The error as JSON, the <code>error</code> member of a response.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the error object</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from server.pep by `pep-doc package`. Do not edit. -->
+<h1 id="serverpep"><a class="header" href="#serverpep">server.pep</a></h1>
+<p>Source: <code>server.pep</code></p>
+<h2 id="languageserver"><a class="header" href="#languageserver">LanguageServer</a></h2>
+<pre><code class="language-pepper">trait LanguageServer
+</code></pre>
+<p>A language server: one method per request or notification of the
+protocol. Only <code>initialize</code> is required. Every other request answers
+<code>METHOD_NOT_FOUND</code> until the server defines it, and every other
+notification is ignored, so a server defines just what its
+<code>ServerCapabilities</code> promise.</p>
+<p><code>serve</code> calls the methods one at a time on one thread, in the order the
+messages arrive, so a server's state needs no locks: a <code>did_change</code> is
+always applied before the request that follows it. Slow work, such as
+analyzing a program, can run on another thread, which hands its result
+back through a channel and <code>Client.wake</code> (see <code>woken</code>).</p>
+<h3 id="methods-2"><a class="header" href="#methods-2">Methods</a></h3>
+<h4 id="initialize"><a class="header" href="#initialize">initialize</a></h4>
+<pre><code class="language-pepper">initialize(params: InitializeParams): Result&lt;InitializeResult, ResponseError&gt;
+</code></pre>
+<p><code>initialize</code>: the first request. Says what the server can do.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>params</code> — who the client is and what it supports</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the server's capabilities, or an error that ends the session</li>
+</ul>
+<h4 id="initialized"><a class="header" href="#initialized">initialized</a></h4>
+<pre><code class="language-pepper">initialized()
+</code></pre>
+<p><code>initialized</code>: the client has the server's capabilities.</p>
+<h4 id="shutdown"><a class="header" href="#shutdown">shutdown</a></h4>
+<pre><code class="language-pepper">shutdown(): Result&lt;void, ResponseError&gt;
+</code></pre>
+<p><code>shutdown</code>: the client is about to ask the server to exit; release
+what needs releasing.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>Ok, or an error the client reports</li>
+</ul>
+<h4 id="did_open"><a class="header" href="#did_open">did_open</a></h4>
+<pre><code class="language-pepper">did_open(params: DidOpenTextDocumentParams)
+</code></pre>
+<p><code>textDocument/didOpen</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>params</code> — the document opened</li>
+</ul>
+<h4 id="did_change"><a class="header" href="#did_change">did_change</a></h4>
+<pre><code class="language-pepper">did_change(params: DidChangeTextDocumentParams)
+</code></pre>
+<p><code>textDocument/didChange</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>params</code> — the document and its changes</li>
+</ul>
+<h4 id="did_save"><a class="header" href="#did_save">did_save</a></h4>
+<pre><code class="language-pepper">did_save(params: DidSaveTextDocumentParams)
+</code></pre>
+<p><code>textDocument/didSave</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>params</code> — the document saved</li>
+</ul>
+<h4 id="did_close"><a class="header" href="#did_close">did_close</a></h4>
+<pre><code class="language-pepper">did_close(params: DidCloseTextDocumentParams)
+</code></pre>
+<p><code>textDocument/didClose</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>params</code> — the document closed</li>
+</ul>
+<h4 id="did_change_watched_files"><a class="header" href="#did_change_watched_files">did_change_watched_files</a></h4>
+<pre><code class="language-pepper">did_change_watched_files(params: DidChangeWatchedFilesParams)
+</code></pre>
+<p><code>workspace/didChangeWatchedFiles</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>params</code> — the files that changed</li>
+</ul>
+<h4 id="did_change_configuration"><a class="header" href="#did_change_configuration">did_change_configuration</a></h4>
+<pre><code class="language-pepper">did_change_configuration(params: DidChangeConfigurationParams)
+</code></pre>
+<p><code>workspace/didChangeConfiguration</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>params</code> — the new settings</li>
+</ul>
+<h4 id="hover"><a class="header" href="#hover">hover</a></h4>
+<pre><code class="language-pepper">hover(params: TextDocumentPositionParams): Result&lt;Hover?, ResponseError&gt;
+</code></pre>
+<p><code>textDocument/hover</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>params</code> — the position hovered</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>what to show, or Empty for nothing</li>
+</ul>
+<h4 id="completion"><a class="header" href="#completion">completion</a></h4>
+<pre><code class="language-pepper">completion(params: CompletionParams): Result&lt;CompletionList?, ResponseError&gt;
+</code></pre>
+<p><code>textDocument/completion</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>params</code> — where completion was asked for</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the completions, or Empty for none</li>
+</ul>
+<h4 id="definition"><a class="header" href="#definition">definition</a></h4>
+<pre><code class="language-pepper">definition(params: TextDocumentPositionParams): Result&lt;Array&lt;Location&gt;, ResponseError&gt;
+</code></pre>
+<p><code>textDocument/definition</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>params</code> — the position of a name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>where it is declared; empty when nowhere known</li>
+</ul>
+<h4 id="references"><a class="header" href="#references">references</a></h4>
+<pre><code class="language-pepper">references(params: ReferenceParams): Result&lt;Array&lt;Location&gt;, ResponseError&gt;
+</code></pre>
+<p><code>textDocument/references</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>params</code> — the position of a name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>where it is used</li>
+</ul>
+<h4 id="document_symbol"><a class="header" href="#document_symbol">document_symbol</a></h4>
+<pre><code class="language-pepper">document_symbol(params: DocumentSymbolParams): Result&lt;Array&lt;DocumentSymbol&gt;, ResponseError&gt;
+</code></pre>
+<p><code>textDocument/documentSymbol</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>params</code> — the document</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>its outline</li>
+</ul>
+<h4 id="inlay_hint"><a class="header" href="#inlay_hint">inlay_hint</a></h4>
+<pre><code class="language-pepper">inlay_hint(params: InlayHintParams): Result&lt;Array&lt;InlayHint&gt;, ResponseError&gt;
+</code></pre>
+<p><code>textDocument/inlayHint</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>params</code> — the document and the range shown</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the hints in the range</li>
+</ul>
+<h4 id="code_action"><a class="header" href="#code_action">code_action</a></h4>
+<pre><code class="language-pepper">code_action(params: CodeActionParams): Result&lt;Array&lt;CodeAction&gt;, ResponseError&gt;
+</code></pre>
+<p><code>textDocument/codeAction</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>params</code> — the range and the diagnostics there</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the actions that apply</li>
+</ul>
+<h4 id="formatting"><a class="header" href="#formatting">formatting</a></h4>
+<pre><code class="language-pepper">formatting(params: DocumentFormattingParams): Result&lt;Array&lt;TextEdit&gt;, ResponseError&gt;
+</code></pre>
+<p><code>textDocument/formatting</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>params</code> — the document and how to format it</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the edits that format it</li>
+</ul>
+<h4 id="rename"><a class="header" href="#rename">rename</a></h4>
+<pre><code class="language-pepper">rename(params: RenameParams): Result&lt;WorkspaceEdit?, ResponseError&gt;
+</code></pre>
+<p><code>textDocument/rename</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>params</code> — the name and its new spelling</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the edits that rename it, or Empty when it cannot be renamed</li>
+</ul>
+<h4 id="request"><a class="header" href="#request">request</a></h4>
+<pre><code class="language-pepper">request(method: String, params: JsonValue): Result&lt;JsonValue, ResponseError&gt;
+</code></pre>
+<p>Any request this trait has no method for, with its parameters as
+JSON.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>method</code> — the request's method</li>
+<li><code>params</code> — its parameters</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the result, as JSON</li>
+</ul>
+<h4 id="woken"><a class="header" href="#woken">woken</a></h4>
+<pre><code class="language-pepper">woken()
+</code></pre>
+<p>Called on the server's thread after another thread called
+<code>Client.wake</code>: the time to take in what that thread left for the
+server.</p>
+<h4 id="notification"><a class="header" href="#notification">notification</a></h4>
+<pre><code class="language-pepper">notification(method: String, params: JsonValue)
+</code></pre>
+<p>Any notification this trait has no method for, with its parameters
+as JSON. <code>$/</code> notifications the server ignores arrive here too.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>method</code> — the notification's method</li>
+<li><code>params</code> — its parameters</li>
+</ul>
+<h2 id="inbound"><a class="header" href="#inbound">Inbound</a></h2>
+<pre><code class="language-pepper">enum Inbound
+</code></pre>
+<p>What arrives at the server's message loop: a client message, the end of
+the input, or a wake from <code>Client.wake</code>.</p>
+<h3 id="cases"><a class="header" href="#cases">Cases</a></h3>
+<h4 id="message-1"><a class="header" href="#message-1">Message</a></h4>
+<pre><code class="language-pepper">Message(message: JsonValue)
+</code></pre>
+<p>A message from the client, as JSON.</p>
+<h4 id="end"><a class="header" href="#end">End</a></h4>
+<pre><code class="language-pepper">End(error: String)
+</code></pre>
+<p>The input ended: empty when it ended cleanly, else what went wrong.</p>
+<h4 id="wake"><a class="header" href="#wake">Wake</a></h4>
+<pre><code class="language-pepper">Wake
+</code></pre>
+<p><code>Client.wake</code> was called.</p>
+<h2 id="client"><a class="header" href="#client">Client</a></h2>
+<pre><code class="language-pepper">[Shared] struct Client
+</code></pre>
+<p>The server's way to talk to the client: notifications it sends on its
+own, such as diagnostics, and <code>wake</code>, which brings work done on other
+threads back to the server's thread.</p>
+<p>A Client is <code>[Shared]</code>: keep it in the server and hand it to the threads
+the server starts. Each message it sends is queued, so sending never
+waits for the client to read.</p>
+<h3 id="constructor-2"><a class="header" href="#constructor-2">Constructor</a></h3>
+<h4 id="client-1"><a class="header" href="#client-1">Client()</a></h4>
+<pre><code class="language-pepper">construct(outgoing: Channel&lt;String&gt;, inbound: Channel&lt;Inbound&gt;)
+</code></pre>
+<p>Creates a client that queues messages on <code>outgoing</code> and wakes the
+loop through <code>inbound</code>; <code>serve</code> and <code>serve_stdio</code> make one.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>outgoing</code> — the messages for the client as JSON text, in order</li>
+<li><code>inbound</code> — the loop's queue</li>
+</ul>
+<h3 id="methods-3"><a class="header" href="#methods-3">Methods</a></h3>
+<h4 id="publish_diagnostics"><a class="header" href="#publish_diagnostics">publish_diagnostics</a></h4>
+<pre><code class="language-pepper">publish_diagnostics(uri: String, diagnostics: Array&lt;Diagnostic&gt;, version: int? = Optional&lt;int&gt;.Empty)
+</code></pre>
+<p>Sends <code>textDocument/publishDiagnostics</code>: the document's diagnostics,
+replacing those sent before.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>uri</code> — the document</li>
+<li><code>diagnostics</code> — every diagnostic of the document; empty clears them</li>
+<li><code>version</code> — the version they are about, if known</li>
+</ul>
+<h4 id="log_message"><a class="header" href="#log_message">log_message</a></h4>
+<pre><code class="language-pepper">log_message(kind: int, message: String)
+</code></pre>
+<p>Sends <code>window/logMessage</code>: a line for the client's log.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>kind</code> — one of the <code>MESSAGE_</code> constants</li>
+<li><code>message</code> — the line</li>
+</ul>
+<h4 id="show_message"><a class="header" href="#show_message">show_message</a></h4>
+<pre><code class="language-pepper">show_message(kind: int, message: String)
+</code></pre>
+<p>Sends <code>window/showMessage</code>: a message the client shows its user.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>kind</code> — one of the <code>MESSAGE_</code> constants</li>
+<li><code>message</code> — the message</li>
+</ul>
+<h4 id="send_notification"><a class="header" href="#send_notification">send_notification</a></h4>
+<pre><code class="language-pepper">send_notification(method: String, params: JsonValue)
+</code></pre>
+<p>Sends any notification.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>method</code> — the method</li>
+<li><code>params</code> — its parameters</li>
+</ul>
+<h4 id="send_request"><a class="header" href="#send_request">send_request</a></h4>
+<pre><code class="language-pepper">send_request(method: String, params: JsonValue)
+</code></pre>
+<p>Sends a request to the client, such as <code>client/registerCapability</code>
+or <code>workspace/inlayHint/refresh</code>, without waiting for its answer: the
+client's response is dropped, and an error in it is logged.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>method</code> — the method</li>
+<li><code>params</code> — its parameters</li>
+</ul>
+<h4 id="watch_files"><a class="header" href="#watch_files">watch_files</a></h4>
+<pre><code class="language-pepper">watch_files(id: String, glob: String)
+</code></pre>
+<p>Asks the client to send <code>workspace/didChangeWatchedFiles</code> for the
+files matching <code>glob</code>, such as <code>**/*.pep</code>. Clients that support
+dynamic registration (see <code>InitializeParams.capabilities</code>) honor it.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>id</code> — a name for the registration</li>
+<li><code>glob</code> — the files to watch</li>
+</ul>
+<h4 id="refresh_inlay_hints"><a class="header" href="#refresh_inlay_hints">refresh_inlay_hints</a></h4>
+<pre><code class="language-pepper">refresh_inlay_hints()
+</code></pre>
+<p>Makes the editor <code>workspace/inlayHint/refresh</code>: ask again for the
+inlay hints of the documents it shows, after an analysis changed
+them.</p>
+<h4 id="wake-1"><a class="header" href="#wake-1">wake</a></h4>
+<pre><code class="language-pepper">wake()
+</code></pre>
+<p>Makes the message loop call the server's <code>woken</code> on the server's
+thread, after the messages already queued. A thread that finished
+work for the server puts its result where the server will look (a
+<code>Channel</code> the server owns) and then calls <code>wake</code>, so the server's
+state is only ever touched on its own thread.</p>
+<h2 id="to_protocol_json"><a class="header" href="#to_protocol_json">to_protocol_json</a></h2>
+<pre><code class="language-pepper">to_protocol_json&lt;T&gt;(value: T): JsonValue
+</code></pre>
+<p>Converts a protocol value to JSON as the protocol expects it: as
+<code>json.to_json</code> does, but leaving out the members whose value is null (an
+Empty optional), which the protocol treats as absent.</p>
+<p><strong>Type parameters</strong></p>
+<ul>
+<li><code>T</code> — the protocol type</li>
+</ul>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — a value of one of the protocol's types</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>its JSON</li>
+</ul>
+<h2 id="without_nulls"><a class="header" href="#without_nulls">without_nulls</a></h2>
+<pre><code class="language-pepper">without_nulls(value: JsonValue): JsonValue
+</code></pre>
+<p>A copy of <code>value</code> without the object members whose value is null, at
+every depth. Array elements stay as they are.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the JSON</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the JSON without null members</li>
+</ul>
+<h2 id="serve_stdio"><a class="header" href="#serve_stdio">serve_stdio</a></h2>
+<pre><code class="language-pepper">serve_stdio&lt;S: LanguageServer&gt;(make: (Client) =&gt; S): int
+</code></pre>
+<p>Runs a language server over standard input and output until the client
+sends <code>exit</code> or the input ends.</p>
+<p>A thread reads standard input and another writes standard output, so
+the server's thread only handles messages, and a message sent from any
+thread goes out without waiting for the server.</p>
+<p><strong>Type parameters</strong></p>
+<ul>
+<li><code>S</code> — the server type</li>
+</ul>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>make</code> — creates the server, given the client it talks back through</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the process's exit code: 0 after <code>shutdown</code> then <code>exit</code>, 1 otherwise</li>
+</ul>
+<h2 id="serve"><a class="header" href="#serve">serve</a></h2>
+<pre><code class="language-pepper">serve&lt;S: LanguageServer&gt;(make: (Client) =&gt; S, inbound: Channel&lt;Inbound&gt;, outgoing: Channel&lt;String&gt;): int
+</code></pre>
+<p>Runs a language server on the calling thread until the client sends
+<code>exit</code> or <code>inbound</code> delivers <code>End</code>.</p>
+<p>Handles one inbound item at a time, in order: messages go to the
+server's method for them, and each <code>Wake</code> calls <code>woken</code>. Answers requests
+before <code>initialize</code> with <code>SERVER_NOT_INITIALIZED</code> and requests after
+<code>shutdown</code> with <code>INVALID_REQUEST</code>. <code>serve_stdio</code> connects the channels to
+standard input and output; tests can fill and read them directly.</p>
+<p><strong>Type parameters</strong></p>
+<ul>
+<li><code>S</code> — the server type</li>
+</ul>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>make</code> — creates the server, given the client it talks back through</li>
+<li><code>inbound</code> — the client's messages, then <code>End</code></li>
+<li><code>outgoing</code> — where messages for the client go, as JSON text, in order</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the process's exit code: 0 after <code>shutdown</code> then <code>exit</code>, 1 otherwise</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from transport.pep by `pep-doc package`. Do not edit. -->
+<h1 id="transportpep"><a class="header" href="#transportpep">transport.pep</a></h1>
+<p>Source: <code>transport.pep</code></p>
+<h2 id="messagereader"><a class="header" href="#messagereader">MessageReader</a></h2>
+<pre><code class="language-pepper">struct MessageReader
+</code></pre>
+<p>Reads framed messages from a stream, one at a time.</p>
+<h3 id="constructor-3"><a class="header" href="#constructor-3">Constructor</a></h3>
+<h4 id="messagereader-1"><a class="header" href="#messagereader-1">MessageReader()</a></h4>
+<pre><code class="language-pepper">construct(input: io.Reader)
+</code></pre>
+<p>Creates a reader over <code>input</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>input</code> — the stream the client writes to, usually standard input</li>
+</ul>
+<h3 id="methods-4"><a class="header" href="#methods-4">Methods</a></h3>
+<h4 id="read"><a class="header" href="#read">read</a></h4>
+<pre><code class="language-pepper">read(): Result&lt;JsonValue?, String&gt;
+</code></pre>
+<p>Reads the next message.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the message's JSON, Empty at the end of the stream, or an error naming what is wrong with the framing or the JSON</li>
+</ul>
+<h2 id="write_message"><a class="header" href="#write_message">write_message</a></h2>
+<pre><code class="language-pepper">write_message(output: io.Writer, message: JsonValue): io.IoResult&lt;void&gt;
+</code></pre>
+<p>Writes <code>message</code> to <code>output</code> with its header.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>output</code> — the stream the client reads, usually standard output</li>
+<li><code>message</code> — the message</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>an error when the stream fails</li>
+</ul>
+<h2 id="write_text"><a class="header" href="#write_text">write_text</a></h2>
+<pre><code class="language-pepper">write_text(output: io.Writer, body: String): io.IoResult&lt;void&gt;
+</code></pre>
+<p>Writes a message already encoded as JSON text to <code>output</code> with its
+header.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>output</code> — the stream the client reads</li>
+<li><code>body</code> — the message's JSON text</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>an error when the stream fails</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from types.pep by `pep-doc package`. Do not edit. -->
+<h1 id="typespep"><a class="header" href="#typespep">types.pep</a></h1>
+<p>Source: <code>types.pep</code></p>
+<h2 id="sync_none"><a class="header" href="#sync_none">SYNC_NONE</a></h2>
+<pre><code class="language-pepper">const SYNC_NONE = 0
+</code></pre>
+<p><code>TextDocumentSyncKind.None</code>: the server does not want document changes.</p>
+<h2 id="sync_full"><a class="header" href="#sync_full">SYNC_FULL</a></h2>
+<pre><code class="language-pepper">const SYNC_FULL = 1
+</code></pre>
+<p><code>TextDocumentSyncKind.Full</code>: each change sends the whole document.</p>
+<h2 id="sync_incremental"><a class="header" href="#sync_incremental">SYNC_INCREMENTAL</a></h2>
+<pre><code class="language-pepper">const SYNC_INCREMENTAL = 2
+</code></pre>
+<p><code>TextDocumentSyncKind.Incremental</code>: each change sends the edited ranges.</p>
+<h2 id="severity_error"><a class="header" href="#severity_error">SEVERITY_ERROR</a></h2>
+<pre><code class="language-pepper">const SEVERITY_ERROR = 1
+</code></pre>
+<p><code>DiagnosticSeverity.Error</code>.</p>
+<h2 id="severity_warning"><a class="header" href="#severity_warning">SEVERITY_WARNING</a></h2>
+<pre><code class="language-pepper">const SEVERITY_WARNING = 2
+</code></pre>
+<p><code>DiagnosticSeverity.Warning</code>.</p>
+<h2 id="severity_information"><a class="header" href="#severity_information">SEVERITY_INFORMATION</a></h2>
+<pre><code class="language-pepper">const SEVERITY_INFORMATION = 3
+</code></pre>
+<p><code>DiagnosticSeverity.Information</code>.</p>
+<h2 id="severity_hint"><a class="header" href="#severity_hint">SEVERITY_HINT</a></h2>
+<pre><code class="language-pepper">const SEVERITY_HINT = 4
+</code></pre>
+<p><code>DiagnosticSeverity.Hint</code>.</p>
+<h2 id="tag_unnecessary"><a class="header" href="#tag_unnecessary">TAG_UNNECESSARY</a></h2>
+<pre><code class="language-pepper">const TAG_UNNECESSARY = 1
+</code></pre>
+<p><code>DiagnosticTag.Unnecessary</code>: code the editor shows faded, such as code
+left out of the build.</p>
+<h2 id="tag_deprecated"><a class="header" href="#tag_deprecated">TAG_DEPRECATED</a></h2>
+<pre><code class="language-pepper">const TAG_DEPRECATED = 2
+</code></pre>
+<p><code>DiagnosticTag.Deprecated</code>: code the editor shows struck through.</p>
+<h2 id="message_error"><a class="header" href="#message_error">MESSAGE_ERROR</a></h2>
+<pre><code class="language-pepper">const MESSAGE_ERROR = 1
+</code></pre>
+<p><code>MessageType.Error</code>, for <code>Client.log_message</code> and <code>Client.show_message</code>.</p>
+<h2 id="message_warning"><a class="header" href="#message_warning">MESSAGE_WARNING</a></h2>
+<pre><code class="language-pepper">const MESSAGE_WARNING = 2
+</code></pre>
+<p><code>MessageType.Warning</code>.</p>
+<h2 id="message_info"><a class="header" href="#message_info">MESSAGE_INFO</a></h2>
+<pre><code class="language-pepper">const MESSAGE_INFO = 3
+</code></pre>
+<p><code>MessageType.Info</code>.</p>
+<h2 id="message_log"><a class="header" href="#message_log">MESSAGE_LOG</a></h2>
+<pre><code class="language-pepper">const MESSAGE_LOG = 4
+</code></pre>
+<p><code>MessageType.Log</code>.</p>
+<h2 id="plain_text"><a class="header" href="#plain_text">PLAIN_TEXT</a></h2>
+<pre><code class="language-pepper">const PLAIN_TEXT = "plaintext"
+</code></pre>
+<p><code>MarkupKind.PlainText</code>.</p>
+<h2 id="markdown"><a class="header" href="#markdown">MARKDOWN</a></h2>
+<pre><code class="language-pepper">const MARKDOWN = "markdown"
+</code></pre>
+<p><code>MarkupKind.Markdown</code>.</p>
+<h2 id="file_created"><a class="header" href="#file_created">FILE_CREATED</a></h2>
+<pre><code class="language-pepper">const FILE_CREATED = 1
+</code></pre>
+<p><code>FileChangeType.Created</code>.</p>
+<h2 id="file_changed"><a class="header" href="#file_changed">FILE_CHANGED</a></h2>
+<pre><code class="language-pepper">const FILE_CHANGED = 2
+</code></pre>
+<p><code>FileChangeType.Changed</code>.</p>
+<h2 id="file_deleted"><a class="header" href="#file_deleted">FILE_DELETED</a></h2>
+<pre><code class="language-pepper">const FILE_DELETED = 3
+</code></pre>
+<p><code>FileChangeType.Deleted</code>.</p>
+<h2 id="symbol_file"><a class="header" href="#symbol_file">SYMBOL_FILE</a></h2>
+<pre><code class="language-pepper">const SYMBOL_FILE = 1
+</code></pre>
+<p><code>SymbolKind</code> values, for <code>DocumentSymbol.kind</code>.</p>
+<h2 id="symbol_module"><a class="header" href="#symbol_module">SYMBOL_MODULE</a></h2>
+<pre><code class="language-pepper">const SYMBOL_MODULE = 2
+</code></pre>
+<p><code>SymbolKind.Module</code>.</p>
+<h2 id="symbol_namespace"><a class="header" href="#symbol_namespace">SYMBOL_NAMESPACE</a></h2>
+<pre><code class="language-pepper">const SYMBOL_NAMESPACE = 3
+</code></pre>
+<p><code>SymbolKind.Namespace</code>.</p>
+<h2 id="symbol_package"><a class="header" href="#symbol_package">SYMBOL_PACKAGE</a></h2>
+<pre><code class="language-pepper">const SYMBOL_PACKAGE = 4
+</code></pre>
+<p><code>SymbolKind.Package</code>.</p>
+<h2 id="symbol_class"><a class="header" href="#symbol_class">SYMBOL_CLASS</a></h2>
+<pre><code class="language-pepper">const SYMBOL_CLASS = 5
+</code></pre>
+<p><code>SymbolKind.Class</code>.</p>
+<h2 id="symbol_method"><a class="header" href="#symbol_method">SYMBOL_METHOD</a></h2>
+<pre><code class="language-pepper">const SYMBOL_METHOD = 6
+</code></pre>
+<p><code>SymbolKind.Method</code>.</p>
+<h2 id="symbol_property"><a class="header" href="#symbol_property">SYMBOL_PROPERTY</a></h2>
+<pre><code class="language-pepper">const SYMBOL_PROPERTY = 7
+</code></pre>
+<p><code>SymbolKind.Property</code>.</p>
+<h2 id="symbol_field"><a class="header" href="#symbol_field">SYMBOL_FIELD</a></h2>
+<pre><code class="language-pepper">const SYMBOL_FIELD = 8
+</code></pre>
+<p><code>SymbolKind.Field</code>.</p>
+<h2 id="symbol_constructor"><a class="header" href="#symbol_constructor">SYMBOL_CONSTRUCTOR</a></h2>
+<pre><code class="language-pepper">const SYMBOL_CONSTRUCTOR = 9
+</code></pre>
+<p><code>SymbolKind.Constructor</code>.</p>
+<h2 id="symbol_enum"><a class="header" href="#symbol_enum">SYMBOL_ENUM</a></h2>
+<pre><code class="language-pepper">const SYMBOL_ENUM = 10
+</code></pre>
+<p><code>SymbolKind.Enum</code>.</p>
+<h2 id="symbol_interface"><a class="header" href="#symbol_interface">SYMBOL_INTERFACE</a></h2>
+<pre><code class="language-pepper">const SYMBOL_INTERFACE = 11
+</code></pre>
+<p><code>SymbolKind.Interface</code>.</p>
+<h2 id="symbol_function"><a class="header" href="#symbol_function">SYMBOL_FUNCTION</a></h2>
+<pre><code class="language-pepper">const SYMBOL_FUNCTION = 12
+</code></pre>
+<p><code>SymbolKind.Function</code>.</p>
+<h2 id="symbol_variable"><a class="header" href="#symbol_variable">SYMBOL_VARIABLE</a></h2>
+<pre><code class="language-pepper">const SYMBOL_VARIABLE = 13
+</code></pre>
+<p><code>SymbolKind.Variable</code>.</p>
+<h2 id="symbol_constant"><a class="header" href="#symbol_constant">SYMBOL_CONSTANT</a></h2>
+<pre><code class="language-pepper">const SYMBOL_CONSTANT = 14
+</code></pre>
+<p><code>SymbolKind.Constant</code>.</p>
+<h2 id="symbol_string"><a class="header" href="#symbol_string">SYMBOL_STRING</a></h2>
+<pre><code class="language-pepper">const SYMBOL_STRING = 15
+</code></pre>
+<p><code>SymbolKind.String</code>.</p>
+<h2 id="symbol_number"><a class="header" href="#symbol_number">SYMBOL_NUMBER</a></h2>
+<pre><code class="language-pepper">const SYMBOL_NUMBER = 16
+</code></pre>
+<p><code>SymbolKind.Number</code>.</p>
+<h2 id="symbol_boolean"><a class="header" href="#symbol_boolean">SYMBOL_BOOLEAN</a></h2>
+<pre><code class="language-pepper">const SYMBOL_BOOLEAN = 17
+</code></pre>
+<p><code>SymbolKind.Boolean</code>.</p>
+<h2 id="symbol_array"><a class="header" href="#symbol_array">SYMBOL_ARRAY</a></h2>
+<pre><code class="language-pepper">const SYMBOL_ARRAY = 18
+</code></pre>
+<p><code>SymbolKind.Array</code>.</p>
+<h2 id="symbol_object"><a class="header" href="#symbol_object">SYMBOL_OBJECT</a></h2>
+<pre><code class="language-pepper">const SYMBOL_OBJECT = 19
+</code></pre>
+<p><code>SymbolKind.Object</code>.</p>
+<h2 id="symbol_key"><a class="header" href="#symbol_key">SYMBOL_KEY</a></h2>
+<pre><code class="language-pepper">const SYMBOL_KEY = 20
+</code></pre>
+<p><code>SymbolKind.Key</code>.</p>
+<h2 id="symbol_null"><a class="header" href="#symbol_null">SYMBOL_NULL</a></h2>
+<pre><code class="language-pepper">const SYMBOL_NULL = 21
+</code></pre>
+<p><code>SymbolKind.Null</code>.</p>
+<h2 id="symbol_enum_member"><a class="header" href="#symbol_enum_member">SYMBOL_ENUM_MEMBER</a></h2>
+<pre><code class="language-pepper">const SYMBOL_ENUM_MEMBER = 22
+</code></pre>
+<p><code>SymbolKind.EnumMember</code>.</p>
+<h2 id="symbol_struct"><a class="header" href="#symbol_struct">SYMBOL_STRUCT</a></h2>
+<pre><code class="language-pepper">const SYMBOL_STRUCT = 23
+</code></pre>
+<p><code>SymbolKind.Struct</code>.</p>
+<h2 id="symbol_event"><a class="header" href="#symbol_event">SYMBOL_EVENT</a></h2>
+<pre><code class="language-pepper">const SYMBOL_EVENT = 24
+</code></pre>
+<p><code>SymbolKind.Event</code>.</p>
+<h2 id="symbol_operator"><a class="header" href="#symbol_operator">SYMBOL_OPERATOR</a></h2>
+<pre><code class="language-pepper">const SYMBOL_OPERATOR = 25
+</code></pre>
+<p><code>SymbolKind.Operator</code>.</p>
+<h2 id="symbol_type_parameter"><a class="header" href="#symbol_type_parameter">SYMBOL_TYPE_PARAMETER</a></h2>
+<pre><code class="language-pepper">const SYMBOL_TYPE_PARAMETER = 26
+</code></pre>
+<p><code>SymbolKind.TypeParameter</code>.</p>
+<h2 id="completion_text"><a class="header" href="#completion_text">COMPLETION_TEXT</a></h2>
+<pre><code class="language-pepper">const COMPLETION_TEXT = 1
+</code></pre>
+<p><code>CompletionItemKind</code> values, for <code>CompletionItem.kind</code>.</p>
+<h2 id="completion_method"><a class="header" href="#completion_method">COMPLETION_METHOD</a></h2>
+<pre><code class="language-pepper">const COMPLETION_METHOD = 2
+</code></pre>
+<p><code>CompletionItemKind.Method</code>.</p>
+<h2 id="completion_function"><a class="header" href="#completion_function">COMPLETION_FUNCTION</a></h2>
+<pre><code class="language-pepper">const COMPLETION_FUNCTION = 3
+</code></pre>
+<p><code>CompletionItemKind.Function</code>.</p>
+<h2 id="completion_constructor"><a class="header" href="#completion_constructor">COMPLETION_CONSTRUCTOR</a></h2>
+<pre><code class="language-pepper">const COMPLETION_CONSTRUCTOR = 4
+</code></pre>
+<p><code>CompletionItemKind.Constructor</code>.</p>
+<h2 id="completion_field"><a class="header" href="#completion_field">COMPLETION_FIELD</a></h2>
+<pre><code class="language-pepper">const COMPLETION_FIELD = 5
+</code></pre>
+<p><code>CompletionItemKind.Field</code>.</p>
+<h2 id="completion_variable"><a class="header" href="#completion_variable">COMPLETION_VARIABLE</a></h2>
+<pre><code class="language-pepper">const COMPLETION_VARIABLE = 6
+</code></pre>
+<p><code>CompletionItemKind.Variable</code>.</p>
+<h2 id="completion_class"><a class="header" href="#completion_class">COMPLETION_CLASS</a></h2>
+<pre><code class="language-pepper">const COMPLETION_CLASS = 7
+</code></pre>
+<p><code>CompletionItemKind.Class</code>.</p>
+<h2 id="completion_interface"><a class="header" href="#completion_interface">COMPLETION_INTERFACE</a></h2>
+<pre><code class="language-pepper">const COMPLETION_INTERFACE = 8
+</code></pre>
+<p><code>CompletionItemKind.Interface</code>.</p>
+<h2 id="completion_module"><a class="header" href="#completion_module">COMPLETION_MODULE</a></h2>
+<pre><code class="language-pepper">const COMPLETION_MODULE = 9
+</code></pre>
+<p><code>CompletionItemKind.Module</code>.</p>
+<h2 id="completion_property"><a class="header" href="#completion_property">COMPLETION_PROPERTY</a></h2>
+<pre><code class="language-pepper">const COMPLETION_PROPERTY = 10
+</code></pre>
+<p><code>CompletionItemKind.Property</code>.</p>
+<h2 id="completion_unit"><a class="header" href="#completion_unit">COMPLETION_UNIT</a></h2>
+<pre><code class="language-pepper">const COMPLETION_UNIT = 11
+</code></pre>
+<p><code>CompletionItemKind.Unit</code>.</p>
+<h2 id="completion_value"><a class="header" href="#completion_value">COMPLETION_VALUE</a></h2>
+<pre><code class="language-pepper">const COMPLETION_VALUE = 12
+</code></pre>
+<p><code>CompletionItemKind.Value</code>.</p>
+<h2 id="completion_enum"><a class="header" href="#completion_enum">COMPLETION_ENUM</a></h2>
+<pre><code class="language-pepper">const COMPLETION_ENUM = 13
+</code></pre>
+<p><code>CompletionItemKind.Enum</code>.</p>
+<h2 id="completion_keyword"><a class="header" href="#completion_keyword">COMPLETION_KEYWORD</a></h2>
+<pre><code class="language-pepper">const COMPLETION_KEYWORD = 14
+</code></pre>
+<p><code>CompletionItemKind.Keyword</code>.</p>
+<h2 id="completion_snippet"><a class="header" href="#completion_snippet">COMPLETION_SNIPPET</a></h2>
+<pre><code class="language-pepper">const COMPLETION_SNIPPET = 15
+</code></pre>
+<p><code>CompletionItemKind.Snippet</code>.</p>
+<h2 id="completion_color"><a class="header" href="#completion_color">COMPLETION_COLOR</a></h2>
+<pre><code class="language-pepper">const COMPLETION_COLOR = 16
+</code></pre>
+<p><code>CompletionItemKind.Color</code>.</p>
+<h2 id="completion_file"><a class="header" href="#completion_file">COMPLETION_FILE</a></h2>
+<pre><code class="language-pepper">const COMPLETION_FILE = 17
+</code></pre>
+<p><code>CompletionItemKind.File</code>.</p>
+<h2 id="completion_reference"><a class="header" href="#completion_reference">COMPLETION_REFERENCE</a></h2>
+<pre><code class="language-pepper">const COMPLETION_REFERENCE = 18
+</code></pre>
+<p><code>CompletionItemKind.Reference</code>.</p>
+<h2 id="completion_folder"><a class="header" href="#completion_folder">COMPLETION_FOLDER</a></h2>
+<pre><code class="language-pepper">const COMPLETION_FOLDER = 19
+</code></pre>
+<p><code>CompletionItemKind.Folder</code>.</p>
+<h2 id="completion_enum_member"><a class="header" href="#completion_enum_member">COMPLETION_ENUM_MEMBER</a></h2>
+<pre><code class="language-pepper">const COMPLETION_ENUM_MEMBER = 20
+</code></pre>
+<p><code>CompletionItemKind.EnumMember</code>.</p>
+<h2 id="completion_constant"><a class="header" href="#completion_constant">COMPLETION_CONSTANT</a></h2>
+<pre><code class="language-pepper">const COMPLETION_CONSTANT = 21
+</code></pre>
+<p><code>CompletionItemKind.Constant</code>.</p>
+<h2 id="completion_struct"><a class="header" href="#completion_struct">COMPLETION_STRUCT</a></h2>
+<pre><code class="language-pepper">const COMPLETION_STRUCT = 22
+</code></pre>
+<p><code>CompletionItemKind.Struct</code>.</p>
+<h2 id="completion_event"><a class="header" href="#completion_event">COMPLETION_EVENT</a></h2>
+<pre><code class="language-pepper">const COMPLETION_EVENT = 23
+</code></pre>
+<p><code>CompletionItemKind.Event</code>.</p>
+<h2 id="completion_operator"><a class="header" href="#completion_operator">COMPLETION_OPERATOR</a></h2>
+<pre><code class="language-pepper">const COMPLETION_OPERATOR = 24
+</code></pre>
+<p><code>CompletionItemKind.Operator</code>.</p>
+<h2 id="completion_type_parameter"><a class="header" href="#completion_type_parameter">COMPLETION_TYPE_PARAMETER</a></h2>
+<pre><code class="language-pepper">const COMPLETION_TYPE_PARAMETER = 25
+</code></pre>
+<p><code>CompletionItemKind.TypeParameter</code>.</p>
+<h2 id="inlay_type"><a class="header" href="#inlay_type">INLAY_TYPE</a></h2>
+<pre><code class="language-pepper">const INLAY_TYPE = 1
+</code></pre>
+<p><code>InlayHintKind.Type</code>.</p>
+<h2 id="inlay_parameter"><a class="header" href="#inlay_parameter">INLAY_PARAMETER</a></h2>
+<pre><code class="language-pepper">const INLAY_PARAMETER = 2
+</code></pre>
+<p><code>InlayHintKind.Parameter</code>.</p>
+<h2 id="quick_fix"><a class="header" href="#quick_fix">QUICK_FIX</a></h2>
+<pre><code class="language-pepper">const QUICK_FIX = "quickfix"
+</code></pre>
+<p><code>CodeActionKind.QuickFix</code>.</p>
+<h2 id="refactor"><a class="header" href="#refactor">REFACTOR</a></h2>
+<pre><code class="language-pepper">const REFACTOR = "refactor"
+</code></pre>
+<p><code>CodeActionKind.Refactor</code>.</p>
+<h2 id="source"><a class="header" href="#source">SOURCE</a></h2>
+<pre><code class="language-pepper">const SOURCE = "source"
+</code></pre>
+<p><code>CodeActionKind.Source</code>.</p>
+<h2 id="position"><a class="header" href="#position">Position</a></h2>
+<pre><code class="language-pepper">struct Position
+</code></pre>
+<p>A place in a document: a zero-based line, and a zero-based column in
+UTF-16 code units (see <code>TextDocument</code> to convert to byte offsets).</p>
+<h3 id="fields-2"><a class="header" href="#fields-2">Fields</a></h3>
+<h4 id="line"><a class="header" href="#line">line</a></h4>
+<pre><code class="language-pepper">[Required] var line: int
+</code></pre>
+<p>The line.</p>
+<h4 id="character"><a class="header" href="#character">character</a></h4>
+<pre><code class="language-pepper">[Required] var character: int
+</code></pre>
+<p>The column, in UTF-16 code units.</p>
+<h3 id="constructor-4"><a class="header" href="#constructor-4">Constructor</a></h3>
+<h4 id="position-1"><a class="header" href="#position-1">Position()</a></h4>
+<pre><code class="language-pepper">construct(line: int = 0, character: int = 0)
+</code></pre>
+<p>Creates a position.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>line</code> — the zero-based line</li>
+<li><code>character</code> — the zero-based UTF-16 column</li>
+</ul>
+<h2 id="range"><a class="header" href="#range">Range</a></h2>
+<pre><code class="language-pepper">struct Range
+</code></pre>
+<p>The text from <code>start</code> up to, not including, <code>end</code>.</p>
+<h3 id="fields-3"><a class="header" href="#fields-3">Fields</a></h3>
+<h4 id="start"><a class="header" href="#start">start</a></h4>
+<pre><code class="language-pepper">[Required] var start: Position
+</code></pre>
+<p>The first position.</p>
+<h4 id="end-1"><a class="header" href="#end-1">end</a></h4>
+<pre><code class="language-pepper">[Required] var end: Position
+</code></pre>
+<p>The position just past the last.</p>
+<h3 id="constructor-5"><a class="header" href="#constructor-5">Constructor</a></h3>
+<h4 id="range-1"><a class="header" href="#range-1">Range()</a></h4>
+<pre><code class="language-pepper">construct(start: Position = Position(), end: Position = Position())
+</code></pre>
+<p>Creates a range.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>start</code> — the first position</li>
+<li><code>end</code> — the position past the last</li>
+</ul>
+<h2 id="location"><a class="header" href="#location">Location</a></h2>
+<pre><code class="language-pepper">struct Location
+</code></pre>
+<p>A range in a document named by URI.</p>
+<h3 id="fields-4"><a class="header" href="#fields-4">Fields</a></h3>
+<h4 id="uri-1"><a class="header" href="#uri-1">uri</a></h4>
+<pre><code class="language-pepper">[Required] var uri: String
+</code></pre>
+<p>The document.</p>
+<h4 id="range-2"><a class="header" href="#range-2">range</a></h4>
+<pre><code class="language-pepper">[Required] var range: Range
+</code></pre>
+<p>The range in it.</p>
+<h3 id="constructor-6"><a class="header" href="#constructor-6">Constructor</a></h3>
+<h4 id="location-1"><a class="header" href="#location-1">Location()</a></h4>
+<pre><code class="language-pepper">construct(uri: String = "", range: Range = Range())
+</code></pre>
+<p>Creates a location.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>uri</code> — the document</li>
+<li><code>range</code> — the range in it</li>
+</ul>
+<h2 id="textedit"><a class="header" href="#textedit">TextEdit</a></h2>
+<pre><code class="language-pepper">struct TextEdit
+</code></pre>
+<p>Replaces the text of <code>range</code> with <code>new_text</code>.</p>
+<h3 id="fields-5"><a class="header" href="#fields-5">Fields</a></h3>
+<h4 id="range-3"><a class="header" href="#range-3">range</a></h4>
+<pre><code class="language-pepper">var range: Range
+</code></pre>
+<p>The text replaced; an empty range inserts.</p>
+<h4 id="new_text"><a class="header" href="#new_text">new_text</a></h4>
+<pre><code class="language-pepper">[Name("newText")] var new_text: String
+</code></pre>
+<p>The new text; empty deletes.</p>
+<h3 id="constructor-7"><a class="header" href="#constructor-7">Constructor</a></h3>
+<h4 id="textedit-1"><a class="header" href="#textedit-1">TextEdit()</a></h4>
+<pre><code class="language-pepper">construct(range: Range = Range(), new_text: String = "")
+</code></pre>
+<p>Creates an edit.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>range</code> — the text replaced</li>
+<li><code>new_text</code> — the text put in its place</li>
+</ul>
+<h2 id="workspaceedit"><a class="header" href="#workspaceedit">WorkspaceEdit</a></h2>
+<pre><code class="language-pepper">struct WorkspaceEdit
+</code></pre>
+<p>Edits to several documents, keyed by URI.</p>
+<h3 id="fields-6"><a class="header" href="#fields-6">Fields</a></h3>
+<h4 id="changes"><a class="header" href="#changes">changes</a></h4>
+<pre><code class="language-pepper">var changes: HashMap&lt;String, Array&lt;TextEdit&gt;&gt;
+</code></pre>
+<p>Each document's edits.</p>
+<h3 id="constructor-8"><a class="header" href="#constructor-8">Constructor</a></h3>
+<h4 id="workspaceedit-1"><a class="header" href="#workspaceedit-1">WorkspaceEdit()</a></h4>
+<pre><code class="language-pepper">construct()
+</code></pre>
+<p>Creates an empty edit.</p>
+<h3 id="methods-5"><a class="header" href="#methods-5">Methods</a></h3>
+<h4 id="add"><a class="header" href="#add">add</a></h4>
+<pre><code class="language-pepper">add(uri: String, edit: TextEdit)
+</code></pre>
+<p>Adds an edit to the document <code>uri</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>uri</code> — the document</li>
+<li><code>edit</code> — the edit</li>
+</ul>
+<h2 id="markupcontent"><a class="header" href="#markupcontent">MarkupContent</a></h2>
+<pre><code class="language-pepper">struct MarkupContent
+</code></pre>
+<p>Text with a format for the client to render.</p>
+<h3 id="fields-7"><a class="header" href="#fields-7">Fields</a></h3>
+<h4 id="kind"><a class="header" href="#kind">kind</a></h4>
+<pre><code class="language-pepper">var kind: String
+</code></pre>
+<p><code>PLAIN_TEXT</code> or <code>MARKDOWN</code>.</p>
+<h4 id="value"><a class="header" href="#value">value</a></h4>
+<pre><code class="language-pepper">var value: String
+</code></pre>
+<p>The text.</p>
+<h3 id="constructor-9"><a class="header" href="#constructor-9">Constructor</a></h3>
+<h4 id="markupcontent-1"><a class="header" href="#markupcontent-1">MarkupContent()</a></h4>
+<pre><code class="language-pepper">construct(kind: String = MARKDOWN, value: String = "")
+</code></pre>
+<p>Creates markup.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>kind</code> — <code>PLAIN_TEXT</code> or <code>MARKDOWN</code></li>
+<li><code>value</code> — the text</li>
+</ul>
+<h2 id="textdocumentidentifier"><a class="header" href="#textdocumentidentifier">TextDocumentIdentifier</a></h2>
+<pre><code class="language-pepper">struct TextDocumentIdentifier
+</code></pre>
+<p>Names a document.</p>
+<h3 id="fields-8"><a class="header" href="#fields-8">Fields</a></h3>
+<h4 id="uri-2"><a class="header" href="#uri-2">uri</a></h4>
+<pre><code class="language-pepper">[Required] var uri: String
+</code></pre>
+<p>The document's URI.</p>
+<h2 id="versionedtextdocumentidentifier"><a class="header" href="#versionedtextdocumentidentifier">VersionedTextDocumentIdentifier</a></h2>
+<pre><code class="language-pepper">struct VersionedTextDocumentIdentifier
+</code></pre>
+<p>Names a document at a version.</p>
+<h3 id="fields-9"><a class="header" href="#fields-9">Fields</a></h3>
+<h4 id="uri-3"><a class="header" href="#uri-3">uri</a></h4>
+<pre><code class="language-pepper">[Required] var uri: String
+</code></pre>
+<p>The document's URI.</p>
+<h4 id="version-1"><a class="header" href="#version-1">version</a></h4>
+<pre><code class="language-pepper">[Required] var version: int
+</code></pre>
+<p>The version, which goes up with each change.</p>
+<h2 id="textdocumentitem"><a class="header" href="#textdocumentitem">TextDocumentItem</a></h2>
+<pre><code class="language-pepper">struct TextDocumentItem
+</code></pre>
+<p>A document the client opened.</p>
+<h3 id="fields-10"><a class="header" href="#fields-10">Fields</a></h3>
+<h4 id="uri-4"><a class="header" href="#uri-4">uri</a></h4>
+<pre><code class="language-pepper">[Required] var uri: String
+</code></pre>
+<p>The document's URI.</p>
+<h4 id="language_id-1"><a class="header" href="#language_id-1">language_id</a></h4>
+<pre><code class="language-pepper">[Required] [Name("languageId")] var language_id: String
+</code></pre>
+<p>The language, such as <code>pepper</code>.</p>
+<h4 id="version-2"><a class="header" href="#version-2">version</a></h4>
+<pre><code class="language-pepper">[Required] var version: int
+</code></pre>
+<p>The version, which goes up with each change.</p>
+<h4 id="text-1"><a class="header" href="#text-1">text</a></h4>
+<pre><code class="language-pepper">[Required] var text: String
+</code></pre>
+<p>The whole text.</p>
+<h2 id="textdocumentpositionparams"><a class="header" href="#textdocumentpositionparams">TextDocumentPositionParams</a></h2>
+<pre><code class="language-pepper">struct TextDocumentPositionParams
+</code></pre>
+<p>A position in a document: the parameters of most requests about code.</p>
+<h3 id="fields-11"><a class="header" href="#fields-11">Fields</a></h3>
+<h4 id="text_document"><a class="header" href="#text_document">text_document</a></h4>
+<pre><code class="language-pepper">[Required] [Name("textDocument")] var text_document: TextDocumentIdentifier
+</code></pre>
+<p>The document.</p>
+<h4 id="position-2"><a class="header" href="#position-2">position</a></h4>
+<pre><code class="language-pepper">[Required] var position: Position
+</code></pre>
+<p>The position in it.</p>
+<h2 id="clientinfo"><a class="header" href="#clientinfo">ClientInfo</a></h2>
+<pre><code class="language-pepper">struct ClientInfo
+</code></pre>
+<p>Who the client or server is.</p>
+<h3 id="fields-12"><a class="header" href="#fields-12">Fields</a></h3>
+<h4 id="name"><a class="header" href="#name">name</a></h4>
+<pre><code class="language-pepper">var name: String
+</code></pre>
+<p>The program's name.</p>
+<h4 id="version-3"><a class="header" href="#version-3">version</a></h4>
+<pre><code class="language-pepper">var version: String?
+</code></pre>
+<p>Its version, if it says.</p>
+<h2 id="workspacefolder"><a class="header" href="#workspacefolder">WorkspaceFolder</a></h2>
+<pre><code class="language-pepper">struct WorkspaceFolder
+</code></pre>
+<p>A folder open in the client's workspace.</p>
+<h3 id="fields-13"><a class="header" href="#fields-13">Fields</a></h3>
+<h4 id="uri-5"><a class="header" href="#uri-5">uri</a></h4>
+<pre><code class="language-pepper">var uri: String
+</code></pre>
+<p>The folder's URI.</p>
+<h4 id="name-1"><a class="header" href="#name-1">name</a></h4>
+<pre><code class="language-pepper">var name: String
+</code></pre>
+<p>Its name in the client.</p>
+<h2 id="initializeparams"><a class="header" href="#initializeparams">InitializeParams</a></h2>
+<pre><code class="language-pepper">struct InitializeParams
+</code></pre>
+<p>The parameters of <code>initialize</code>.</p>
+<h3 id="fields-14"><a class="header" href="#fields-14">Fields</a></h3>
+<h4 id="process_id"><a class="header" href="#process_id">process_id</a></h4>
+<pre><code class="language-pepper">[Name("processId")] var process_id: long?
+</code></pre>
+<p>The client's process, so the server can exit if it dies.</p>
+<h4 id="client_info"><a class="header" href="#client_info">client_info</a></h4>
+<pre><code class="language-pepper">[Name("clientInfo")] var client_info: ClientInfo?
+</code></pre>
+<p>The client's name and version.</p>
+<h4 id="root_uri"><a class="header" href="#root_uri">root_uri</a></h4>
+<pre><code class="language-pepper">[Name("rootUri")] var root_uri: String?
+</code></pre>
+<p>The workspace's root folder (deprecated by the protocol in favor of
+<code>workspace_folders</code>).</p>
+<h4 id="workspace_folders"><a class="header" href="#workspace_folders">workspace_folders</a></h4>
+<pre><code class="language-pepper">[Name("workspaceFolders")] var workspace_folders: Array&lt;WorkspaceFolder&gt;?
+</code></pre>
+<p>The folders open in the workspace.</p>
+<h4 id="initialization_options"><a class="header" href="#initialization_options">initialization_options</a></h4>
+<pre><code class="language-pepper">[Name("initializationOptions")] var initialization_options: JsonValue?
+</code></pre>
+<p>Options the client's extension passes as is.</p>
+<h4 id="capabilities"><a class="header" href="#capabilities">capabilities</a></h4>
+<pre><code class="language-pepper">var capabilities: JsonValue?
+</code></pre>
+<p>What the client supports, as the client sent it.</p>
+<h2 id="completionoptions"><a class="header" href="#completionoptions">CompletionOptions</a></h2>
+<pre><code class="language-pepper">struct CompletionOptions
+</code></pre>
+<p>Completion settings in <code>ServerCapabilities</code>.</p>
+<h3 id="fields-15"><a class="header" href="#fields-15">Fields</a></h3>
+<h4 id="trigger_characters"><a class="header" href="#trigger_characters">trigger_characters</a></h4>
+<pre><code class="language-pepper">[Name("triggerCharacters")] var trigger_characters: Array&lt;String&gt;?
+</code></pre>
+<p>Characters that start completion, such as <code>.</code>.</p>
+<h4 id="resolve_provider"><a class="header" href="#resolve_provider">resolve_provider</a></h4>
+<pre><code class="language-pepper">[Name("resolveProvider")] var resolve_provider: bool?
+</code></pre>
+<p>Whether the server answers <code>completionItem/resolve</code>.</p>
+<h2 id="textdocumentsyncoptions"><a class="header" href="#textdocumentsyncoptions">TextDocumentSyncOptions</a></h2>
+<pre><code class="language-pepper">struct TextDocumentSyncOptions
+</code></pre>
+<p>Text synchronization settings in <code>ServerCapabilities</code>.</p>
+<h3 id="fields-16"><a class="header" href="#fields-16">Fields</a></h3>
+<h4 id="open_close"><a class="header" href="#open_close">open_close</a></h4>
+<pre><code class="language-pepper">[Name("openClose")] var open_close: bool
+</code></pre>
+<p>Whether the server wants <code>didOpen</code> and <code>didClose</code>.</p>
+<h4 id="change"><a class="header" href="#change">change</a></h4>
+<pre><code class="language-pepper">var change: int
+</code></pre>
+<p><code>SYNC_NONE</code>, <code>SYNC_FULL</code> or <code>SYNC_INCREMENTAL</code>.</p>
+<h3 id="constructor-10"><a class="header" href="#constructor-10">Constructor</a></h3>
+<h4 id="textdocumentsyncoptions-1"><a class="header" href="#textdocumentsyncoptions-1">TextDocumentSyncOptions()</a></h4>
+<pre><code class="language-pepper">construct(change: int = SYNC_FULL)
+</code></pre>
+<p>Creates settings.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>change</code> — how changes are sent</li>
+</ul>
+<h2 id="servercapabilities"><a class="header" href="#servercapabilities">ServerCapabilities</a></h2>
+<pre><code class="language-pepper">struct ServerCapabilities
+</code></pre>
+<p>What the server can do, the answer to <code>initialize</code>. Each feature the
+server leaves Empty (or false) is one the client does not ask for.</p>
+<h3 id="fields-17"><a class="header" href="#fields-17">Fields</a></h3>
+<h4 id="text_document_sync"><a class="header" href="#text_document_sync">text_document_sync</a></h4>
+<pre><code class="language-pepper">[Name("textDocumentSync")] var text_document_sync: TextDocumentSyncOptions?
+</code></pre>
+<p>How documents are synchronized.</p>
+<h4 id="hover_provider"><a class="header" href="#hover_provider">hover_provider</a></h4>
+<pre><code class="language-pepper">[Name("hoverProvider")] var hover_provider: bool?
+</code></pre>
+<p>Whether the server answers <code>textDocument/hover</code>.</p>
+<h4 id="completion_provider"><a class="header" href="#completion_provider">completion_provider</a></h4>
+<pre><code class="language-pepper">[Name("completionProvider")] var completion_provider: CompletionOptions?
+</code></pre>
+<p>Completion settings; Empty means no completion.</p>
+<h4 id="definition_provider"><a class="header" href="#definition_provider">definition_provider</a></h4>
+<pre><code class="language-pepper">[Name("definitionProvider")] var definition_provider: bool?
+</code></pre>
+<p>Whether the server answers <code>textDocument/definition</code>.</p>
+<h4 id="references_provider"><a class="header" href="#references_provider">references_provider</a></h4>
+<pre><code class="language-pepper">[Name("referencesProvider")] var references_provider: bool?
+</code></pre>
+<p>Whether the server answers <code>textDocument/references</code>.</p>
+<h4 id="document_symbol_provider"><a class="header" href="#document_symbol_provider">document_symbol_provider</a></h4>
+<pre><code class="language-pepper">[Name("documentSymbolProvider")] var document_symbol_provider: bool?
+</code></pre>
+<p>Whether the server answers <code>textDocument/documentSymbol</code>.</p>
+<h4 id="code_action_provider"><a class="header" href="#code_action_provider">code_action_provider</a></h4>
+<pre><code class="language-pepper">[Name("codeActionProvider")] var code_action_provider: bool?
+</code></pre>
+<p>Whether the server answers <code>textDocument/codeAction</code>.</p>
+<h4 id="document_formatting_provider"><a class="header" href="#document_formatting_provider">document_formatting_provider</a></h4>
+<pre><code class="language-pepper">[Name("documentFormattingProvider")] var document_formatting_provider: bool?
+</code></pre>
+<p>Whether the server answers <code>textDocument/formatting</code>.</p>
+<h4 id="rename_provider"><a class="header" href="#rename_provider">rename_provider</a></h4>
+<pre><code class="language-pepper">[Name("renameProvider")] var rename_provider: bool?
+</code></pre>
+<p>Whether the server answers <code>textDocument/rename</code>.</p>
+<h4 id="inlay_hint_provider"><a class="header" href="#inlay_hint_provider">inlay_hint_provider</a></h4>
+<pre><code class="language-pepper">[Name("inlayHintProvider")] var inlay_hint_provider: bool?
+</code></pre>
+<p>Whether the server answers <code>textDocument/inlayHint</code>.</p>
+<h4 id="experimental"><a class="header" href="#experimental">experimental</a></h4>
+<pre><code class="language-pepper">[Name("experimental")] var experimental: JsonValue?
+</code></pre>
+<p>Capabilities this struct does not name, merged in as is (for
+example <code>{"semanticTokensProvider": ...}</code>).</p>
+<h2 id="initializeresult"><a class="header" href="#initializeresult">InitializeResult</a></h2>
+<pre><code class="language-pepper">struct InitializeResult
+</code></pre>
+<p>The answer to <code>initialize</code>.</p>
+<h3 id="fields-18"><a class="header" href="#fields-18">Fields</a></h3>
+<h4 id="capabilities-1"><a class="header" href="#capabilities-1">capabilities</a></h4>
+<pre><code class="language-pepper">var capabilities: ServerCapabilities
+</code></pre>
+<p>What the server can do.</p>
+<h4 id="server_info"><a class="header" href="#server_info">server_info</a></h4>
+<pre><code class="language-pepper">[Name("serverInfo")] var server_info: ClientInfo?
+</code></pre>
+<p>The server's name and version.</p>
+<h3 id="constructor-11"><a class="header" href="#constructor-11">Constructor</a></h3>
+<h4 id="initializeresult-1"><a class="header" href="#initializeresult-1">InitializeResult()</a></h4>
+<pre><code class="language-pepper">construct()
+</code></pre>
+<p>Creates a result with no capabilities, for the server to fill in.</p>
+<h2 id="didopentextdocumentparams"><a class="header" href="#didopentextdocumentparams">DidOpenTextDocumentParams</a></h2>
+<pre><code class="language-pepper">struct DidOpenTextDocumentParams
+</code></pre>
+<p>The parameters of <code>textDocument/didOpen</code>.</p>
+<h3 id="fields-19"><a class="header" href="#fields-19">Fields</a></h3>
+<h4 id="text_document-1"><a class="header" href="#text_document-1">text_document</a></h4>
+<pre><code class="language-pepper">[Required] [Name("textDocument")] var text_document: TextDocumentItem
+</code></pre>
+<p>The document opened, with its text.</p>
+<h2 id="textdocumentcontentchangeevent"><a class="header" href="#textdocumentcontentchangeevent">TextDocumentContentChangeEvent</a></h2>
+<pre><code class="language-pepper">struct TextDocumentContentChangeEvent
+</code></pre>
+<p>One change to a document: the new text of <code>range</code>, or the whole new
+text when <code>range</code> is Empty.</p>
+<h3 id="fields-20"><a class="header" href="#fields-20">Fields</a></h3>
+<h4 id="range-4"><a class="header" href="#range-4">range</a></h4>
+<pre><code class="language-pepper">var range: Range?
+</code></pre>
+<p>The text replaced; Empty replaces the whole document.</p>
+<h4 id="text-2"><a class="header" href="#text-2">text</a></h4>
+<pre><code class="language-pepper">[Required] var text: String
+</code></pre>
+<p>The new text.</p>
+<h2 id="didchangetextdocumentparams"><a class="header" href="#didchangetextdocumentparams">DidChangeTextDocumentParams</a></h2>
+<pre><code class="language-pepper">struct DidChangeTextDocumentParams
+</code></pre>
+<p>The parameters of <code>textDocument/didChange</code>.</p>
+<h3 id="fields-21"><a class="header" href="#fields-21">Fields</a></h3>
+<h4 id="text_document-2"><a class="header" href="#text_document-2">text_document</a></h4>
+<pre><code class="language-pepper">[Required] [Name("textDocument")] var text_document: VersionedTextDocumentIdentifier
+</code></pre>
+<p>The document and its new version.</p>
+<h4 id="content_changes"><a class="header" href="#content_changes">content_changes</a></h4>
+<pre><code class="language-pepper">[Required] [Name("contentChanges")] var content_changes: Array&lt;TextDocumentContentChangeEvent&gt;
+</code></pre>
+<p>The changes, in the order to apply them.</p>
+<h2 id="didsavetextdocumentparams"><a class="header" href="#didsavetextdocumentparams">DidSaveTextDocumentParams</a></h2>
+<pre><code class="language-pepper">struct DidSaveTextDocumentParams
+</code></pre>
+<p>The parameters of <code>textDocument/didSave</code>.</p>
+<h3 id="fields-22"><a class="header" href="#fields-22">Fields</a></h3>
+<h4 id="text_document-3"><a class="header" href="#text_document-3">text_document</a></h4>
+<pre><code class="language-pepper">[Required] [Name("textDocument")] var text_document: TextDocumentIdentifier
+</code></pre>
+<p>The document saved.</p>
+<h4 id="text-3"><a class="header" href="#text-3">text</a></h4>
+<pre><code class="language-pepper">var text: String?
+</code></pre>
+<p>The text, when the client was asked to include it.</p>
+<h2 id="didclosetextdocumentparams"><a class="header" href="#didclosetextdocumentparams">DidCloseTextDocumentParams</a></h2>
+<pre><code class="language-pepper">struct DidCloseTextDocumentParams
+</code></pre>
+<p>The parameters of <code>textDocument/didClose</code>.</p>
+<h3 id="fields-23"><a class="header" href="#fields-23">Fields</a></h3>
+<h4 id="text_document-4"><a class="header" href="#text_document-4">text_document</a></h4>
+<pre><code class="language-pepper">[Required] [Name("textDocument")] var text_document: TextDocumentIdentifier
+</code></pre>
+<p>The document closed.</p>
+<h2 id="fileevent"><a class="header" href="#fileevent">FileEvent</a></h2>
+<pre><code class="language-pepper">struct FileEvent
+</code></pre>
+<p>A watched file that changed.</p>
+<h3 id="fields-24"><a class="header" href="#fields-24">Fields</a></h3>
+<h4 id="uri-6"><a class="header" href="#uri-6">uri</a></h4>
+<pre><code class="language-pepper">[Required] var uri: String
+</code></pre>
+<p>The file.</p>
+<h4 id="change-1"><a class="header" href="#change-1">change</a></h4>
+<pre><code class="language-pepper">[Required] [Name("type")] var change: int
+</code></pre>
+<p><code>FILE_CREATED</code>, <code>FILE_CHANGED</code> or <code>FILE_DELETED</code>.</p>
+<h2 id="didchangewatchedfilesparams"><a class="header" href="#didchangewatchedfilesparams">DidChangeWatchedFilesParams</a></h2>
+<pre><code class="language-pepper">struct DidChangeWatchedFilesParams
+</code></pre>
+<p>The parameters of <code>workspace/didChangeWatchedFiles</code>.</p>
+<h3 id="fields-25"><a class="header" href="#fields-25">Fields</a></h3>
+<h4 id="changes-1"><a class="header" href="#changes-1">changes</a></h4>
+<pre><code class="language-pepper">[Required] var changes: Array&lt;FileEvent&gt;
+</code></pre>
+<p>The changes.</p>
+<h2 id="didchangeconfigurationparams"><a class="header" href="#didchangeconfigurationparams">DidChangeConfigurationParams</a></h2>
+<pre><code class="language-pepper">struct DidChangeConfigurationParams
+</code></pre>
+<p>The parameters of <code>workspace/didChangeConfiguration</code>.</p>
+<h3 id="fields-26"><a class="header" href="#fields-26">Fields</a></h3>
+<h4 id="settings"><a class="header" href="#settings">settings</a></h4>
+<pre><code class="language-pepper">var settings: JsonValue?
+</code></pre>
+<p>The settings, as the client sent them.</p>
+<h2 id="diagnosticrelatedinformation"><a class="header" href="#diagnosticrelatedinformation">DiagnosticRelatedInformation</a></h2>
+<pre><code class="language-pepper">struct DiagnosticRelatedInformation
+</code></pre>
+<p>More about a diagnostic, at another place.</p>
+<h3 id="fields-27"><a class="header" href="#fields-27">Fields</a></h3>
+<h4 id="location-2"><a class="header" href="#location-2">location</a></h4>
+<pre><code class="language-pepper">var location: Location
+</code></pre>
+<p>Where.</p>
+<h4 id="message-2"><a class="header" href="#message-2">message</a></h4>
+<pre><code class="language-pepper">var message: String
+</code></pre>
+<p>What it says.</p>
+<h2 id="diagnostic"><a class="header" href="#diagnostic">Diagnostic</a></h2>
+<pre><code class="language-pepper">struct Diagnostic
+</code></pre>
+<p>A problem the server reports in a document.</p>
+<h3 id="fields-28"><a class="header" href="#fields-28">Fields</a></h3>
+<h4 id="range-5"><a class="header" href="#range-5">range</a></h4>
+<pre><code class="language-pepper">[Required] var range: Range
+</code></pre>
+<p>Where.</p>
+<h4 id="severity"><a class="header" href="#severity">severity</a></h4>
+<pre><code class="language-pepper">var severity: int?
+</code></pre>
+<p><code>SEVERITY_ERROR</code>, <code>SEVERITY_WARNING</code>, <code>SEVERITY_INFORMATION</code> or
+<code>SEVERITY_HINT</code>.</p>
+<h4 id="code-1"><a class="header" href="#code-1">code</a></h4>
+<pre><code class="language-pepper">var code: String?
+</code></pre>
+<p>The problem's code, such as a compiler error number.</p>
+<h4 id="source-1"><a class="header" href="#source-1">source</a></h4>
+<pre><code class="language-pepper">var source: String?
+</code></pre>
+<p>Who reports it, such as the server's name.</p>
+<h4 id="message-3"><a class="header" href="#message-3">message</a></h4>
+<pre><code class="language-pepper">[Required] var message: String
+</code></pre>
+<p>What is wrong.</p>
+<h4 id="related_information"><a class="header" href="#related_information">related_information</a></h4>
+<pre><code class="language-pepper">[Name("relatedInformation")] var related_information: Array&lt;DiagnosticRelatedInformation&gt;?
+</code></pre>
+<p>Places that explain it.</p>
+<h4 id="tags"><a class="header" href="#tags">tags</a></h4>
+<pre><code class="language-pepper">var tags: Array&lt;int&gt;?
+</code></pre>
+<p><code>TAG_UNNECESSARY</code> or <code>TAG_DEPRECATED</code>, which change how the editor
+shows the code.</p>
+<h4 id="data-1"><a class="header" href="#data-1">data</a></h4>
+<pre><code class="language-pepper">var data: JsonValue?
+</code></pre>
+<p>Data the server gets back in a code action's context.</p>
+<h3 id="constructor-12"><a class="header" href="#constructor-12">Constructor</a></h3>
+<h4 id="diagnostic-1"><a class="header" href="#diagnostic-1">Diagnostic()</a></h4>
+<pre><code class="language-pepper">construct(range: Range = Range(), message: String = "", severity: int = SEVERITY_ERROR)
+</code></pre>
+<p>Creates a diagnostic.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>range</code> — where</li>
+<li><code>message</code> — what is wrong</li>
+<li><code>severity</code> — one of the <code>SEVERITY_</code> constants</li>
+</ul>
+<h2 id="publishdiagnosticsparams"><a class="header" href="#publishdiagnosticsparams">PublishDiagnosticsParams</a></h2>
+<pre><code class="language-pepper">struct PublishDiagnosticsParams
+</code></pre>
+<p>The parameters of <code>textDocument/publishDiagnostics</code>.</p>
+<h3 id="fields-29"><a class="header" href="#fields-29">Fields</a></h3>
+<h4 id="uri-7"><a class="header" href="#uri-7">uri</a></h4>
+<pre><code class="language-pepper">var uri: String
+</code></pre>
+<p>The document.</p>
+<h4 id="version-4"><a class="header" href="#version-4">version</a></h4>
+<pre><code class="language-pepper">var version: int?
+</code></pre>
+<p>The version the diagnostics are about, if known.</p>
+<h4 id="diagnostics"><a class="header" href="#diagnostics">diagnostics</a></h4>
+<pre><code class="language-pepper">var diagnostics: Array&lt;Diagnostic&gt;
+</code></pre>
+<p>Every diagnostic of the document; an empty array clears them.</p>
+<h2 id="messageparams"><a class="header" href="#messageparams">MessageParams</a></h2>
+<pre><code class="language-pepper">struct MessageParams
+</code></pre>
+<p>The parameters of <code>window/logMessage</code> and <code>window/showMessage</code>.</p>
+<h3 id="fields-30"><a class="header" href="#fields-30">Fields</a></h3>
+<h4 id="kind-1"><a class="header" href="#kind-1">kind</a></h4>
+<pre><code class="language-pepper">[Name("type")] var kind: int
+</code></pre>
+<p>One of the <code>MESSAGE_</code> constants.</p>
+<h4 id="message-4"><a class="header" href="#message-4">message</a></h4>
+<pre><code class="language-pepper">var message: String
+</code></pre>
+<p>The message.</p>
+<h2 id="hover-1"><a class="header" href="#hover-1">Hover</a></h2>
+<pre><code class="language-pepper">struct Hover
+</code></pre>
+<p>The answer to <code>textDocument/hover</code>.</p>
+<h3 id="fields-31"><a class="header" href="#fields-31">Fields</a></h3>
+<h4 id="contents"><a class="header" href="#contents">contents</a></h4>
+<pre><code class="language-pepper">var contents: MarkupContent
+</code></pre>
+<p>What to show.</p>
+<h4 id="range-6"><a class="header" href="#range-6">range</a></h4>
+<pre><code class="language-pepper">var range: Range?
+</code></pre>
+<p>The text the hover is about, to highlight.</p>
+<h3 id="constructor-13"><a class="header" href="#constructor-13">Constructor</a></h3>
+<h4 id="hover-2"><a class="header" href="#hover-2">Hover()</a></h4>
+<pre><code class="language-pepper">construct(contents: MarkupContent = MarkupContent())
+</code></pre>
+<p>Creates a hover.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>contents</code> — what to show</li>
+</ul>
+<h2 id="completionparams"><a class="header" href="#completionparams">CompletionParams</a></h2>
+<pre><code class="language-pepper">struct CompletionParams
+</code></pre>
+<p>The parameters of <code>textDocument/completion</code>.</p>
+<h3 id="fields-32"><a class="header" href="#fields-32">Fields</a></h3>
+<h4 id="text_document-5"><a class="header" href="#text_document-5">text_document</a></h4>
+<pre><code class="language-pepper">[Required] [Name("textDocument")] var text_document: TextDocumentIdentifier
+</code></pre>
+<p>The document.</p>
+<h4 id="position-3"><a class="header" href="#position-3">position</a></h4>
+<pre><code class="language-pepper">[Required] var position: Position
+</code></pre>
+<p>Where completion was asked for.</p>
+<h4 id="context"><a class="header" href="#context">context</a></h4>
+<pre><code class="language-pepper">var context: JsonValue?
+</code></pre>
+<p>How it was triggered, as the client sent it.</p>
+<h2 id="completionitem"><a class="header" href="#completionitem">CompletionItem</a></h2>
+<pre><code class="language-pepper">struct CompletionItem
+</code></pre>
+<p>One completion.</p>
+<h3 id="fields-33"><a class="header" href="#fields-33">Fields</a></h3>
+<h4 id="label"><a class="header" href="#label">label</a></h4>
+<pre><code class="language-pepper">var label: String
+</code></pre>
+<p>The text shown, and inserted unless <code>insert_text</code> or <code>text_edit</code> says
+otherwise.</p>
+<h4 id="kind-2"><a class="header" href="#kind-2">kind</a></h4>
+<pre><code class="language-pepper">var kind: int?
+</code></pre>
+<p>One of the <code>COMPLETION_</code> constants.</p>
+<h4 id="detail"><a class="header" href="#detail">detail</a></h4>
+<pre><code class="language-pepper">var detail: String?
+</code></pre>
+<p>A short description, such as a signature.</p>
+<h4 id="documentation"><a class="header" href="#documentation">documentation</a></h4>
+<pre><code class="language-pepper">var documentation: MarkupContent?
+</code></pre>
+<p>Documentation to show beside it.</p>
+<h4 id="insert_text"><a class="header" href="#insert_text">insert_text</a></h4>
+<pre><code class="language-pepper">[Name("insertText")] var insert_text: String?
+</code></pre>
+<p>The text inserted instead of <code>label</code>.</p>
+<h4 id="text_edit"><a class="header" href="#text_edit">text_edit</a></h4>
+<pre><code class="language-pepper">[Name("textEdit")] var text_edit: TextEdit?
+</code></pre>
+<p>An edit made instead of inserting.</p>
+<h4 id="sort_text"><a class="header" href="#sort_text">sort_text</a></h4>
+<pre><code class="language-pepper">[Name("sortText")] var sort_text: String?
+</code></pre>
+<p>The key the client sorts by instead of <code>label</code>.</p>
+<h4 id="filter_text"><a class="header" href="#filter_text">filter_text</a></h4>
+<pre><code class="language-pepper">[Name("filterText")] var filter_text: String?
+</code></pre>
+<p>The text the client filters by instead of <code>label</code>.</p>
+<h3 id="constructor-14"><a class="header" href="#constructor-14">Constructor</a></h3>
+<h4 id="completionitem-1"><a class="header" href="#completionitem-1">CompletionItem()</a></h4>
+<pre><code class="language-pepper">construct(label: String = "", kind: int = COMPLETION_TEXT)
+</code></pre>
+<p>Creates an item.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>label</code> — the text shown and inserted</li>
+<li><code>kind</code> — one of the <code>COMPLETION_</code> constants</li>
+</ul>
+<h2 id="completionlist"><a class="header" href="#completionlist">CompletionList</a></h2>
+<pre><code class="language-pepper">struct CompletionList
+</code></pre>
+<p>The answer to <code>textDocument/completion</code>.</p>
+<h3 id="fields-34"><a class="header" href="#fields-34">Fields</a></h3>
+<h4 id="is_incomplete"><a class="header" href="#is_incomplete">is_incomplete</a></h4>
+<pre><code class="language-pepper">[Name("isIncomplete")] var is_incomplete: bool
+</code></pre>
+<p>Whether typing more should ask again rather than filter this list.</p>
+<h4 id="items"><a class="header" href="#items">items</a></h4>
+<pre><code class="language-pepper">var items: Array&lt;CompletionItem&gt;
+</code></pre>
+<p>The completions.</p>
+<h3 id="constructor-15"><a class="header" href="#constructor-15">Constructor</a></h3>
+<h4 id="completionlist-1"><a class="header" href="#completionlist-1">CompletionList()</a></h4>
+<pre><code class="language-pepper">construct(items: Array&lt;CompletionItem&gt; = Array&lt;CompletionItem&gt;(), is_incomplete: bool = false)
+</code></pre>
+<p>Creates a list.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>items</code> — the completions</li>
+<li><code>is_incomplete</code> — whether typing more should ask again</li>
+</ul>
+<h2 id="referenceparams"><a class="header" href="#referenceparams">ReferenceParams</a></h2>
+<pre><code class="language-pepper">struct ReferenceParams
+</code></pre>
+<p>The parameters of <code>textDocument/references</code>.</p>
+<h3 id="fields-35"><a class="header" href="#fields-35">Fields</a></h3>
+<h4 id="text_document-6"><a class="header" href="#text_document-6">text_document</a></h4>
+<pre><code class="language-pepper">[Required] [Name("textDocument")] var text_document: TextDocumentIdentifier
+</code></pre>
+<p>The document.</p>
+<h4 id="position-4"><a class="header" href="#position-4">position</a></h4>
+<pre><code class="language-pepper">[Required] var position: Position
+</code></pre>
+<p>The position of the name.</p>
+<h4 id="context-1"><a class="header" href="#context-1">context</a></h4>
+<pre><code class="language-pepper">var context: JsonValue?
+</code></pre>
+<p><code>{"includeDeclaration": bool}</code>, as the client sent it.</p>
+<h2 id="documentsymbolparams"><a class="header" href="#documentsymbolparams">DocumentSymbolParams</a></h2>
+<pre><code class="language-pepper">struct DocumentSymbolParams
+</code></pre>
+<p>The parameters of <code>textDocument/documentSymbol</code>.</p>
+<h3 id="fields-36"><a class="header" href="#fields-36">Fields</a></h3>
+<h4 id="text_document-7"><a class="header" href="#text_document-7">text_document</a></h4>
+<pre><code class="language-pepper">[Required] [Name("textDocument")] var text_document: TextDocumentIdentifier
+</code></pre>
+<p>The document.</p>
+<h2 id="documentsymbol"><a class="header" href="#documentsymbol">DocumentSymbol</a></h2>
+<pre><code class="language-pepper">struct DocumentSymbol
+</code></pre>
+<p>A declaration in a document's outline.</p>
+<h3 id="fields-37"><a class="header" href="#fields-37">Fields</a></h3>
+<h4 id="name-2"><a class="header" href="#name-2">name</a></h4>
+<pre><code class="language-pepper">var name: String
+</code></pre>
+<p>The name.</p>
+<h4 id="detail-1"><a class="header" href="#detail-1">detail</a></h4>
+<pre><code class="language-pepper">var detail: String?
+</code></pre>
+<p>More, such as a signature.</p>
+<h4 id="kind-3"><a class="header" href="#kind-3">kind</a></h4>
+<pre><code class="language-pepper">var kind: int
+</code></pre>
+<p>One of the <code>SYMBOL_</code> constants.</p>
+<h4 id="range-7"><a class="header" href="#range-7">range</a></h4>
+<pre><code class="language-pepper">var range: Range
+</code></pre>
+<p>The whole declaration.</p>
+<h4 id="selection_range"><a class="header" href="#selection_range">selection_range</a></h4>
+<pre><code class="language-pepper">[Name("selectionRange")] var selection_range: Range
+</code></pre>
+<p>The name, inside <code>range</code>.</p>
+<h4 id="children"><a class="header" href="#children">children</a></h4>
+<pre><code class="language-pepper">var children: Array&lt;DocumentSymbol&gt;
+</code></pre>
+<p>The declarations inside it.</p>
+<h3 id="constructor-16"><a class="header" href="#constructor-16">Constructor</a></h3>
+<h4 id="documentsymbol-1"><a class="header" href="#documentsymbol-1">DocumentSymbol()</a></h4>
+<pre><code class="language-pepper">construct( name: String = "", kind: int = SYMBOL_VARIABLE, range: Range = Range(), selection_range: Range = Range() )
+</code></pre>
+<p>Creates a symbol.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>name</code> — the name</li>
+<li><code>kind</code> — one of the <code>SYMBOL_</code> constants</li>
+<li><code>range</code> — the whole declaration</li>
+<li><code>selection_range</code> — the name</li>
+</ul>
+<h2 id="inlayhintparams"><a class="header" href="#inlayhintparams">InlayHintParams</a></h2>
+<pre><code class="language-pepper">struct InlayHintParams
+</code></pre>
+<p>The parameters of <code>textDocument/inlayHint</code>.</p>
+<h3 id="fields-38"><a class="header" href="#fields-38">Fields</a></h3>
+<h4 id="text_document-8"><a class="header" href="#text_document-8">text_document</a></h4>
+<pre><code class="language-pepper">[Required] [Name("textDocument")] var text_document: TextDocumentIdentifier
+</code></pre>
+<p>The document.</p>
+<h4 id="range-8"><a class="header" href="#range-8">range</a></h4>
+<pre><code class="language-pepper">[Required] var range: Range
+</code></pre>
+<p>The part of it shown.</p>
+<h2 id="inlayhint"><a class="header" href="#inlayhint">InlayHint</a></h2>
+<pre><code class="language-pepper">struct InlayHint
+</code></pre>
+<p>Text the client shows inside the code, such as an inferred type.</p>
+<h3 id="fields-39"><a class="header" href="#fields-39">Fields</a></h3>
+<h4 id="position-5"><a class="header" href="#position-5">position</a></h4>
+<pre><code class="language-pepper">var position: Position
+</code></pre>
+<p>Where.</p>
+<h4 id="label-1"><a class="header" href="#label-1">label</a></h4>
+<pre><code class="language-pepper">var label: String
+</code></pre>
+<p>The text.</p>
+<h4 id="kind-4"><a class="header" href="#kind-4">kind</a></h4>
+<pre><code class="language-pepper">var kind: int?
+</code></pre>
+<p><code>INLAY_TYPE</code> or <code>INLAY_PARAMETER</code>.</p>
+<h4 id="tooltip"><a class="header" href="#tooltip">tooltip</a></h4>
+<pre><code class="language-pepper">var tooltip: MarkupContent?
+</code></pre>
+<p>A tooltip.</p>
+<h4 id="padding_left"><a class="header" href="#padding_left">padding_left</a></h4>
+<pre><code class="language-pepper">[Name("paddingLeft")] var padding_left: bool?
+</code></pre>
+<p>Whether to put a space before it.</p>
+<h4 id="padding_right"><a class="header" href="#padding_right">padding_right</a></h4>
+<pre><code class="language-pepper">[Name("paddingRight")] var padding_right: bool?
+</code></pre>
+<p>Whether to put a space after it.</p>
+<h3 id="constructor-17"><a class="header" href="#constructor-17">Constructor</a></h3>
+<h4 id="inlayhint-1"><a class="header" href="#inlayhint-1">InlayHint()</a></h4>
+<pre><code class="language-pepper">construct(position: Position = Position(), label: String = "")
+</code></pre>
+<p>Creates a hint.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>position</code> — where</li>
+<li><code>label</code> — the text</li>
+</ul>
+<h2 id="codeactioncontext"><a class="header" href="#codeactioncontext">CodeActionContext</a></h2>
+<pre><code class="language-pepper">struct CodeActionContext
+</code></pre>
+<p>What a code action request is about.</p>
+<h3 id="fields-40"><a class="header" href="#fields-40">Fields</a></h3>
+<h4 id="diagnostics-1"><a class="header" href="#diagnostics-1">diagnostics</a></h4>
+<pre><code class="language-pepper">[Required] var diagnostics: Array&lt;Diagnostic&gt;
+</code></pre>
+<p>The diagnostics at the range.</p>
+<h4 id="only"><a class="header" href="#only">only</a></h4>
+<pre><code class="language-pepper">var only: Array&lt;String&gt;?
+</code></pre>
+<p>The kinds of action wanted; Empty means any.</p>
+<h2 id="codeactionparams"><a class="header" href="#codeactionparams">CodeActionParams</a></h2>
+<pre><code class="language-pepper">struct CodeActionParams
+</code></pre>
+<p>The parameters of <code>textDocument/codeAction</code>.</p>
+<h3 id="fields-41"><a class="header" href="#fields-41">Fields</a></h3>
+<h4 id="text_document-9"><a class="header" href="#text_document-9">text_document</a></h4>
+<pre><code class="language-pepper">[Required] [Name("textDocument")] var text_document: TextDocumentIdentifier
+</code></pre>
+<p>The document.</p>
+<h4 id="range-9"><a class="header" href="#range-9">range</a></h4>
+<pre><code class="language-pepper">[Required] var range: Range
+</code></pre>
+<p>The range selected.</p>
+<h4 id="context-2"><a class="header" href="#context-2">context</a></h4>
+<pre><code class="language-pepper">[Required] var context: CodeActionContext
+</code></pre>
+<p>The diagnostics there.</p>
+<h2 id="codeaction"><a class="header" href="#codeaction">CodeAction</a></h2>
+<pre><code class="language-pepper">struct CodeAction
+</code></pre>
+<p>A fix or refactoring the client can apply.</p>
+<h3 id="fields-42"><a class="header" href="#fields-42">Fields</a></h3>
+<h4 id="title"><a class="header" href="#title">title</a></h4>
+<pre><code class="language-pepper">var title: String
+</code></pre>
+<p>What it does.</p>
+<h4 id="kind-5"><a class="header" href="#kind-5">kind</a></h4>
+<pre><code class="language-pepper">var kind: String?
+</code></pre>
+<p><code>QUICK_FIX</code>, <code>REFACTOR</code>, <code>SOURCE</code>, or a dotted refinement of one.</p>
+<h4 id="diagnostics-2"><a class="header" href="#diagnostics-2">diagnostics</a></h4>
+<pre><code class="language-pepper">var diagnostics: Array&lt;Diagnostic&gt;?
+</code></pre>
+<p>The diagnostics it fixes.</p>
+<h4 id="is_preferred"><a class="header" href="#is_preferred">is_preferred</a></h4>
+<pre><code class="language-pepper">[Name("isPreferred")] var is_preferred: bool?
+</code></pre>
+<p>Whether it is the fix to apply by default.</p>
+<h4 id="edit"><a class="header" href="#edit">edit</a></h4>
+<pre><code class="language-pepper">var edit: WorkspaceEdit?
+</code></pre>
+<p>The edit it makes.</p>
+<h3 id="constructor-18"><a class="header" href="#constructor-18">Constructor</a></h3>
+<h4 id="codeaction-1"><a class="header" href="#codeaction-1">CodeAction()</a></h4>
+<pre><code class="language-pepper">construct(title: String = "", kind: String = QUICK_FIX)
+</code></pre>
+<p>Creates an action.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>title</code> — what it does</li>
+<li><code>kind</code> — its kind</li>
+</ul>
+<h2 id="formattingoptions"><a class="header" href="#formattingoptions">FormattingOptions</a></h2>
+<pre><code class="language-pepper">struct FormattingOptions
+</code></pre>
+<p>How to format.</p>
+<h3 id="fields-43"><a class="header" href="#fields-43">Fields</a></h3>
+<h4 id="tab_size"><a class="header" href="#tab_size">tab_size</a></h4>
+<pre><code class="language-pepper">[Name("tabSize")] var tab_size: int
+</code></pre>
+<p>Spaces per tab.</p>
+<h4 id="insert_spaces"><a class="header" href="#insert_spaces">insert_spaces</a></h4>
+<pre><code class="language-pepper">[Name("insertSpaces")] var insert_spaces: bool
+</code></pre>
+<p>Whether to indent with spaces.</p>
+<h2 id="documentformattingparams"><a class="header" href="#documentformattingparams">DocumentFormattingParams</a></h2>
+<pre><code class="language-pepper">struct DocumentFormattingParams
+</code></pre>
+<p>The parameters of <code>textDocument/formatting</code>.</p>
+<h3 id="fields-44"><a class="header" href="#fields-44">Fields</a></h3>
+<h4 id="text_document-10"><a class="header" href="#text_document-10">text_document</a></h4>
+<pre><code class="language-pepper">[Required] [Name("textDocument")] var text_document: TextDocumentIdentifier
+</code></pre>
+<p>The document.</p>
+<h4 id="options"><a class="header" href="#options">options</a></h4>
+<pre><code class="language-pepper">[Required] var options: FormattingOptions
+</code></pre>
+<p>How to format.</p>
+<h2 id="renameparams"><a class="header" href="#renameparams">RenameParams</a></h2>
+<pre><code class="language-pepper">struct RenameParams
+</code></pre>
+<p>The parameters of <code>textDocument/rename</code>.</p>
+<h3 id="fields-45"><a class="header" href="#fields-45">Fields</a></h3>
+<h4 id="text_document-11"><a class="header" href="#text_document-11">text_document</a></h4>
+<pre><code class="language-pepper">[Required] [Name("textDocument")] var text_document: TextDocumentIdentifier
+</code></pre>
+<p>The document.</p>
+<h4 id="position-6"><a class="header" href="#position-6">position</a></h4>
+<pre><code class="language-pepper">[Required] var position: Position
+</code></pre>
+<p>The position of the name.</p>
+<h4 id="new_name"><a class="header" href="#new_name">new_name</a></h4>
+<pre><code class="language-pepper">[Required] [Name("newName")] var new_name: String
+</code></pre>
+<p>The new name.</p>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from uri.pep by `pep-doc package`. Do not edit. -->
+<h1 id="uripep"><a class="header" href="#uripep">uri.pep</a></h1>
+<p>Source: <code>uri.pep</code></p>
+<h2 id="uri_to_path"><a class="header" href="#uri_to_path">uri_to_path</a></h2>
+<pre><code class="language-pepper">uri_to_path(uri: String): String?
+</code></pre>
+<p>The path a <code>file:</code> URI names, with its <code>%XX</code> escapes decoded:
+<code>file:///home/me/a%20b.pep</code> is <code>/home/me/a b.pep</code>, and
+<code>file:///c%3A/src/a.pep</code> is <code>c:/src/a.pep</code>. Empty for any other scheme.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>uri</code> — the URI</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the path, or Empty when <code>uri</code> is not a <code>file:</code> URI</li>
+</ul>
+<h2 id="path_to_uri"><a class="header" href="#path_to_uri">path_to_uri</a></h2>
+<pre><code class="language-pepper">path_to_uri(path: String): String
+</code></pre>
+<p>The <code>file:</code> URI of an absolute path, escaping what a URI cannot hold:
+<code>/home/me/a b.pep</code> is <code>file:///home/me/a%20b.pep</code>, and <code>C:\src\a.pep</code> is
+<code>file:///C%3A/src/a.pep</code>, as VS Code writes them.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>path</code> — an absolute path</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the URI</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+
+    </div>
+    </body>
+</html>

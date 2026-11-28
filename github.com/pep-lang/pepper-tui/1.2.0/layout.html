@@ -1,0 +1,369 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>layout.pep - tui</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">tui</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <!-- Generated from layout.pep by `pep-doc package`. Do not edit. -->
+<h1 id="layoutpep"><a class="header" href="#layoutpep">layout.pep</a></h1>
+<p>Layout: <code>Layout</code> splits a <code>Rect</code> into a row or a column of smaller ones,
+sized by <code>Constraint</code>s.</p>
+<p>Source: <code>layout.pep</code></p>
+<h2 id="direction"><a class="header" href="#direction">Direction</a></h2>
+<pre><code class="language-pepper">enum Direction
+</code></pre>
+<p>Which way a layout lays its parts out.</p>
+<h3 id="cases"><a class="header" href="#cases">Cases</a></h3>
+<h4 id="horizontal"><a class="header" href="#horizontal">Horizontal</a></h4>
+<pre><code class="language-pepper">Horizontal
+</code></pre>
+<p>Left to right: the parts split the width.</p>
+<h4 id="vertical"><a class="header" href="#vertical">Vertical</a></h4>
+<pre><code class="language-pepper">Vertical
+</code></pre>
+<p>Top to bottom: the parts split the height.</p>
+<h2 id="constraint"><a class="header" href="#constraint">Constraint</a></h2>
+<pre><code class="language-pepper">[Value] enum Constraint
+</code></pre>
+<p>How big one part of a layout wants to be, along the layout's direction.</p>
+<h3 id="cases-1"><a class="header" href="#cases-1">Cases</a></h3>
+<h4 id="length"><a class="header" href="#length">Length</a></h4>
+<pre><code class="language-pepper">Length(size: int)
+</code></pre>
+<p>Exactly <code>size</code> cells.</p>
+<h4 id="min"><a class="header" href="#min">Min</a></h4>
+<pre><code class="language-pepper">Min(size: int)
+</code></pre>
+<p>At least <code>size</code> cells; it takes a share of the space left over when
+no part is a <code>Fill</code>.</p>
+<h4 id="max"><a class="header" href="#max">Max</a></h4>
+<pre><code class="language-pepper">Max(size: int)
+</code></pre>
+<p>At most <code>size</code> cells.</p>
+<h4 id="percentage"><a class="header" href="#percentage">Percentage</a></h4>
+<pre><code class="language-pepper">Percentage(percent: int)
+</code></pre>
+<p><code>percent</code> percent of the space, rounded down.</p>
+<h4 id="ratio"><a class="header" href="#ratio">Ratio</a></h4>
+<pre><code class="language-pepper">Ratio(numerator: int, denominator: int)
+</code></pre>
+<p><code>numerator / denominator</code> of the space, rounded down; nothing for a
+denominator of 0.</p>
+<h4 id="fill"><a class="header" href="#fill">Fill</a></h4>
+<pre><code class="language-pepper">Fill(weight: int)
+</code></pre>
+<p>A share of the space left over, by <code>weight</code> against the other
+<code>Fill</code>s.</p>
+<h2 id="layout"><a class="header" href="#layout">Layout</a></h2>
+<pre><code class="language-pepper">struct Layout
+</code></pre>
+<p>Splits a rectangle into parts along one direction, one per constraint.</p>
+<p>The solver is deterministic and never fails: each part first gets what
+its constraint asks for (a <code>Fill</code> nothing, a <code>Min</code> or a <code>Max</code> its size).
+Space left over goes to the <code>Fill</code> parts by weight or, with none, shared
+evenly by the <code>Min</code> parts, and stays empty at the end otherwise. When the
+parts ask for more than there is, every part shrinks in proportion to
+what it asked for, so all of them still fit. Rounding leftovers go to the
+first parts.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import tui;
+import [Constraint, Direction] from tui;
+
+var parts = tui.Layout(Direction.Vertical, [Constraint.Length(1), Constraint.Fill(1)]).split(tui.Rect(0, 0, 10, 5));
+# parts[0] is Rect(0, 0, 10, 1); parts[1] is Rect(0, 1, 10, 4)
+</code></pre>
+<h3 id="fields"><a class="header" href="#fields">Fields</a></h3>
+<h4 id="direction-1"><a class="header" href="#direction-1">direction</a></h4>
+<pre><code class="language-pepper">var direction: Direction
+</code></pre>
+<p>The direction the parts follow.</p>
+<h4 id="constraints"><a class="header" href="#constraints">constraints</a></h4>
+<pre><code class="language-pepper">var constraints: Constraint[]
+</code></pre>
+<p>One constraint per part.</p>
+<h4 id="horizontal_margin"><a class="header" href="#horizontal_margin">horizontal_margin</a></h4>
+<pre><code class="language-pepper">var horizontal_margin: int
+</code></pre>
+<p>Columns left empty at the left and the right of the area.</p>
+<h4 id="vertical_margin"><a class="header" href="#vertical_margin">vertical_margin</a></h4>
+<pre><code class="language-pepper">var vertical_margin: int
+</code></pre>
+<p>Rows left empty at the top and the bottom of the area.</p>
+<h4 id="spacing"><a class="header" href="#spacing">spacing</a></h4>
+<pre><code class="language-pepper">var spacing: int
+</code></pre>
+<p>Cells left empty between neighboring parts.</p>
+<h3 id="constructor"><a class="header" href="#constructor">Constructor</a></h3>
+<h4 id="layout-1"><a class="header" href="#layout-1">Layout()</a></h4>
+<pre><code class="language-pepper">construct(direction: Direction, constraints: Constraint[], margin: int = 0, spacing: int = 0)
+</code></pre>
+<p>Makes a layout.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>direction</code> — the direction the parts follow</li>
+<li><code>constraints</code> — one constraint per part</li>
+<li><code>margin</code> — cells left empty on every side of the area</li>
+<li><code>spacing</code> — cells left empty between neighboring parts</li>
+</ul>
+<h3 id="static-methods"><a class="header" href="#static-methods">Static methods</a></h3>
+<h4 id="vertical-1"><a class="header" href="#vertical-1">vertical</a></h4>
+<pre><code class="language-pepper">static vertical(constraints: Constraint[]): Layout
+</code></pre>
+<p>Makes a layout of parts top to bottom.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>constraints</code> — one constraint per part</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the layout</li>
+</ul>
+<h4 id="horizontal-1"><a class="header" href="#horizontal-1">horizontal</a></h4>
+<pre><code class="language-pepper">static horizontal(constraints: Constraint[]): Layout
+</code></pre>
+<p>Makes a layout of parts left to right.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>constraints</code> — one constraint per part</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the layout</li>
+</ul>
+<h3 id="methods"><a class="header" href="#methods">Methods</a></h3>
+<h4 id="split"><a class="header" href="#split">split</a></h4>
+<pre><code class="language-pepper">split(area: Rect): Rect[]
+</code></pre>
+<p>Splits <code>area</code> into one rectangle per constraint.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>area</code> — the area to split</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the parts, in order; parts that get no space are empty</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="geometry.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="list.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="geometry.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="list.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

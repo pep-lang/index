@@ -1,0 +1,2722 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>llvm_c/core.pep - llvm</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">llvm</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <!-- Generated from llvm_c/core.pep by `pep-doc package`. Do not edit. -->
+<h1 id="llvm_ccorepep"><a class="header" href="#llvm_ccorepep">llvm_c/core.pep</a></h1>
+<p>The parts of <code>llvm-c/Core.h</code>, <code>Analysis.h</code> and <code>BitWriter.h</code> that a
+compiler needs: contexts, modules, types, values, constants, basic
+blocks, the instruction builder, verification and bitcode output.</p>
+<p>Each declaration is the C function of the same name, with C's types:
+every <code>LLVM*Ref</code> handle is <code>void*</code>, <code>LLVMBool</code> and the enums are <code>int</code>,
+<code>unsigned</code> is <code>uint</code>, and <code>size_t</code> and <code>uint64_t</code> are <code>ulong</code>. See the
+LLVM-C headers for what each does. Strings LLVM returns as <code>char*</code> are
+freed with <code>LLVMDisposeMessage</code>; a returned <code>const char*</code> is not.</p>
+<p>Source: <code>llvm_c/core.pep</code></p>
+<h2 id="llvmdisposemessage"><a class="header" href="#llvmdisposemessage">LLVMDisposeMessage</a></h2>
+<pre><code class="language-pepper">extern void LLVMDisposeMessage(char* message)
+</code></pre>
+<p>Frees a string LLVM returned (<code>LLVMPrintModuleToString</code> and similar).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>message</code> — the string to free</li>
+</ul>
+<h2 id="llvmcontextcreate"><a class="header" href="#llvmcontextcreate">LLVMContextCreate</a></h2>
+<pre><code class="language-pepper">extern void* LLVMContextCreate()
+</code></pre>
+<p>Creates a context, which owns types and constants.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the new context</li>
+</ul>
+<h2 id="llvmcontextdispose"><a class="header" href="#llvmcontextdispose">LLVMContextDispose</a></h2>
+<pre><code class="language-pepper">extern void LLVMContextDispose(void* context)
+</code></pre>
+<p>Destroys a context and everything it owns.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>context</code> — the context to destroy</li>
+</ul>
+<h2 id="llvmgetenumattributekindforname"><a class="header" href="#llvmgetenumattributekindforname">LLVMGetEnumAttributeKindForName</a></h2>
+<pre><code class="language-pepper">extern uint LLVMGetEnumAttributeKindForName(char* name, ulong length)
+</code></pre>
+<p>Returns the attribute kind for an attribute name such as <code>nounwind</code>, or 0.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>name</code> — the attribute's name</li>
+<li><code>length</code> — the name's length in bytes</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the kind, or 0 for an unknown name</li>
+</ul>
+<h2 id="llvmcreateenumattribute"><a class="header" href="#llvmcreateenumattribute">LLVMCreateEnumAttribute</a></h2>
+<pre><code class="language-pepper">extern void* LLVMCreateEnumAttribute(void* context, uint kind, ulong value)
+</code></pre>
+<p>Creates an enum attribute (one with an optional integer value).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>context</code> — the context that owns the attribute</li>
+<li><code>kind</code> — the kind from <code>LLVMGetEnumAttributeKindForName</code></li>
+<li><code>value</code> — the attribute's integer value, 0 for none</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the attribute</li>
+</ul>
+<h2 id="llvmmodulecreatewithnameincontext"><a class="header" href="#llvmmodulecreatewithnameincontext">LLVMModuleCreateWithNameInContext</a></h2>
+<pre><code class="language-pepper">extern void* LLVMModuleCreateWithNameInContext(char* name, void* context)
+</code></pre>
+<p>Creates an empty module in <code>context</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>name</code> — the module's identifier</li>
+<li><code>context</code> — the context that owns its types</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the new module</li>
+</ul>
+<h2 id="llvmgetmodulecontext"><a class="header" href="#llvmgetmodulecontext">LLVMGetModuleContext</a></h2>
+<pre><code class="language-pepper">extern void* LLVMGetModuleContext(void* module)
+</code></pre>
+<p>Returns the context that owns a module's types.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>module</code> — the module</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the context</li>
+</ul>
+<h2 id="llvmdisposemodule"><a class="header" href="#llvmdisposemodule">LLVMDisposeModule</a></h2>
+<pre><code class="language-pepper">extern void LLVMDisposeModule(void* module)
+</code></pre>
+<p>Destroys a module and the functions and globals in it.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>module</code> — the module to destroy</li>
+</ul>
+<h2 id="llvmgettarget"><a class="header" href="#llvmgettarget">LLVMGetTarget</a></h2>
+<pre><code class="language-pepper">extern char* LLVMGetTarget(void* module)
+</code></pre>
+<p>Returns the module's target triple; the module owns the string.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>module</code> — the module</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the triple</li>
+</ul>
+<h2 id="llvmsettarget"><a class="header" href="#llvmsettarget">LLVMSetTarget</a></h2>
+<pre><code class="language-pepper">extern void LLVMSetTarget(void* module, char* triple)
+</code></pre>
+<p>Sets the module's target triple.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>module</code> — the module</li>
+<li><code>triple</code> — the triple</li>
+</ul>
+<h2 id="llvmgetdatalayoutstr"><a class="header" href="#llvmgetdatalayoutstr">LLVMGetDataLayoutStr</a></h2>
+<pre><code class="language-pepper">extern char* LLVMGetDataLayoutStr(void* module)
+</code></pre>
+<p>Returns the module's data layout string; the module owns the string.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>module</code> — the module</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the data layout</li>
+</ul>
+<h2 id="llvmsetdatalayout"><a class="header" href="#llvmsetdatalayout">LLVMSetDataLayout</a></h2>
+<pre><code class="language-pepper">extern void LLVMSetDataLayout(void* module, char* layout)
+</code></pre>
+<p>Sets the module's data layout string.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>module</code> — the module</li>
+<li><code>layout</code> — the data layout</li>
+</ul>
+<h2 id="llvmsetsourcefilename"><a class="header" href="#llvmsetsourcefilename">LLVMSetSourceFileName</a></h2>
+<pre><code class="language-pepper">extern void LLVMSetSourceFileName(void* module, char* name, ulong length)
+</code></pre>
+<p>Sets the source file name recorded in the module.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>module</code> — the module</li>
+<li><code>name</code> — the file name</li>
+<li><code>length</code> — the name's length in bytes</li>
+</ul>
+<h2 id="llvmprintmoduletostring"><a class="header" href="#llvmprintmoduletostring">LLVMPrintModuleToString</a></h2>
+<pre><code class="language-pepper">extern char* LLVMPrintModuleToString(void* module)
+</code></pre>
+<p>Returns the module's textual IR; free it with <code>LLVMDisposeMessage</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>module</code> — the module</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the IR text</li>
+</ul>
+<h2 id="llvmaddfunction"><a class="header" href="#llvmaddfunction">LLVMAddFunction</a></h2>
+<pre><code class="language-pepper">extern void* LLVMAddFunction(void* module, char* name, void* llvm_type)
+</code></pre>
+<p>Adds a function declaration to the module.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>module</code> — the module</li>
+<li><code>name</code> — the function's name</li>
+<li><code>llvm_type</code> — the function's type</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the function</li>
+</ul>
+<h2 id="llvmgetnamedfunction"><a class="header" href="#llvmgetnamedfunction">LLVMGetNamedFunction</a></h2>
+<pre><code class="language-pepper">extern void* LLVMGetNamedFunction(void* module, char* name)
+</code></pre>
+<p>Returns the function named <code>name</code>, or null.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>module</code> — the module</li>
+<li><code>name</code> — the function's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the function, or null</li>
+</ul>
+<h2 id="llvmaddglobal"><a class="header" href="#llvmaddglobal">LLVMAddGlobal</a></h2>
+<pre><code class="language-pepper">extern void* LLVMAddGlobal(void* module, void* llvm_type, char* name)
+</code></pre>
+<p>Adds a global variable to the module.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>module</code> — the module</li>
+<li><code>llvm_type</code> — the variable's type</li>
+<li><code>name</code> — the variable's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the global</li>
+</ul>
+<h2 id="llvmgetnamedglobal"><a class="header" href="#llvmgetnamedglobal">LLVMGetNamedGlobal</a></h2>
+<pre><code class="language-pepper">extern void* LLVMGetNamedGlobal(void* module, char* name)
+</code></pre>
+<p>Returns the global variable named <code>name</code>, or null.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>module</code> — the module</li>
+<li><code>name</code> — the variable's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the global, or null</li>
+</ul>
+<h2 id="llvmverifymodule"><a class="header" href="#llvmverifymodule">LLVMVerifyModule</a></h2>
+<pre><code class="language-pepper">extern int LLVMVerifyModule(void* module, int action, char** message)
+</code></pre>
+<p>Checks the module; with action 2 (return status) it only reports.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>module</code> — the module</li>
+<li><code>action</code> — 0 abort, 1 print, 2 return status</li>
+<li><code>message</code> — receives the problems found; free with <code>LLVMDisposeMessage</code></li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>nonzero when the module is broken</li>
+</ul>
+<h2 id="llvmverifyfunction"><a class="header" href="#llvmverifyfunction">LLVMVerifyFunction</a></h2>
+<pre><code class="language-pepper">extern int LLVMVerifyFunction(void* function, int action)
+</code></pre>
+<p>Checks one function.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>function</code> — the function</li>
+<li><code>action</code> — 0 abort, 1 print, 2 return status</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>nonzero when the function is broken</li>
+</ul>
+<h2 id="llvmwritebitcodetofile"><a class="header" href="#llvmwritebitcodetofile">LLVMWriteBitcodeToFile</a></h2>
+<pre><code class="language-pepper">extern int LLVMWriteBitcodeToFile(void* module, char* path)
+</code></pre>
+<p>Writes the module as bitcode.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>module</code> — the module</li>
+<li><code>path</code> — the file to write</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>0 on success</li>
+</ul>
+<h2 id="llvmcreatememorybufferwithcontentsoffile"><a class="header" href="#llvmcreatememorybufferwithcontentsoffile">LLVMCreateMemoryBufferWithContentsOfFile</a></h2>
+<pre><code class="language-pepper">extern int LLVMCreateMemoryBufferWithContentsOfFile(char* path, void** buffer, char** message)
+</code></pre>
+<p>Reads a whole file into a memory buffer.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>path</code> — the file</li>
+<li><code>buffer</code> — receives the buffer; free it with <code>LLVMDisposeMemoryBuffer</code></li>
+<li><code>message</code> — receives the reason on failure; free it with <code>LLVMDisposeMessage</code></li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>nonzero on failure</li>
+</ul>
+<h2 id="llvmparsebitcodeincontext2"><a class="header" href="#llvmparsebitcodeincontext2">LLVMParseBitcodeInContext2</a></h2>
+<pre><code class="language-pepper">extern int LLVMParseBitcodeInContext2(void* context, void* buffer, void** module)
+</code></pre>
+<p>Parses bitcode into a module of <code>context</code>. The buffer stays the caller's.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>context</code> — the context</li>
+<li><code>buffer</code> — the bitcode</li>
+<li><code>module</code> — receives the module</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>nonzero on failure</li>
+</ul>
+<h2 id="llvmclonemodule"><a class="header" href="#llvmclonemodule">LLVMCloneModule</a></h2>
+<pre><code class="language-pepper">extern void* LLVMCloneModule(void* module)
+</code></pre>
+<p>Copies a module, in its context.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>module</code> — the module</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the copy</li>
+</ul>
+<h2 id="llvmlinkmodules2"><a class="header" href="#llvmlinkmodules2">LLVMLinkModules2</a></h2>
+<pre><code class="language-pepper">extern int LLVMLinkModules2(void* destination, void* source)
+</code></pre>
+<p>Links <code>source</code> into <code>destination</code> and disposes of <code>source</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>destination</code> — the module linked into</li>
+<li><code>source</code> — the module linked in, disposed of</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>nonzero when the two do not link</li>
+</ul>
+<h2 id="llvmisdeclaration"><a class="header" href="#llvmisdeclaration">LLVMIsDeclaration</a></h2>
+<pre><code class="language-pepper">extern int LLVMIsDeclaration(void* global)
+</code></pre>
+<p>Reports whether a function or global variable is only declared.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>global</code> — the function or global variable</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>nonzero for a declaration</li>
+</ul>
+<h2 id="llvmgettypekind"><a class="header" href="#llvmgettypekind">LLVMGetTypeKind</a></h2>
+<pre><code class="language-pepper">extern int LLVMGetTypeKind(void* llvm_type)
+</code></pre>
+<p>Returns the type's kind (<code>LLVMTypeKind</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>llvm_type</code> — the type</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the kind</li>
+</ul>
+<h2 id="llvmprinttypetostring"><a class="header" href="#llvmprinttypetostring">LLVMPrintTypeToString</a></h2>
+<pre><code class="language-pepper">extern char* LLVMPrintTypeToString(void* llvm_type)
+</code></pre>
+<p>Returns the type as IR text; free it with <code>LLVMDisposeMessage</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>llvm_type</code> — the type</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the text</li>
+</ul>
+<h2 id="llvmint1typeincontext"><a class="header" href="#llvmint1typeincontext">LLVMInt1TypeInContext</a></h2>
+<pre><code class="language-pepper">extern void* LLVMInt1TypeInContext(void* context)
+</code></pre>
+<p>Returns the 1-bit integer type.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>context</code> — the context</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the type</li>
+</ul>
+<h2 id="llvmint8typeincontext"><a class="header" href="#llvmint8typeincontext">LLVMInt8TypeInContext</a></h2>
+<pre><code class="language-pepper">extern void* LLVMInt8TypeInContext(void* context)
+</code></pre>
+<p>Returns the 8-bit integer type.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>context</code> — the context</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the type</li>
+</ul>
+<h2 id="llvmint16typeincontext"><a class="header" href="#llvmint16typeincontext">LLVMInt16TypeInContext</a></h2>
+<pre><code class="language-pepper">extern void* LLVMInt16TypeInContext(void* context)
+</code></pre>
+<p>Returns the 16-bit integer type.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>context</code> — the context</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the type</li>
+</ul>
+<h2 id="llvmint32typeincontext"><a class="header" href="#llvmint32typeincontext">LLVMInt32TypeInContext</a></h2>
+<pre><code class="language-pepper">extern void* LLVMInt32TypeInContext(void* context)
+</code></pre>
+<p>Returns the 32-bit integer type.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>context</code> — the context</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the type</li>
+</ul>
+<h2 id="llvmint64typeincontext"><a class="header" href="#llvmint64typeincontext">LLVMInt64TypeInContext</a></h2>
+<pre><code class="language-pepper">extern void* LLVMInt64TypeInContext(void* context)
+</code></pre>
+<p>Returns the 64-bit integer type.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>context</code> — the context</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the type</li>
+</ul>
+<h2 id="llvminttypeincontext"><a class="header" href="#llvminttypeincontext">LLVMIntTypeInContext</a></h2>
+<pre><code class="language-pepper">extern void* LLVMIntTypeInContext(void* context, uint bits)
+</code></pre>
+<p>Returns the integer type of <code>bits</code> bits.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>context</code> — the context</li>
+<li><code>bits</code> — the width</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the type</li>
+</ul>
+<h2 id="llvmgetinttypewidth"><a class="header" href="#llvmgetinttypewidth">LLVMGetIntTypeWidth</a></h2>
+<pre><code class="language-pepper">extern uint LLVMGetIntTypeWidth(void* llvm_type)
+</code></pre>
+<p>Returns an integer type's width in bits.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>llvm_type</code> — the integer type</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the width</li>
+</ul>
+<h2 id="llvmfloattypeincontext"><a class="header" href="#llvmfloattypeincontext">LLVMFloatTypeInContext</a></h2>
+<pre><code class="language-pepper">extern void* LLVMFloatTypeInContext(void* context)
+</code></pre>
+<p>Returns the 32-bit floating-point type.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>context</code> — the context</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the type</li>
+</ul>
+<h2 id="llvmdoubletypeincontext"><a class="header" href="#llvmdoubletypeincontext">LLVMDoubleTypeInContext</a></h2>
+<pre><code class="language-pepper">extern void* LLVMDoubleTypeInContext(void* context)
+</code></pre>
+<p>Returns the 64-bit floating-point type.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>context</code> — the context</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the type</li>
+</ul>
+<h2 id="llvmvoidtypeincontext"><a class="header" href="#llvmvoidtypeincontext">LLVMVoidTypeInContext</a></h2>
+<pre><code class="language-pepper">extern void* LLVMVoidTypeInContext(void* context)
+</code></pre>
+<p>Returns the void type.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>context</code> — the context</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the type</li>
+</ul>
+<h2 id="llvmpointertypeincontext"><a class="header" href="#llvmpointertypeincontext">LLVMPointerTypeInContext</a></h2>
+<pre><code class="language-pepper">extern void* LLVMPointerTypeInContext(void* context, uint address_space)
+</code></pre>
+<p>Returns the (opaque) pointer type in an address space.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>context</code> — the context</li>
+<li><code>address_space</code> — the address space, 0 by default</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the type</li>
+</ul>
+<h2 id="llvmfunctiontype"><a class="header" href="#llvmfunctiontype">LLVMFunctionType</a></h2>
+<pre><code class="language-pepper">extern void* LLVMFunctionType(void* result, void** params, uint count, int variadic)
+</code></pre>
+<p>Returns a function type.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>result</code> — the return type</li>
+<li><code>params</code> — the parameter types</li>
+<li><code>count</code> — the number of parameters</li>
+<li><code>variadic</code> — nonzero for a C variadic function</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the type</li>
+</ul>
+<h2 id="llvmstructtypeincontext"><a class="header" href="#llvmstructtypeincontext">LLVMStructTypeInContext</a></h2>
+<pre><code class="language-pepper">extern void* LLVMStructTypeInContext(void* context, void** fields, uint count, int packed)
+</code></pre>
+<p>Returns a literal (unnamed) struct type.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>context</code> — the context</li>
+<li><code>fields</code> — the field types</li>
+<li><code>count</code> — the number of fields</li>
+<li><code>packed</code> — nonzero for no padding</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the type</li>
+</ul>
+<h2 id="llvmstructcreatenamed"><a class="header" href="#llvmstructcreatenamed">LLVMStructCreateNamed</a></h2>
+<pre><code class="language-pepper">extern void* LLVMStructCreateNamed(void* context, char* name)
+</code></pre>
+<p>Creates a named struct type with no body yet.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>context</code> — the context</li>
+<li><code>name</code> — the struct's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the type</li>
+</ul>
+<h2 id="llvmstructsetbody"><a class="header" href="#llvmstructsetbody">LLVMStructSetBody</a></h2>
+<pre><code class="language-pepper">extern void LLVMStructSetBody(void* llvm_type, void** fields, uint count, int packed)
+</code></pre>
+<p>Sets a named struct's fields.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>llvm_type</code> — the struct type</li>
+<li><code>fields</code> — the field types</li>
+<li><code>count</code> — the number of fields</li>
+<li><code>packed</code> — nonzero for no padding</li>
+</ul>
+<h2 id="llvmarraytype2"><a class="header" href="#llvmarraytype2">LLVMArrayType2</a></h2>
+<pre><code class="language-pepper">extern void* LLVMArrayType2(void* element, ulong count)
+</code></pre>
+<p>Returns an array type.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>element</code> — the element type</li>
+<li><code>count</code> — the number of elements</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the type</li>
+</ul>
+<h2 id="llvmvectortype"><a class="header" href="#llvmvectortype">LLVMVectorType</a></h2>
+<pre><code class="language-pepper">extern void* LLVMVectorType(void* element, uint count)
+</code></pre>
+<p>Returns a vector type.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>element</code> — the element type</li>
+<li><code>count</code> — the number of elements</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the type</li>
+</ul>
+<h2 id="llvmtypeof"><a class="header" href="#llvmtypeof">LLVMTypeOf</a></h2>
+<pre><code class="language-pepper">extern void* LLVMTypeOf(void* value)
+</code></pre>
+<p>Returns a value's type.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the value</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the type</li>
+</ul>
+<h2 id="llvmgetvaluename2"><a class="header" href="#llvmgetvaluename2">LLVMGetValueName2</a></h2>
+<pre><code class="language-pepper">extern char* LLVMGetValueName2(void* value, ulong* length)
+</code></pre>
+<p>Returns a value's name; the value owns the string.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the value</li>
+<li><code>length</code> — receives the name's length in bytes</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the name</li>
+</ul>
+<h2 id="llvmsetvaluename2"><a class="header" href="#llvmsetvaluename2">LLVMSetValueName2</a></h2>
+<pre><code class="language-pepper">extern void LLVMSetValueName2(void* value, char* name, ulong length)
+</code></pre>
+<p>Sets a value's name.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the value</li>
+<li><code>name</code> — the name</li>
+<li><code>length</code> — the name's length in bytes</li>
+</ul>
+<h2 id="llvmprintvaluetostring"><a class="header" href="#llvmprintvaluetostring">LLVMPrintValueToString</a></h2>
+<pre><code class="language-pepper">extern char* LLVMPrintValueToString(void* value)
+</code></pre>
+<p>Returns the value as IR text; free it with <code>LLVMDisposeMessage</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the value</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the text</li>
+</ul>
+<h2 id="llvmcountparams"><a class="header" href="#llvmcountparams">LLVMCountParams</a></h2>
+<pre><code class="language-pepper">extern uint LLVMCountParams(void* function)
+</code></pre>
+<p>Returns the number of a function's parameters.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>function</code> — the function</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the count</li>
+</ul>
+<h2 id="llvmgetparam"><a class="header" href="#llvmgetparam">LLVMGetParam</a></h2>
+<pre><code class="language-pepper">extern void* LLVMGetParam(void* function, uint index)
+</code></pre>
+<p>Returns a function's parameter.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>function</code> — the function</li>
+<li><code>index</code> — the parameter's position</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the parameter</li>
+</ul>
+<h2 id="llvmsetfunctioncallconv"><a class="header" href="#llvmsetfunctioncallconv">LLVMSetFunctionCallConv</a></h2>
+<pre><code class="language-pepper">extern void LLVMSetFunctionCallConv(void* function, uint convention)
+</code></pre>
+<p>Sets a function's calling convention (<code>LLVMCallConv</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>function</code> — the function</li>
+<li><code>convention</code> — the calling convention</li>
+</ul>
+<h2 id="llvmaddattributeatindex"><a class="header" href="#llvmaddattributeatindex">LLVMAddAttributeAtIndex</a></h2>
+<pre><code class="language-pepper">extern void LLVMAddAttributeAtIndex(void* function, uint index, void* attribute)
+</code></pre>
+<p>Adds an attribute to a function, its result (index 0), or a parameter
+(index 1 and up); <code>0xFFFFFFFF</code> is the function itself.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>function</code> — the function</li>
+<li><code>index</code> — where the attribute goes</li>
+<li><code>attribute</code> — the attribute</li>
+</ul>
+<h2 id="llvmgetlinkage"><a class="header" href="#llvmgetlinkage">LLVMGetLinkage</a></h2>
+<pre><code class="language-pepper">extern int LLVMGetLinkage(void* global)
+</code></pre>
+<p>Returns a global's linkage (<code>LLVMLinkage</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>global</code> — the global</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the linkage</li>
+</ul>
+<h2 id="llvmsetlinkage"><a class="header" href="#llvmsetlinkage">LLVMSetLinkage</a></h2>
+<pre><code class="language-pepper">extern void LLVMSetLinkage(void* global, int linkage)
+</code></pre>
+<p>Sets a global's linkage (<code>LLVMLinkage</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>global</code> — the global</li>
+<li><code>linkage</code> — the linkage</li>
+</ul>
+<h2 id="llvmsetinitializer"><a class="header" href="#llvmsetinitializer">LLVMSetInitializer</a></h2>
+<pre><code class="language-pepper">extern void LLVMSetInitializer(void* global, void* value)
+</code></pre>
+<p>Sets a global variable's initial value.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>global</code> — the global variable</li>
+<li><code>value</code> — the constant</li>
+</ul>
+<h2 id="llvmgetinitializer"><a class="header" href="#llvmgetinitializer">LLVMGetInitializer</a></h2>
+<pre><code class="language-pepper">extern void* LLVMGetInitializer(void* global)
+</code></pre>
+<p>Returns a global variable's initial value.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>global</code> — the global variable</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the constant, or null when it has none</li>
+</ul>
+<h2 id="llvmdeleteglobal"><a class="header" href="#llvmdeleteglobal">LLVMDeleteGlobal</a></h2>
+<pre><code class="language-pepper">extern void LLVMDeleteGlobal(void* global)
+</code></pre>
+<p>Deletes a global variable from its module.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>global</code> — the global variable</li>
+</ul>
+<h2 id="llvmsetsection"><a class="header" href="#llvmsetsection">LLVMSetSection</a></h2>
+<pre><code class="language-pepper">extern void LLVMSetSection(void* global, char* section)
+</code></pre>
+<p>Sets the object-file section a global is placed in.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>global</code> — the global variable or function</li>
+<li><code>section</code> — the section's name, NUL-terminated</li>
+</ul>
+<h2 id="llvmsetglobalconstant"><a class="header" href="#llvmsetglobalconstant">LLVMSetGlobalConstant</a></h2>
+<pre><code class="language-pepper">extern void LLVMSetGlobalConstant(void* global, int constant)
+</code></pre>
+<p>Marks a global variable constant.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>global</code> — the global variable</li>
+<li><code>constant</code> — nonzero for constant</li>
+</ul>
+<h2 id="llvmconstint"><a class="header" href="#llvmconstint">LLVMConstInt</a></h2>
+<pre><code class="language-pepper">extern void* LLVMConstInt(void* llvm_type, ulong value, int sign_extend)
+</code></pre>
+<p>Returns an integer constant.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>llvm_type</code> — the integer type</li>
+<li><code>value</code> — the bits</li>
+<li><code>sign_extend</code> — nonzero to sign-extend <code>value</code> to the type's width</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the constant</li>
+</ul>
+<h2 id="llvmconstreal"><a class="header" href="#llvmconstreal">LLVMConstReal</a></h2>
+<pre><code class="language-pepper">extern void* LLVMConstReal(void* llvm_type, double value)
+</code></pre>
+<p>Returns a floating-point constant.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>llvm_type</code> — the floating-point type</li>
+<li><code>value</code> — the value</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the constant</li>
+</ul>
+<h2 id="llvmconstnull"><a class="header" href="#llvmconstnull">LLVMConstNull</a></h2>
+<pre><code class="language-pepper">extern void* LLVMConstNull(void* llvm_type)
+</code></pre>
+<p>Returns the zero value of a type.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>llvm_type</code> — the type</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the constant</li>
+</ul>
+<h2 id="llvmgetundef"><a class="header" href="#llvmgetundef">LLVMGetUndef</a></h2>
+<pre><code class="language-pepper">extern void* LLVMGetUndef(void* llvm_type)
+</code></pre>
+<p>Returns the undefined value of a type.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>llvm_type</code> — the type</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the constant</li>
+</ul>
+<h2 id="llvmgetpoison"><a class="header" href="#llvmgetpoison">LLVMGetPoison</a></h2>
+<pre><code class="language-pepper">extern void* LLVMGetPoison(void* llvm_type)
+</code></pre>
+<p>Returns the poison value of a type.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>llvm_type</code> — the type</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the constant</li>
+</ul>
+<h2 id="llvmconststringincontext"><a class="header" href="#llvmconststringincontext">LLVMConstStringInContext</a></h2>
+<pre><code class="language-pepper">extern void* LLVMConstStringInContext(void* context, char* text, uint length, int no_terminator)
+</code></pre>
+<p>Returns a byte-array constant.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>context</code> — the context</li>
+<li><code>text</code> — the bytes</li>
+<li><code>length</code> — the number of bytes</li>
+<li><code>no_terminator</code> — nonzero to leave out the trailing NUL</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the constant</li>
+</ul>
+<h2 id="llvmconststructincontext"><a class="header" href="#llvmconststructincontext">LLVMConstStructInContext</a></h2>
+<pre><code class="language-pepper">extern void* LLVMConstStructInContext(void* context, void** values, uint count, int packed)
+</code></pre>
+<p>Returns a literal struct constant.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>context</code> — the context</li>
+<li><code>values</code> — the field values</li>
+<li><code>count</code> — the number of fields</li>
+<li><code>packed</code> — nonzero for no padding</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the constant</li>
+</ul>
+<h2 id="llvmconstnamedstruct"><a class="header" href="#llvmconstnamedstruct">LLVMConstNamedStruct</a></h2>
+<pre><code class="language-pepper">extern void* LLVMConstNamedStruct(void* llvm_type, void** values, uint count)
+</code></pre>
+<p>Returns a constant of a named struct type.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>llvm_type</code> — the struct type</li>
+<li><code>values</code> — the field values</li>
+<li><code>count</code> — the number of fields</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the constant</li>
+</ul>
+<h2 id="llvmconstarray2"><a class="header" href="#llvmconstarray2">LLVMConstArray2</a></h2>
+<pre><code class="language-pepper">extern void* LLVMConstArray2(void* element, void** values, ulong count)
+</code></pre>
+<p>Returns an array constant.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>element</code> — the element type</li>
+<li><code>values</code> — the elements</li>
+<li><code>count</code> — the number of elements</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the constant</li>
+</ul>
+<h2 id="llvmappendbasicblockincontext"><a class="header" href="#llvmappendbasicblockincontext">LLVMAppendBasicBlockInContext</a></h2>
+<pre><code class="language-pepper">extern void* LLVMAppendBasicBlockInContext(void* context, void* function, char* name)
+</code></pre>
+<p>Appends a basic block to a function.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>context</code> — the context</li>
+<li><code>function</code> — the function</li>
+<li><code>name</code> — the block's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the block</li>
+</ul>
+<h2 id="llvmgetbasicblockparent"><a class="header" href="#llvmgetbasicblockparent">LLVMGetBasicBlockParent</a></h2>
+<pre><code class="language-pepper">extern void* LLVMGetBasicBlockParent(void* block)
+</code></pre>
+<p>Returns the function a block belongs to.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>block</code> — the block</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the function</li>
+</ul>
+<h2 id="llvmgetbasicblockterminator"><a class="header" href="#llvmgetbasicblockterminator">LLVMGetBasicBlockTerminator</a></h2>
+<pre><code class="language-pepper">extern void* LLVMGetBasicBlockTerminator(void* block)
+</code></pre>
+<p>Returns a block's terminator instruction, or null.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>block</code> — the block</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the terminator, or null</li>
+</ul>
+<h2 id="llvmgetbasicblockname"><a class="header" href="#llvmgetbasicblockname">LLVMGetBasicBlockName</a></h2>
+<pre><code class="language-pepper">extern char* LLVMGetBasicBlockName(void* block)
+</code></pre>
+<p>Returns a block's name; the block owns the string.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>block</code> — the block</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the name</li>
+</ul>
+<h2 id="llvmaddincoming"><a class="header" href="#llvmaddincoming">LLVMAddIncoming</a></h2>
+<pre><code class="language-pepper">extern void LLVMAddIncoming(void* phi, void** values, void** blocks, uint count)
+</code></pre>
+<p>Adds incoming edges to a phi node.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>phi</code> — the phi node</li>
+<li><code>values</code> — the incoming values</li>
+<li><code>blocks</code> — the blocks they come from</li>
+<li><code>count</code> — the number of edges</li>
+</ul>
+<h2 id="llvmaddcase"><a class="header" href="#llvmaddcase">LLVMAddCase</a></h2>
+<pre><code class="language-pepper">extern void LLVMAddCase(void* switch_instruction, void* on, void* destination)
+</code></pre>
+<p>Adds a case to a switch.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>switch_instruction</code> — the switch</li>
+<li><code>on</code> — the case's value</li>
+<li><code>destination</code> — the block to branch to</li>
+</ul>
+<h2 id="llvmcreatebuilderincontext"><a class="header" href="#llvmcreatebuilderincontext">LLVMCreateBuilderInContext</a></h2>
+<pre><code class="language-pepper">extern void* LLVMCreateBuilderInContext(void* context)
+</code></pre>
+<p>Creates an instruction builder.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>context</code> — the context</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the builder</li>
+</ul>
+<h2 id="llvmdisposebuilder"><a class="header" href="#llvmdisposebuilder">LLVMDisposeBuilder</a></h2>
+<pre><code class="language-pepper">extern void LLVMDisposeBuilder(void* builder)
+</code></pre>
+<p>Destroys a builder.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>builder</code> — the builder</li>
+</ul>
+<h2 id="llvmpositionbuilderatend"><a class="header" href="#llvmpositionbuilderatend">LLVMPositionBuilderAtEnd</a></h2>
+<pre><code class="language-pepper">extern void LLVMPositionBuilderAtEnd(void* builder, void* block)
+</code></pre>
+<p>Moves the builder to the end of a block.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>builder</code> — the builder</li>
+<li><code>block</code> — the block</li>
+</ul>
+<h2 id="llvmgetinsertblock"><a class="header" href="#llvmgetinsertblock">LLVMGetInsertBlock</a></h2>
+<pre><code class="language-pepper">extern void* LLVMGetInsertBlock(void* builder)
+</code></pre>
+<p>Returns the block the builder inserts into, or null.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>builder</code> — the builder</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the block, or null</li>
+</ul>
+<h2 id="llvmbuildretvoid"><a class="header" href="#llvmbuildretvoid">LLVMBuildRetVoid</a></h2>
+<pre><code class="language-pepper">extern void* LLVMBuildRetVoid(void* builder)
+</code></pre>
+<p>Builds <code>ret void</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>builder</code> — the builder</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the instruction</li>
+</ul>
+<h2 id="llvmbuildret"><a class="header" href="#llvmbuildret">LLVMBuildRet</a></h2>
+<pre><code class="language-pepper">extern void* LLVMBuildRet(void* builder, void* value)
+</code></pre>
+<p>Builds <code>ret value</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>builder</code> — the builder</li>
+<li><code>value</code> — the value to return</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the instruction</li>
+</ul>
+<h2 id="llvmbuildbr"><a class="header" href="#llvmbuildbr">LLVMBuildBr</a></h2>
+<pre><code class="language-pepper">extern void* LLVMBuildBr(void* builder, void* destination)
+</code></pre>
+<p>Builds an unconditional branch.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>builder</code> — the builder</li>
+<li><code>destination</code> — the block to branch to</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the instruction</li>
+</ul>
+<h2 id="llvmbuildcondbr"><a class="header" href="#llvmbuildcondbr">LLVMBuildCondBr</a></h2>
+<pre><code class="language-pepper">extern void* LLVMBuildCondBr(void* builder, void* condition, void* then_block, void* else_block)
+</code></pre>
+<p>Builds a conditional branch.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>builder</code> — the builder</li>
+<li><code>condition</code> — the <code>i1</code> condition</li>
+<li><code>then_block</code> — the block when true</li>
+<li><code>else_block</code> — the block when false</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the instruction</li>
+</ul>
+<h2 id="llvmbuildswitch"><a class="header" href="#llvmbuildswitch">LLVMBuildSwitch</a></h2>
+<pre><code class="language-pepper">extern void* LLVMBuildSwitch(void* builder, void* value, void* otherwise, uint count)
+</code></pre>
+<p>Builds a switch; add cases with <code>LLVMAddCase</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>builder</code> — the builder</li>
+<li><code>value</code> — the value switched on</li>
+<li><code>otherwise</code> — the default block</li>
+<li><code>count</code> — the expected number of cases</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the instruction</li>
+</ul>
+<h2 id="llvmbuildunreachable"><a class="header" href="#llvmbuildunreachable">LLVMBuildUnreachable</a></h2>
+<pre><code class="language-pepper">extern void* LLVMBuildUnreachable(void* builder)
+</code></pre>
+<p>Builds <code>unreachable</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>builder</code> — the builder</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the instruction</li>
+</ul>
+<h2 id="llvmbuildbinop"><a class="header" href="#llvmbuildbinop">LLVMBuildBinOp</a></h2>
+<pre><code class="language-pepper">extern void* LLVMBuildBinOp(void* builder, int opcode, void* left, void* right, char* name)
+</code></pre>
+<p>Builds a binary operation (<code>LLVMOpcode</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>builder</code> — the builder</li>
+<li><code>opcode</code> — the operation</li>
+<li><code>left</code> — the left operand</li>
+<li><code>right</code> — the right operand</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the instruction</li>
+</ul>
+<h2 id="llvmbuildnswadd"><a class="header" href="#llvmbuildnswadd">LLVMBuildNSWAdd</a></h2>
+<pre><code class="language-pepper">extern void* LLVMBuildNSWAdd(void* builder, void* left, void* right, char* name)
+</code></pre>
+<p>Builds <code>add nsw</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>builder</code> — the builder</li>
+<li><code>left</code> — the left operand</li>
+<li><code>right</code> — the right operand</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the instruction</li>
+</ul>
+<h2 id="llvmbuildnswsub"><a class="header" href="#llvmbuildnswsub">LLVMBuildNSWSub</a></h2>
+<pre><code class="language-pepper">extern void* LLVMBuildNSWSub(void* builder, void* left, void* right, char* name)
+</code></pre>
+<p>Builds <code>sub nsw</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>builder</code> — the builder</li>
+<li><code>left</code> — the left operand</li>
+<li><code>right</code> — the right operand</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the instruction</li>
+</ul>
+<h2 id="llvmbuildnswmul"><a class="header" href="#llvmbuildnswmul">LLVMBuildNSWMul</a></h2>
+<pre><code class="language-pepper">extern void* LLVMBuildNSWMul(void* builder, void* left, void* right, char* name)
+</code></pre>
+<p>Builds <code>mul nsw</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>builder</code> — the builder</li>
+<li><code>left</code> — the left operand</li>
+<li><code>right</code> — the right operand</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the instruction</li>
+</ul>
+<h2 id="llvmbuildneg"><a class="header" href="#llvmbuildneg">LLVMBuildNeg</a></h2>
+<pre><code class="language-pepper">extern void* LLVMBuildNeg(void* builder, void* value, char* name)
+</code></pre>
+<p>Builds an integer negation.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>builder</code> — the builder</li>
+<li><code>value</code> — the operand</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the instruction</li>
+</ul>
+<h2 id="llvmbuildfneg"><a class="header" href="#llvmbuildfneg">LLVMBuildFNeg</a></h2>
+<pre><code class="language-pepper">extern void* LLVMBuildFNeg(void* builder, void* value, char* name)
+</code></pre>
+<p>Builds a floating-point negation.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>builder</code> — the builder</li>
+<li><code>value</code> — the operand</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the instruction</li>
+</ul>
+<h2 id="llvmbuildnot"><a class="header" href="#llvmbuildnot">LLVMBuildNot</a></h2>
+<pre><code class="language-pepper">extern void* LLVMBuildNot(void* builder, void* value, char* name)
+</code></pre>
+<p>Builds a bitwise not.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>builder</code> — the builder</li>
+<li><code>value</code> — the operand</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the instruction</li>
+</ul>
+<h2 id="llvmbuildicmp"><a class="header" href="#llvmbuildicmp">LLVMBuildICmp</a></h2>
+<pre><code class="language-pepper">extern void* LLVMBuildICmp(void* builder, int predicate, void* left, void* right, char* name)
+</code></pre>
+<p>Builds an integer comparison (<code>LLVMIntPredicate</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>builder</code> — the builder</li>
+<li><code>predicate</code> — the comparison</li>
+<li><code>left</code> — the left operand</li>
+<li><code>right</code> — the right operand</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the instruction</li>
+</ul>
+<h2 id="llvmbuildfcmp"><a class="header" href="#llvmbuildfcmp">LLVMBuildFCmp</a></h2>
+<pre><code class="language-pepper">extern void* LLVMBuildFCmp(void* builder, int predicate, void* left, void* right, char* name)
+</code></pre>
+<p>Builds a floating-point comparison (<code>LLVMRealPredicate</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>builder</code> — the builder</li>
+<li><code>predicate</code> — the comparison</li>
+<li><code>left</code> — the left operand</li>
+<li><code>right</code> — the right operand</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the instruction</li>
+</ul>
+<h2 id="llvmbuildcast"><a class="header" href="#llvmbuildcast">LLVMBuildCast</a></h2>
+<pre><code class="language-pepper">extern void* LLVMBuildCast(void* builder, int opcode, void* value, void* llvm_type, char* name)
+</code></pre>
+<p>Builds a cast (<code>LLVMOpcode</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>builder</code> — the builder</li>
+<li><code>opcode</code> — the cast</li>
+<li><code>value</code> — the operand</li>
+<li><code>llvm_type</code> — the type cast to</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the instruction</li>
+</ul>
+<h2 id="llvmbuildalloca"><a class="header" href="#llvmbuildalloca">LLVMBuildAlloca</a></h2>
+<pre><code class="language-pepper">extern void* LLVMBuildAlloca(void* builder, void* llvm_type, char* name)
+</code></pre>
+<p>Builds <code>alloca</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>builder</code> — the builder</li>
+<li><code>llvm_type</code> — the allocated type</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the instruction</li>
+</ul>
+<h2 id="llvmbuildload2"><a class="header" href="#llvmbuildload2">LLVMBuildLoad2</a></h2>
+<pre><code class="language-pepper">extern void* LLVMBuildLoad2(void* builder, void* llvm_type, void* pointer, char* name)
+</code></pre>
+<p>Builds <code>load</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>builder</code> — the builder</li>
+<li><code>llvm_type</code> — the loaded type</li>
+<li><code>pointer</code> — the address</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the instruction</li>
+</ul>
+<h2 id="llvmbuildstore"><a class="header" href="#llvmbuildstore">LLVMBuildStore</a></h2>
+<pre><code class="language-pepper">extern void* LLVMBuildStore(void* builder, void* value, void* pointer)
+</code></pre>
+<p>Builds <code>store</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>builder</code> — the builder</li>
+<li><code>value</code> — the value to store</li>
+<li><code>pointer</code> — the address</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the instruction</li>
+</ul>
+<h2 id="llvmbuildgep2"><a class="header" href="#llvmbuildgep2">LLVMBuildGEP2</a></h2>
+<pre><code class="language-pepper">extern void* LLVMBuildGEP2( void* builder, void* llvm_type, void* pointer, void** indices, uint count, char* name )
+</code></pre>
+<p>Builds <code>getelementptr</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>builder</code> — the builder</li>
+<li><code>llvm_type</code> — the source element type</li>
+<li><code>pointer</code> — the base address</li>
+<li><code>indices</code> — the indices</li>
+<li><code>count</code> — the number of indices</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the instruction</li>
+</ul>
+<h2 id="llvmbuildinboundsgep2"><a class="header" href="#llvmbuildinboundsgep2">LLVMBuildInBoundsGEP2</a></h2>
+<pre><code class="language-pepper">extern void* LLVMBuildInBoundsGEP2( void* builder, void* llvm_type, void* pointer, void** indices, uint count, char* name )
+</code></pre>
+<p>Builds <code>getelementptr inbounds</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>builder</code> — the builder</li>
+<li><code>llvm_type</code> — the source element type</li>
+<li><code>pointer</code> — the base address</li>
+<li><code>indices</code> — the indices</li>
+<li><code>count</code> — the number of indices</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the instruction</li>
+</ul>
+<h2 id="llvmbuildstructgep2"><a class="header" href="#llvmbuildstructgep2">LLVMBuildStructGEP2</a></h2>
+<pre><code class="language-pepper">extern void* LLVMBuildStructGEP2(void* builder, void* llvm_type, void* pointer, uint index, char* name)
+</code></pre>
+<p>Builds the address of a struct field.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>builder</code> — the builder</li>
+<li><code>llvm_type</code> — the struct type</li>
+<li><code>pointer</code> — the struct's address</li>
+<li><code>index</code> — the field's position</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the instruction</li>
+</ul>
+<h2 id="llvmbuildcall2"><a class="header" href="#llvmbuildcall2">LLVMBuildCall2</a></h2>
+<pre><code class="language-pepper">extern void* LLVMBuildCall2( void* builder, void* llvm_type, void* function, void** arguments, uint count, char* name )
+</code></pre>
+<p>Builds <code>call</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>builder</code> — the builder</li>
+<li><code>llvm_type</code> — the callee's function type</li>
+<li><code>function</code> — the callee</li>
+<li><code>arguments</code> — the arguments</li>
+<li><code>count</code> — the number of arguments</li>
+<li><code>name</code> — the result's name; empty for a <code>void</code> call</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the instruction</li>
+</ul>
+<h2 id="llvmbuildphi"><a class="header" href="#llvmbuildphi">LLVMBuildPhi</a></h2>
+<pre><code class="language-pepper">extern void* LLVMBuildPhi(void* builder, void* llvm_type, char* name)
+</code></pre>
+<p>Builds an empty <code>phi</code>; add edges with <code>LLVMAddIncoming</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>builder</code> — the builder</li>
+<li><code>llvm_type</code> — the value's type</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the instruction</li>
+</ul>
+<h2 id="llvmbuildselect"><a class="header" href="#llvmbuildselect">LLVMBuildSelect</a></h2>
+<pre><code class="language-pepper">extern void* LLVMBuildSelect(void* builder, void* condition, void* then_value, void* else_value, char* name)
+</code></pre>
+<p>Builds <code>select</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>builder</code> — the builder</li>
+<li><code>condition</code> — the <code>i1</code> condition</li>
+<li><code>then_value</code> — the value when true</li>
+<li><code>else_value</code> — the value when false</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the instruction</li>
+</ul>
+<h2 id="llvmbuildextractvalue"><a class="header" href="#llvmbuildextractvalue">LLVMBuildExtractValue</a></h2>
+<pre><code class="language-pepper">extern void* LLVMBuildExtractValue(void* builder, void* aggregate, uint index, char* name)
+</code></pre>
+<p>Builds <code>extractvalue</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>builder</code> — the builder</li>
+<li><code>aggregate</code> — the struct or array value</li>
+<li><code>index</code> — the element's position</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the instruction</li>
+</ul>
+<h2 id="llvmbuildinsertvalue"><a class="header" href="#llvmbuildinsertvalue">LLVMBuildInsertValue</a></h2>
+<pre><code class="language-pepper">extern void* LLVMBuildInsertValue(void* builder, void* aggregate, void* element, uint index, char* name)
+</code></pre>
+<p>Builds <code>insertvalue</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>builder</code> — the builder</li>
+<li><code>aggregate</code> — the struct or array value</li>
+<li><code>element</code> — the new element</li>
+<li><code>index</code> — the element's position</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the instruction</li>
+</ul>
+<h2 id="llvmbuildglobalstring"><a class="header" href="#llvmbuildglobalstring">LLVMBuildGlobalString</a></h2>
+<pre><code class="language-pepper">extern void* LLVMBuildGlobalString(void* builder, char* text, char* name)
+</code></pre>
+<p>Builds a private global holding a NUL-terminated string and returns its
+address.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>builder</code> — the builder</li>
+<li><code>text</code> — the string</li>
+<li><code>name</code> — the global's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the global</li>
+</ul>
+<h2 id="llvmcreatestringattribute"><a class="header" href="#llvmcreatestringattribute">LLVMCreateStringAttribute</a></h2>
+<pre><code class="language-pepper">extern void* LLVMCreateStringAttribute( void* context, char* key, uint key_length, char* value, uint value_length )
+</code></pre>
+<p>Creates a string attribute (<code>"key"="value"</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>context</code> — the context that owns the attribute</li>
+<li><code>key</code> — the attribute's key</li>
+<li><code>key_length</code> — the key's length in bytes</li>
+<li><code>value</code> — the attribute's value</li>
+<li><code>value_length</code> — the value's length in bytes</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the attribute</li>
+</ul>
+<h2 id="llvmglobalgetvaluetype"><a class="header" href="#llvmglobalgetvaluetype">LLVMGlobalGetValueType</a></h2>
+<pre><code class="language-pepper">extern void* LLVMGlobalGetValueType(void* global)
+</code></pre>
+<p>Returns the type of a global's value (a function's function type).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>global</code> — the function or global variable</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>its value type</li>
+</ul>
+<h2 id="llvmgetreturntype"><a class="header" href="#llvmgetreturntype">LLVMGetReturnType</a></h2>
+<pre><code class="language-pepper">extern void* LLVMGetReturnType(void* function_type)
+</code></pre>
+<p>Returns a function type's result type.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>function_type</code> — the function type</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the result type</li>
+</ul>
+<h2 id="llvmcountparamtypes"><a class="header" href="#llvmcountparamtypes">LLVMCountParamTypes</a></h2>
+<pre><code class="language-pepper">extern uint LLVMCountParamTypes(void* function_type)
+</code></pre>
+<p>Returns the number of a function type's parameters.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>function_type</code> — the function type</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the count</li>
+</ul>
+<h2 id="llvmgetparamtypes"><a class="header" href="#llvmgetparamtypes">LLVMGetParamTypes</a></h2>
+<pre><code class="language-pepper">extern void LLVMGetParamTypes(void* function_type, void** types)
+</code></pre>
+<p>Writes a function type's parameter types to <code>types</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>function_type</code> — the function type</li>
+<li><code>types</code> — room for <code>LLVMCountParamTypes</code> handles</li>
+</ul>
+<h2 id="llvmgetstructname"><a class="header" href="#llvmgetstructname">LLVMGetStructName</a></h2>
+<pre><code class="language-pepper">extern char* LLVMGetStructName(void* struct_type)
+</code></pre>
+<p>Returns a struct type's name, or null for a literal struct.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>struct_type</code> — the struct type</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the name, which the type owns</li>
+</ul>
+<h2 id="llvmcountstructelementtypes"><a class="header" href="#llvmcountstructelementtypes">LLVMCountStructElementTypes</a></h2>
+<pre><code class="language-pepper">extern uint LLVMCountStructElementTypes(void* struct_type)
+</code></pre>
+<p>Returns the number of a struct type's fields.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>struct_type</code> — the struct type</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the count</li>
+</ul>
+<h2 id="llvmstructgettypeatindex"><a class="header" href="#llvmstructgettypeatindex">LLVMStructGetTypeAtIndex</a></h2>
+<pre><code class="language-pepper">extern void* LLVMStructGetTypeAtIndex(void* struct_type, uint index)
+</code></pre>
+<p>Returns a struct type's field type.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>struct_type</code> — the struct type</li>
+<li><code>index</code> — the field's position</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the field's type</li>
+</ul>
+<h2 id="llvmisopaquestruct"><a class="header" href="#llvmisopaquestruct">LLVMIsOpaqueStruct</a></h2>
+<pre><code class="language-pepper">extern int LLVMIsOpaqueStruct(void* struct_type)
+</code></pre>
+<p>Returns whether a struct type has no body yet.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>struct_type</code> — the struct type</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>nonzero when it is opaque</li>
+</ul>
+<h2 id="llvmgetelementtype"><a class="header" href="#llvmgetelementtype">LLVMGetElementType</a></h2>
+<pre><code class="language-pepper">extern void* LLVMGetElementType(void* llvm_type)
+</code></pre>
+<p>Returns an array's or vector's element type.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>llvm_type</code> — the array, vector or pointer type</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the element type</li>
+</ul>
+<h2 id="llvmgetarraylength2"><a class="header" href="#llvmgetarraylength2">LLVMGetArrayLength2</a></h2>
+<pre><code class="language-pepper">extern ulong LLVMGetArrayLength2(void* array_type)
+</code></pre>
+<p>Returns an array type's length.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>array_type</code> — the array type</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the length</li>
+</ul>
+<h2 id="llvmgetvectorsize"><a class="header" href="#llvmgetvectorsize">LLVMGetVectorSize</a></h2>
+<pre><code class="language-pepper">extern uint LLVMGetVectorSize(void* vector_type)
+</code></pre>
+<p>Returns a vector type's length.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>vector_type</code> — the vector type</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the length</li>
+</ul>
+<h2 id="llvmisconstant"><a class="header" href="#llvmisconstant">LLVMIsConstant</a></h2>
+<pre><code class="language-pepper">extern int LLVMIsConstant(void* value)
+</code></pre>
+<p>Returns whether a value is a constant.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the value</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>nonzero when it is constant</li>
+</ul>
+<h2 id="llvmisaconstantint"><a class="header" href="#llvmisaconstantint">LLVMIsAConstantInt</a></h2>
+<pre><code class="language-pepper">extern void* LLVMIsAConstantInt(void* value)
+</code></pre>
+<p>Returns the value when it is a <code>ConstantInt</code>, else null.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the value</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the value or null</li>
+</ul>
+<h2 id="llvmisafunction"><a class="header" href="#llvmisafunction">LLVMIsAFunction</a></h2>
+<pre><code class="language-pepper">extern void* LLVMIsAFunction(void* value)
+</code></pre>
+<p>Returns the value when it is a <code>Function</code>, else null.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the value</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the value or null</li>
+</ul>
+<h2 id="llvmconstintgetzextvalue"><a class="header" href="#llvmconstintgetzextvalue">LLVMConstIntGetZExtValue</a></h2>
+<pre><code class="language-pepper">extern ulong LLVMConstIntGetZExtValue(void* value)
+</code></pre>
+<p>Returns a constant integer zero-extended to 64 bits.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the <code>ConstantInt</code></li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>its value</li>
+</ul>
+<h2 id="llvmconstintgetsextvalue"><a class="header" href="#llvmconstintgetsextvalue">LLVMConstIntGetSExtValue</a></h2>
+<pre><code class="language-pepper">extern long LLVMConstIntGetSExtValue(void* value)
+</code></pre>
+<p>Returns a constant integer sign-extended to 64 bits.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the <code>ConstantInt</code></li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>its value</li>
+</ul>
+<h2 id="llvmconstallones"><a class="header" href="#llvmconstallones">LLVMConstAllOnes</a></h2>
+<pre><code class="language-pepper">extern void* LLVMConstAllOnes(void* llvm_type)
+</code></pre>
+<p>Returns an integer constant of type <code>llvm_type</code> with every bit set.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>llvm_type</code> — the integer type</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the constant</li>
+</ul>
+<h2 id="llvmconstpointernull"><a class="header" href="#llvmconstpointernull">LLVMConstPointerNull</a></h2>
+<pre><code class="language-pepper">extern void* LLVMConstPointerNull(void* llvm_type)
+</code></pre>
+<p>Returns the null pointer of a pointer type.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>llvm_type</code> — the pointer type</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the constant</li>
+</ul>
+<h2 id="llvmgetfirstbasicblock"><a class="header" href="#llvmgetfirstbasicblock">LLVMGetFirstBasicBlock</a></h2>
+<pre><code class="language-pepper">extern void* LLVMGetFirstBasicBlock(void* function)
+</code></pre>
+<p>Returns a function's first basic block, or null.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>function</code> — the function</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the block or null</li>
+</ul>
+<h2 id="llvmgetlastbasicblock"><a class="header" href="#llvmgetlastbasicblock">LLVMGetLastBasicBlock</a></h2>
+<pre><code class="language-pepper">extern void* LLVMGetLastBasicBlock(void* function)
+</code></pre>
+<p>Returns a function's last basic block, or null.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>function</code> — the function</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the block or null</li>
+</ul>
+<h2 id="llvmgetnextbasicblock"><a class="header" href="#llvmgetnextbasicblock">LLVMGetNextBasicBlock</a></h2>
+<pre><code class="language-pepper">extern void* LLVMGetNextBasicBlock(void* block)
+</code></pre>
+<p>Returns the block after <code>block</code> in its function, or null.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>block</code> — the block</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the next block or null</li>
+</ul>
+<h2 id="llvmcountbasicblocks"><a class="header" href="#llvmcountbasicblocks">LLVMCountBasicBlocks</a></h2>
+<pre><code class="language-pepper">extern uint LLVMCountBasicBlocks(void* function)
+</code></pre>
+<p>Returns the number of a function's basic blocks.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>function</code> — the function</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the count</li>
+</ul>
+<h2 id="llvminsertbasicblockincontext"><a class="header" href="#llvminsertbasicblockincontext">LLVMInsertBasicBlockInContext</a></h2>
+<pre><code class="language-pepper">extern void* LLVMInsertBasicBlockInContext(void* context, void* before, char* name)
+</code></pre>
+<p>Creates a block and inserts it before <code>before</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>context</code> — the context</li>
+<li><code>before</code> — the block to insert before</li>
+<li><code>name</code> — the block's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the new block</li>
+</ul>
+<h2 id="llvmmovebasicblockafter"><a class="header" href="#llvmmovebasicblockafter">LLVMMoveBasicBlockAfter</a></h2>
+<pre><code class="language-pepper">extern void LLVMMoveBasicBlockAfter(void* block, void* after)
+</code></pre>
+<p>Moves <code>block</code> to just after <code>after</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>block</code> — the block to move</li>
+<li><code>after</code> — the block to follow</li>
+</ul>
+<h2 id="llvmgetfirstinstruction"><a class="header" href="#llvmgetfirstinstruction">LLVMGetFirstInstruction</a></h2>
+<pre><code class="language-pepper">extern void* LLVMGetFirstInstruction(void* block)
+</code></pre>
+<p>Returns a block's first instruction, or null.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>block</code> — the block</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the instruction or null</li>
+</ul>
+<h2 id="llvmgetlastinstruction"><a class="header" href="#llvmgetlastinstruction">LLVMGetLastInstruction</a></h2>
+<pre><code class="language-pepper">extern void* LLVMGetLastInstruction(void* block)
+</code></pre>
+<p>Returns a block's last instruction, or null.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>block</code> — the block</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the instruction or null</li>
+</ul>
+<h2 id="llvmgetnextinstruction"><a class="header" href="#llvmgetnextinstruction">LLVMGetNextInstruction</a></h2>
+<pre><code class="language-pepper">extern void* LLVMGetNextInstruction(void* instruction)
+</code></pre>
+<p>Returns the instruction after <code>instruction</code>, or null.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>instruction</code> — the instruction</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the next instruction or null</li>
+</ul>
+<h2 id="llvmgetpreviousinstruction"><a class="header" href="#llvmgetpreviousinstruction">LLVMGetPreviousInstruction</a></h2>
+<pre><code class="language-pepper">extern void* LLVMGetPreviousInstruction(void* instruction)
+</code></pre>
+<p>Returns the instruction before <code>instruction</code>, or null.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>instruction</code> — the instruction</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the previous instruction or null</li>
+</ul>
+<h2 id="llvmgetinstructionopcode"><a class="header" href="#llvmgetinstructionopcode">LLVMGetInstructionOpcode</a></h2>
+<pre><code class="language-pepper">extern int LLVMGetInstructionOpcode(void* instruction)
+</code></pre>
+<p>Returns an instruction's opcode (<code>LLVMOpcode</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>instruction</code> — the instruction</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the opcode</li>
+</ul>
+<h2 id="llvmgetinstructionparent"><a class="header" href="#llvmgetinstructionparent">LLVMGetInstructionParent</a></h2>
+<pre><code class="language-pepper">extern void* LLVMGetInstructionParent(void* instruction)
+</code></pre>
+<p>Returns the block an instruction is in.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>instruction</code> — the instruction</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the block</li>
+</ul>
+<h2 id="llvminstructionerasefromparent"><a class="header" href="#llvminstructionerasefromparent">LLVMInstructionEraseFromParent</a></h2>
+<pre><code class="language-pepper">extern void LLVMInstructionEraseFromParent(void* instruction)
+</code></pre>
+<p>Removes an instruction from its block and deletes it.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>instruction</code> — the instruction</li>
+</ul>
+<h2 id="llvmgetfirstfunction"><a class="header" href="#llvmgetfirstfunction">LLVMGetFirstFunction</a></h2>
+<pre><code class="language-pepper">extern void* LLVMGetFirstFunction(void* module)
+</code></pre>
+<p>Returns a module's first function, or null.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>module</code> — the module</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the function or null</li>
+</ul>
+<h2 id="llvmgetnextfunction"><a class="header" href="#llvmgetnextfunction">LLVMGetNextFunction</a></h2>
+<pre><code class="language-pepper">extern void* LLVMGetNextFunction(void* function)
+</code></pre>
+<p>Returns the function after <code>function</code> in its module, or null.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>function</code> — the function</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the next function or null</li>
+</ul>
+<h2 id="llvmgetfirstglobal"><a class="header" href="#llvmgetfirstglobal">LLVMGetFirstGlobal</a></h2>
+<pre><code class="language-pepper">extern void* LLVMGetFirstGlobal(void* module)
+</code></pre>
+<p>Returns a module's first global variable, or null.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>module</code> — the module</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the global or null</li>
+</ul>
+<h2 id="llvmgetnextglobal"><a class="header" href="#llvmgetnextglobal">LLVMGetNextGlobal</a></h2>
+<pre><code class="language-pepper">extern void* LLVMGetNextGlobal(void* global)
+</code></pre>
+<p>Returns the global variable after <code>global</code>, or null.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>global</code> — the global</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the next global or null</li>
+</ul>
+<h2 id="llvmdeletefunction"><a class="header" href="#llvmdeletefunction">LLVMDeleteFunction</a></h2>
+<pre><code class="language-pepper">extern void LLVMDeleteFunction(void* function)
+</code></pre>
+<p>Deletes a function from its module.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>function</code> — the function</li>
+</ul>
+<h2 id="llvmdeletebasicblock"><a class="header" href="#llvmdeletebasicblock">LLVMDeleteBasicBlock</a></h2>
+<pre><code class="language-pepper">extern void LLVMDeleteBasicBlock(void* block)
+</code></pre>
+<p>Removes a basic block from its function and deletes it.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>block</code> — the block</li>
+</ul>
+<h2 id="llvmsetpersonalityfn"><a class="header" href="#llvmsetpersonalityfn">LLVMSetPersonalityFn</a></h2>
+<pre><code class="language-pepper">extern void LLVMSetPersonalityFn(void* function, void* personality)
+</code></pre>
+<p>Sets (or, given null, clears) a function's personality function.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>function</code> — the function</li>
+<li><code>personality</code> — the personality function</li>
+</ul>
+<h2 id="llvmhaspersonalityfn"><a class="header" href="#llvmhaspersonalityfn">LLVMHasPersonalityFn</a></h2>
+<pre><code class="language-pepper">extern int LLVMHasPersonalityFn(void* function)
+</code></pre>
+<p>Reports whether a function has a personality function.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>function</code> — the function</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>nonzero when it has one</li>
+</ul>
+<h2 id="llvmgetglobalparent"><a class="header" href="#llvmgetglobalparent">LLVMGetGlobalParent</a></h2>
+<pre><code class="language-pepper">extern void* LLVMGetGlobalParent(void* global)
+</code></pre>
+<p>Returns the module a function or global variable belongs to.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>global</code> — the function or global variable</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the module</li>
+</ul>
+<h2 id="llvmgetorinsertcomdat"><a class="header" href="#llvmgetorinsertcomdat">LLVMGetOrInsertComdat</a></h2>
+<pre><code class="language-pepper">extern void* LLVMGetOrInsertComdat(void* module, char* name)
+</code></pre>
+<p>Returns the module's comdat of this name, adding it when it has none.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>module</code> — the module</li>
+<li><code>name</code> — the comdat's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the comdat</li>
+</ul>
+<h2 id="llvmgetcomdat"><a class="header" href="#llvmgetcomdat">LLVMGetComdat</a></h2>
+<pre><code class="language-pepper">extern void* LLVMGetComdat(void* global)
+</code></pre>
+<p>Returns the comdat a function or global variable is in, or null.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>global</code> — the function or global variable</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the comdat or null</li>
+</ul>
+<h2 id="llvmsetcomdat"><a class="header" href="#llvmsetcomdat">LLVMSetComdat</a></h2>
+<pre><code class="language-pepper">extern void LLVMSetComdat(void* global, void* comdat)
+</code></pre>
+<p>Puts a function or global variable in a comdat.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>global</code> — the function or global variable</li>
+<li><code>comdat</code> — the comdat</li>
+</ul>
+<h2 id="llvmsetvisibility"><a class="header" href="#llvmsetvisibility">LLVMSetVisibility</a></h2>
+<pre><code class="language-pepper">extern void LLVMSetVisibility(void* global, int visibility)
+</code></pre>
+<p>Sets a global value's visibility (<code>LLVMVisibility</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>global</code> — the function or global variable</li>
+<li><code>visibility</code> — 0 default, 1 hidden, 2 protected</li>
+</ul>
+<h2 id="llvmgetfirstuse"><a class="header" href="#llvmgetfirstuse">LLVMGetFirstUse</a></h2>
+<pre><code class="language-pepper">extern void* LLVMGetFirstUse(void* value)
+</code></pre>
+<p>Returns a value's first use, or null when nothing uses it.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the value</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the use or null</li>
+</ul>
+<h2 id="llvmreplacealluseswith"><a class="header" href="#llvmreplacealluseswith">LLVMReplaceAllUsesWith</a></h2>
+<pre><code class="language-pepper">extern void LLVMReplaceAllUsesWith(void* old, void* replacement)
+</code></pre>
+<p>Makes every use of <code>old</code> a use of <code>replacement</code>, of the same type.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>old</code> — the value whose uses change</li>
+<li><code>replacement</code> — the value they use instead</li>
+</ul>
+<h2 id="llvmsetunnamedaddress"><a class="header" href="#llvmsetunnamedaddress">LLVMSetUnnamedAddress</a></h2>
+<pre><code class="language-pepper">extern void LLVMSetUnnamedAddress(void* global, int unnamed)
+</code></pre>
+<p>Sets whether a global's address is significant (<code>LLVMUnnamedAddr</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>global</code> — the global</li>
+<li><code>unnamed</code> — 0 for none, 1 for <code>local_unnamed_addr</code>, 2 for <code>unnamed_addr</code></li>
+</ul>
+<h2 id="llvmgetunnamedaddress"><a class="header" href="#llvmgetunnamedaddress">LLVMGetUnnamedAddress</a></h2>
+<pre><code class="language-pepper">extern int LLVMGetUnnamedAddress(void* global)
+</code></pre>
+<p>Returns whether a global's address is significant (<code>LLVMUnnamedAddr</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>global</code> — the function or global variable</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>0 for none, 1 for <code>local_unnamed_addr</code>, 2 for <code>unnamed_addr</code></li>
+</ul>
+<h2 id="llvmsetthreadlocalmode"><a class="header" href="#llvmsetthreadlocalmode">LLVMSetThreadLocalMode</a></h2>
+<pre><code class="language-pepper">extern void LLVMSetThreadLocalMode(void* global, int mode)
+</code></pre>
+<p>Sets a global variable's <code>thread_local</code> mode (<code>LLVMThreadLocalMode</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>global</code> — the global</li>
+<li><code>mode</code> — the mode; 0 for not thread-local</li>
+</ul>
+<h2 id="llvmsetalignment"><a class="header" href="#llvmsetalignment">LLVMSetAlignment</a></h2>
+<pre><code class="language-pepper">extern void LLVMSetAlignment(void* value, uint bytes)
+</code></pre>
+<p>Sets a global's, alloca's, load's or store's alignment.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the value</li>
+<li><code>bytes</code> — the alignment</li>
+</ul>
+<h2 id="llvmsetmetadata"><a class="header" href="#llvmsetmetadata">LLVMSetMetadata</a></h2>
+<pre><code class="language-pepper">extern void LLVMSetMetadata(void* instruction, uint kind, void* node)
+</code></pre>
+<p>Sets an instruction's metadata of kind <code>kind</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>instruction</code> — the instruction</li>
+<li><code>kind</code> — the kind, from <code>LLVMGetMDKindIDInContext</code></li>
+<li><code>node</code> — the metadata, as a value</li>
+</ul>
+<h2 id="llvmgetmdkindidincontext"><a class="header" href="#llvmgetmdkindidincontext">LLVMGetMDKindIDInContext</a></h2>
+<pre><code class="language-pepper">extern uint LLVMGetMDKindIDInContext(void* context, char* name, uint length)
+</code></pre>
+<p>Returns the kind of metadata named <code>name</code> (<code>tbaa</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>context</code> — the context</li>
+<li><code>name</code> — the name</li>
+<li><code>length</code> — the name's length in bytes</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the kind</li>
+</ul>
+<h2 id="llvmmdstringincontext2"><a class="header" href="#llvmmdstringincontext2">LLVMMDStringInContext2</a></h2>
+<pre><code class="language-pepper">extern void* LLVMMDStringInContext2(void* context, char* text, ulong length)
+</code></pre>
+<p>Returns a metadata string.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>context</code> — the context</li>
+<li><code>text</code> — the string</li>
+<li><code>length</code> — its length in bytes</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the metadata</li>
+</ul>
+<h2 id="llvmmdnodeincontext2"><a class="header" href="#llvmmdnodeincontext2">LLVMMDNodeInContext2</a></h2>
+<pre><code class="language-pepper">extern void* LLVMMDNodeInContext2(void* context, void** operands, ulong count)
+</code></pre>
+<p>Returns a metadata tuple of <code>count</code> operands.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>context</code> — the context</li>
+<li><code>operands</code> — the operands</li>
+<li><code>count</code> — how many</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the metadata</li>
+</ul>
+<h2 id="llvmmetadataasvalue"><a class="header" href="#llvmmetadataasvalue">LLVMMetadataAsValue</a></h2>
+<pre><code class="language-pepper">extern void* LLVMMetadataAsValue(void* context, void* metadata)
+</code></pre>
+<p>Wraps metadata as a value.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>context</code> — the context</li>
+<li><code>metadata</code> — the metadata</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the value</li>
+</ul>
+<h2 id="llvmvalueasmetadata"><a class="header" href="#llvmvalueasmetadata">LLVMValueAsMetadata</a></h2>
+<pre><code class="language-pepper">extern void* LLVMValueAsMetadata(void* value)
+</code></pre>
+<p>Wraps a constant as metadata.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the constant</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the metadata</li>
+</ul>
+<h2 id="llvmlookupintrinsicid"><a class="header" href="#llvmlookupintrinsicid">LLVMLookupIntrinsicID</a></h2>
+<pre><code class="language-pepper">extern uint LLVMLookupIntrinsicID(char* name, ulong length)
+</code></pre>
+<p>Returns the ID of the intrinsic named <code>name</code> (<code>llvm.trap</code>), or 0.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>name</code> — the name</li>
+<li><code>length</code> — its length in bytes</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the ID</li>
+</ul>
+<h2 id="llvmgetintrinsicdeclaration"><a class="header" href="#llvmgetintrinsicdeclaration">LLVMGetIntrinsicDeclaration</a></h2>
+<pre><code class="language-pepper">extern void* LLVMGetIntrinsicDeclaration(void* module, uint id, void** types, ulong count)
+</code></pre>
+<p>Declares (or finds) an intrinsic in a module, overloaded on <code>types</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>module</code> — the module</li>
+<li><code>id</code> — the intrinsic's ID</li>
+<li><code>types</code> — the overload's types</li>
+<li><code>count</code> — how many</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the function</li>
+</ul>
+<h2 id="llvmintrinsicgettype"><a class="header" href="#llvmintrinsicgettype">LLVMIntrinsicGetType</a></h2>
+<pre><code class="language-pepper">extern void* LLVMIntrinsicGetType(void* context, uint id, void** types, ulong count)
+</code></pre>
+<p>Returns an intrinsic's function type for the overload on <code>types</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>context</code> — the context</li>
+<li><code>id</code> — the intrinsic's ID</li>
+<li><code>types</code> — the overload's types</li>
+<li><code>count</code> — how many</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the function type</li>
+</ul>
+<h2 id="llvmpositionbuilderbefore"><a class="header" href="#llvmpositionbuilderbefore">LLVMPositionBuilderBefore</a></h2>
+<pre><code class="language-pepper">extern void LLVMPositionBuilderBefore(void* builder, void* instruction)
+</code></pre>
+<p>Moves the builder to just before <code>instruction</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>builder</code> — the builder</li>
+<li><code>instruction</code> — the instruction</li>
+</ul>
+<h2 id="llvmaddcallsiteattribute"><a class="header" href="#llvmaddcallsiteattribute">LLVMAddCallSiteAttribute</a></h2>
+<pre><code class="language-pepper">extern void LLVMAddCallSiteAttribute(void* call, uint index, void* attribute)
+</code></pre>
+<p>Adds an attribute to a call instruction (index as for <code>LLVMAddAttributeAtIndex</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>call</code> — the call</li>
+<li><code>index</code> — the attribute index</li>
+<li><code>attribute</code> — the attribute</li>
+</ul>
+<h2 id="llvmsetvolatile"><a class="header" href="#llvmsetvolatile">LLVMSetVolatile</a></h2>
+<pre><code class="language-pepper">extern void LLVMSetVolatile(void* instruction, int volatile)
+</code></pre>
+<p>Marks a load or store volatile, or not.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>instruction</code> — the load or store</li>
+<li><code>volatile</code> — nonzero for volatile</li>
+</ul>
+<h2 id="llvmbuildatomicrmw"><a class="header" href="#llvmbuildatomicrmw">LLVMBuildAtomicRMW</a></h2>
+<pre><code class="language-pepper">extern void* LLVMBuildAtomicRMW( void* builder, int op, void* pointer, void* value, int ordering, int single_thread )
+</code></pre>
+<p>Builds <code>atomicrmw</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>builder</code> — the builder</li>
+<li><code>op</code> — the operation (<code>LLVMAtomicRMWBinOp</code>)</li>
+<li><code>pointer</code> — the address</li>
+<li><code>value</code> — the operand</li>
+<li><code>ordering</code> — the ordering (<code>LLVMAtomicOrdering</code>)</li>
+<li><code>single_thread</code> — nonzero for single-thread scope</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the old value</li>
+</ul>
+<h2 id="llvmbuildatomiccmpxchg"><a class="header" href="#llvmbuildatomiccmpxchg">LLVMBuildAtomicCmpXchg</a></h2>
+<pre><code class="language-pepper">extern void* LLVMBuildAtomicCmpXchg( void* builder, void* pointer, void* expected, void* replacement, int success, int failure, int single_thread )
+</code></pre>
+<p>Builds <code>cmpxchg</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>builder</code> — the builder</li>
+<li><code>pointer</code> — the address</li>
+<li><code>expected</code> — the value expected there</li>
+<li><code>replacement</code> — the value to store</li>
+<li><code>success</code> — the ordering on success</li>
+<li><code>failure</code> — the ordering on failure</li>
+<li><code>single_thread</code> — nonzero for single-thread scope</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the <code>{ old, succeeded }</code> pair</li>
+</ul>
+<h2 id="llvmsetordering"><a class="header" href="#llvmsetordering">LLVMSetOrdering</a></h2>
+<pre><code class="language-pepper">extern void LLVMSetOrdering(void* instruction, int ordering)
+</code></pre>
+<p>Sets an atomic load's or store's ordering.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>instruction</code> — the load or store</li>
+<li><code>ordering</code> — the ordering (<code>LLVMAtomicOrdering</code>)</li>
+</ul>
+<h2 id="llvmbuildmemcpy"><a class="header" href="#llvmbuildmemcpy">LLVMBuildMemCpy</a></h2>
+<pre><code class="language-pepper">extern void* LLVMBuildMemCpy( void* builder, void* destination, uint destination_align, void* source, uint source_align, void* size )
+</code></pre>
+<p>Builds <code>llvm.memcpy</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>builder</code> — the builder</li>
+<li><code>destination</code> — the destination</li>
+<li><code>destination_align</code> — its alignment</li>
+<li><code>source</code> — the source</li>
+<li><code>source_align</code> — its alignment</li>
+<li><code>size</code> — the byte count</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the call</li>
+</ul>
+<h2 id="llvmbuildmemmove"><a class="header" href="#llvmbuildmemmove">LLVMBuildMemMove</a></h2>
+<pre><code class="language-pepper">extern void* LLVMBuildMemMove( void* builder, void* destination, uint destination_align, void* source, uint source_align, void* size )
+</code></pre>
+<p>Builds <code>llvm.memmove</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>builder</code> — the builder</li>
+<li><code>destination</code> — the destination</li>
+<li><code>destination_align</code> — its alignment</li>
+<li><code>source</code> — the source</li>
+<li><code>source_align</code> — its alignment</li>
+<li><code>size</code> — the byte count</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the call</li>
+</ul>
+<h2 id="llvmbuildmemset"><a class="header" href="#llvmbuildmemset">LLVMBuildMemSet</a></h2>
+<pre><code class="language-pepper">extern void* LLVMBuildMemSet(void* builder, void* pointer, void* value, void* length, uint align)
+</code></pre>
+<p>Builds <code>llvm.memset</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>builder</code> — the builder</li>
+<li><code>pointer</code> — the destination</li>
+<li><code>value</code> — the byte</li>
+<li><code>length</code> — the byte count</li>
+<li><code>align</code> — the destination's alignment</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the call</li>
+</ul>
+<h2 id="llvmbuildextractelement"><a class="header" href="#llvmbuildextractelement">LLVMBuildExtractElement</a></h2>
+<pre><code class="language-pepper">extern void* LLVMBuildExtractElement(void* builder, void* vector, void* index, char* name)
+</code></pre>
+<p>Builds <code>extractelement</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>builder</code> — the builder</li>
+<li><code>vector</code> — the vector</li>
+<li><code>index</code> — the lane</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the lane's value</li>
+</ul>
+<h2 id="llvmbuildinsertelement"><a class="header" href="#llvmbuildinsertelement">LLVMBuildInsertElement</a></h2>
+<pre><code class="language-pepper">extern void* LLVMBuildInsertElement(void* builder, void* vector, void* element, void* index, char* name)
+</code></pre>
+<p>Builds <code>insertelement</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>builder</code> — the builder</li>
+<li><code>vector</code> — the vector</li>
+<li><code>element</code> — the new lane value</li>
+<li><code>index</code> — the lane</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the new vector</li>
+</ul>
+<h2 id="llvmbuildshufflevector"><a class="header" href="#llvmbuildshufflevector">LLVMBuildShuffleVector</a></h2>
+<pre><code class="language-pepper">extern void* LLVMBuildShuffleVector(void* builder, void* left, void* right, void* mask, char* name)
+</code></pre>
+<p>Builds <code>shufflevector</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>builder</code> — the builder</li>
+<li><code>left</code> — the first vector</li>
+<li><code>right</code> — the second vector</li>
+<li><code>mask</code> — the constant lane mask</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the new vector</li>
+</ul>
+<h2 id="llvmbuildfence"><a class="header" href="#llvmbuildfence">LLVMBuildFence</a></h2>
+<pre><code class="language-pepper">extern void* LLVMBuildFence(void* builder, int ordering, int single_thread, char* name)
+</code></pre>
+<p>Builds <code>fence</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>builder</code> — the builder</li>
+<li><code>ordering</code> — the ordering</li>
+<li><code>single_thread</code> — nonzero for single-thread scope</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the instruction</li>
+</ul>
+<h2 id="llvmsizeof"><a class="header" href="#llvmsizeof">LLVMSizeOf</a></h2>
+<pre><code class="language-pepper">extern void* LLVMSizeOf(void* llvm_type)
+</code></pre>
+<p>Returns the size of a type as a constant <code>i64</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>llvm_type</code> — the type</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the size</li>
+</ul>
+<h2 id="llvmconstvector"><a class="header" href="#llvmconstvector">LLVMConstVector</a></h2>
+<pre><code class="language-pepper">extern void* LLVMConstVector(void** values, uint count)
+</code></pre>
+<p>Returns a constant vector.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>values</code> — the lanes</li>
+<li><code>count</code> — how many</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the vector</li>
+</ul>
+<h2 id="llvmintrinsicisoverloaded"><a class="header" href="#llvmintrinsicisoverloaded">LLVMIntrinsicIsOverloaded</a></h2>
+<pre><code class="language-pepper">extern int LLVMIntrinsicIsOverloaded(uint id)
+</code></pre>
+<p>Returns whether an intrinsic takes types to name a declaration.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>id</code> — the intrinsic's ID</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>nonzero when overloaded</li>
+</ul>
+<h2 id="llvmintrinsiccopyoverloadedname2"><a class="header" href="#llvmintrinsiccopyoverloadedname2">LLVMIntrinsicCopyOverloadedName2</a></h2>
+<pre><code class="language-pepper">extern char* LLVMIntrinsicCopyOverloadedName2(void* module, uint id, void** types, ulong count, ulong* length)
+</code></pre>
+<p>Returns the name of an overloaded intrinsic for <code>types</code>; free it with
+<code>LLVMDisposeMessage</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>module</code> — the module</li>
+<li><code>id</code> — the intrinsic's ID</li>
+<li><code>types</code> — the overload's types</li>
+<li><code>count</code> — how many</li>
+<li><code>length</code> — receives the name's length</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the name</li>
+</ul>
+<h2 id="llvmgetintrinsicid"><a class="header" href="#llvmgetintrinsicid">LLVMGetIntrinsicID</a></h2>
+<pre><code class="language-pepper">extern uint LLVMGetIntrinsicID(void* function)
+</code></pre>
+<p>Returns a function's intrinsic ID, or 0.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>function</code> — the function</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the ID</li>
+</ul>
+<h2 id="llvmgetinlineasm"><a class="header" href="#llvmgetinlineasm">LLVMGetInlineAsm</a></h2>
+<pre><code class="language-pepper">extern void* LLVMGetInlineAsm( void* llvm_type, char* assembly, ulong assembly_length, char* constraints, ulong constraints_length, int side_effects, int align_stack, int dialect, int can_throw )
+</code></pre>
+<p>Returns an inline assembly value.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>llvm_type</code> — the function type</li>
+<li><code>assembly</code> — the assembly text</li>
+<li><code>assembly_length</code> — its length</li>
+<li><code>constraints</code> — the constraints</li>
+<li><code>constraints_length</code> — their length</li>
+<li><code>side_effects</code> — nonzero when it has side effects</li>
+<li><code>align_stack</code> — nonzero to align the stack</li>
+<li><code>dialect</code> — 0 for AT&amp;T, 1 for Intel</li>
+<li><code>can_throw</code> — nonzero when it may unwind</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the value</li>
+</ul>
+<h2 id="llvmbuildisnull"><a class="header" href="#llvmbuildisnull">LLVMBuildIsNull</a></h2>
+<pre><code class="language-pepper">extern void* LLVMBuildIsNull(void* builder, void* value, char* name)
+</code></pre>
+<p>Builds a test that a pointer is null.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>builder</code> — the builder</li>
+<li><code>value</code> — the pointer</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>an <code>i1</code></li>
+</ul>
+<h2 id="llvmbuildisnotnull"><a class="header" href="#llvmbuildisnotnull">LLVMBuildIsNotNull</a></h2>
+<pre><code class="language-pepper">extern void* LLVMBuildIsNotNull(void* builder, void* value, char* name)
+</code></pre>
+<p>Builds a test that a pointer is not null.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>builder</code> — the builder</li>
+<li><code>value</code> — the pointer</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>an <code>i1</code></li>
+</ul>
+<h2 id="llvmbuildintcast"><a class="header" href="#llvmbuildintcast">LLVMBuildIntCast</a></h2>
+<pre><code class="language-pepper">extern void* LLVMBuildIntCast(void* builder, void* value, void* llvm_type, char* name)
+</code></pre>
+<p>Builds a signed integer cast: a truncation, sign extension or nothing.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>builder</code> — the builder</li>
+<li><code>value</code> — the integer</li>
+<li><code>llvm_type</code> — the integer type to convert to</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the result</li>
+</ul>
+<h2 id="llvmisfunctionvararg"><a class="header" href="#llvmisfunctionvararg">LLVMIsFunctionVarArg</a></h2>
+<pre><code class="language-pepper">extern int LLVMIsFunctionVarArg(void* function_type)
+</code></pre>
+<p>Returns whether a function type takes variadic arguments.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>function_type</code> — the type</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>nonzero when variadic</li>
+</ul>
+<h2 id="llvmconstinttoptr"><a class="header" href="#llvmconstinttoptr">LLVMConstIntToPtr</a></h2>
+<pre><code class="language-pepper">extern void* LLVMConstIntToPtr(void* value, void* llvm_type)
+</code></pre>
+<p>Returns a constant integer converted to a pointer.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the constant</li>
+<li><code>llvm_type</code> — the pointer type</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the constant</li>
+</ul>
+<h2 id="llvmconstgep2"><a class="header" href="#llvmconstgep2">LLVMConstGEP2</a></h2>
+<pre><code class="language-pepper">extern void* LLVMConstGEP2(void* llvm_type, void* value, void** indices, uint count)
+</code></pre>
+<p>Returns a constant <code>getelementptr</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>llvm_type</code> — the type the indices step through</li>
+<li><code>value</code> — the base constant</li>
+<li><code>indices</code> — the indices</li>
+<li><code>count</code> — how many</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the constant</li>
+</ul>
+<h2 id="llvmgetoperand"><a class="header" href="#llvmgetoperand">LLVMGetOperand</a></h2>
+<pre><code class="language-pepper">extern void* LLVMGetOperand(void* value, uint index)
+</code></pre>
+<p>Returns an operand of a user.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the user</li>
+<li><code>index</code> — the operand's position</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the operand</li>
+</ul>
+<h2 id="llvmgetnumoperands"><a class="header" href="#llvmgetnumoperands">LLVMGetNumOperands</a></h2>
+<pre><code class="language-pepper">extern int LLVMGetNumOperands(void* value)
+</code></pre>
+<p>Returns how many operands a user has.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the user</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the count</li>
+</ul>
+<h2 id="llvmisainstruction"><a class="header" href="#llvmisainstruction">LLVMIsAInstruction</a></h2>
+<pre><code class="language-pepper">extern void* LLVMIsAInstruction(void* value)
+</code></pre>
+<p>Returns <code>value</code> when it is an instruction, else null.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the value</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the value or null</li>
+</ul>
+<h2 id="llvmgetgepsourceelementtype"><a class="header" href="#llvmgetgepsourceelementtype">LLVMGetGEPSourceElementType</a></h2>
+<pre><code class="language-pepper">extern void* LLVMGetGEPSourceElementType(void* value)
+</code></pre>
+<p>Returns the source element type of a <code>getelementptr</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the instruction</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the type</li>
+</ul>
+<h2 id="llvmgetenumattributeatindex"><a class="header" href="#llvmgetenumattributeatindex">LLVMGetEnumAttributeAtIndex</a></h2>
+<pre><code class="language-pepper">extern void* LLVMGetEnumAttributeAtIndex(void* function, uint index, uint kind)
+</code></pre>
+<p>Returns an enum attribute at a position, or null.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>function</code> — the function</li>
+<li><code>index</code> — the position (0 the return value, then 1 per parameter, -1 the function)</li>
+<li><code>kind</code> — the attribute kind</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the attribute or null</li>
+</ul>
+<h2 id="llvmsetdllstorageclass"><a class="header" href="#llvmsetdllstorageclass">LLVMSetDLLStorageClass</a></h2>
+<pre><code class="language-pepper">extern void LLVMSetDLLStorageClass(void* global, int class)
+</code></pre>
+<p>Sets a global's DLL storage class (0 default, 1 import, 2 export).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>global</code> — the global</li>
+<li><code>class</code> — the class</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="llvm_c-module.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="llvm_c-debug_info.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="llvm_c-module.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="llvm_c-debug_info.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

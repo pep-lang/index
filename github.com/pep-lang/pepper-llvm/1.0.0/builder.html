@@ -1,0 +1,1242 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>builder.pep - llvm</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">llvm</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <!-- Generated from builder.pep by `pep-doc package`. Do not edit. -->
+<h1 id="builderpep"><a class="header" href="#builderpep">builder.pep</a></h1>
+<p><code>Builder</code>: appends instructions to a basic block.</p>
+<p>Source: <code>builder.pep</code></p>
+<h2 id="builder"><a class="header" href="#builder">Builder</a></h2>
+<pre><code class="language-pepper">struct Builder
+</code></pre>
+<p>An instruction builder (<code>LLVMBuilderRef</code>). Move it to a block with
+<code>position_at_end</code>, then each call appends one instruction there and
+returns its result. It is disposed when the last reference to it goes
+away.</p>
+<p>Every method that makes a value takes an optional <code>name</code> for it (<code>%sum</code>
+in IR); without one LLVM numbers it (<code>%0</code>).</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">var context = llvm.Context();
+var module = llvm.Module(context, "main");
+var i32 = context.int32_type();
+var add = module.add_function("add", llvm.Type.function(i32, [i32, i32]));
+var builder = llvm.Builder(context);
+builder.position_at_end(context.append_block(add, "entry"));
+builder.return_value(builder.add(add.param(0), add.param(1), "sum"));
+</code></pre>
+<h3 id="properties"><a class="header" href="#properties">Properties</a></h3>
+<h4 id="context"><a class="header" href="#context">context</a></h4>
+<pre><code class="language-pepper">var context: Context { get; }
+</code></pre>
+<p>The context the builder makes instructions in.</p>
+<h4 id="ref"><a class="header" href="#ref">ref</a></h4>
+<pre><code class="language-pepper">var ref: __ptr&lt;void&gt; { get; }
+</code></pre>
+<p>The LLVM-C handle, for calls into <code>llvm_c</code>.</p>
+<h3 id="constructor"><a class="header" href="#constructor">Constructor</a></h3>
+<h4 id="builder-1"><a class="header" href="#builder-1">Builder()</a></h4>
+<pre><code class="language-pepper">construct(context: Context)
+</code></pre>
+<p>Creates a builder that is not positioned anywhere yet.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>context</code> — the context of the modules it builds into</li>
+</ul>
+<h3 id="methods"><a class="header" href="#methods">Methods</a></h3>
+<h4 id="position_at_end"><a class="header" href="#position_at_end">position_at_end</a></h4>
+<pre><code class="language-pepper">position_at_end(block: BasicBlock)
+</code></pre>
+<p>Makes later instructions go at the end of <code>block</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>block</code> — the block to append to</li>
+</ul>
+<h4 id="insert_block"><a class="header" href="#insert_block">insert_block</a></h4>
+<pre><code class="language-pepper">insert_block(): BasicBlock
+</code></pre>
+<p>Returns the block instructions go into, or a null block when the
+builder is not positioned.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the block</li>
+</ul>
+<h4 id="set_location"><a class="header" href="#set_location">set_location</a></h4>
+<pre><code class="language-pepper">set_location(location: Metadata)
+</code></pre>
+<p>Gives the instructions built from now on a source location, until it
+is changed or cleared.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>location</code> — the location, from <code>DebugBuilder.location</code></li>
+</ul>
+<h4 id="clear_location"><a class="header" href="#clear_location">clear_location</a></h4>
+<pre><code class="language-pepper">clear_location()
+</code></pre>
+<p>Stops giving new instructions a source location.</p>
+<h4 id="return_value"><a class="header" href="#return_value">return_value</a></h4>
+<pre><code class="language-pepper">return_value(value: Value): Value
+</code></pre>
+<p>Builds <code>ret</code> with a value.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the value to return</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the instruction</li>
+</ul>
+<h4 id="return_void"><a class="header" href="#return_void">return_void</a></h4>
+<pre><code class="language-pepper">return_void(): Value
+</code></pre>
+<p>Builds <code>ret void</code>.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the instruction</li>
+</ul>
+<h4 id="branch"><a class="header" href="#branch">branch</a></h4>
+<pre><code class="language-pepper">branch(destination: BasicBlock): Value
+</code></pre>
+<p>Builds an unconditional branch (<code>br label</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>destination</code> — the block to branch to</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the instruction</li>
+</ul>
+<h4 id="conditional_branch"><a class="header" href="#conditional_branch">conditional_branch</a></h4>
+<pre><code class="language-pepper">conditional_branch(condition: Value, then_block: BasicBlock, else_block: BasicBlock): Value
+</code></pre>
+<p>Builds a conditional branch (<code>br i1</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>condition</code> — an <code>i1</code> value</li>
+<li><code>then_block</code> — the block when <code>condition</code> is true</li>
+<li><code>else_block</code> — the block when it is false</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the instruction</li>
+</ul>
+<h4 id="switch_on"><a class="header" href="#switch_on">switch_on</a></h4>
+<pre><code class="language-pepper">switch_on(value: Value, otherwise: BasicBlock, case_count: uint = 0): Value
+</code></pre>
+<p>Builds a <code>switch</code>; add its cases with <code>Value.add_case</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the integer switched on</li>
+<li><code>otherwise</code> — the block when no case matches</li>
+<li><code>case_count</code> — how many cases will be added, to reserve room</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the instruction</li>
+</ul>
+<h4 id="unreachable"><a class="header" href="#unreachable">unreachable</a></h4>
+<pre><code class="language-pepper">unreachable(): Value
+</code></pre>
+<p>Builds <code>unreachable</code>.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the instruction</li>
+</ul>
+<h4 id="add"><a class="header" href="#add">add</a></h4>
+<pre><code class="language-pepper">add(left: Value, right: Value, name: String = ""): Value
+</code></pre>
+<p>Builds integer addition (<code>add</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>left</code> — the left operand</li>
+<li><code>right</code> — the right operand, of the same type</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the result</li>
+</ul>
+<h4 id="sub"><a class="header" href="#sub">sub</a></h4>
+<pre><code class="language-pepper">sub(left: Value, right: Value, name: String = ""): Value
+</code></pre>
+<p>Builds integer subtraction (<code>sub</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>left</code> — the left operand</li>
+<li><code>right</code> — the right operand, of the same type</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the result</li>
+</ul>
+<h4 id="mul"><a class="header" href="#mul">mul</a></h4>
+<pre><code class="language-pepper">mul(left: Value, right: Value, name: String = ""): Value
+</code></pre>
+<p>Builds integer multiplication (<code>mul</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>left</code> — the left operand</li>
+<li><code>right</code> — the right operand, of the same type</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the result</li>
+</ul>
+<h4 id="signed_divide"><a class="header" href="#signed_divide">signed_divide</a></h4>
+<pre><code class="language-pepper">signed_divide(left: Value, right: Value, name: String = ""): Value
+</code></pre>
+<p>Builds signed integer division (<code>sdiv</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>left</code> — the left operand</li>
+<li><code>right</code> — the right operand, of the same type</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the result</li>
+</ul>
+<h4 id="unsigned_divide"><a class="header" href="#unsigned_divide">unsigned_divide</a></h4>
+<pre><code class="language-pepper">unsigned_divide(left: Value, right: Value, name: String = ""): Value
+</code></pre>
+<p>Builds unsigned integer division (<code>udiv</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>left</code> — the left operand</li>
+<li><code>right</code> — the right operand, of the same type</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the result</li>
+</ul>
+<h4 id="signed_remainder"><a class="header" href="#signed_remainder">signed_remainder</a></h4>
+<pre><code class="language-pepper">signed_remainder(left: Value, right: Value, name: String = ""): Value
+</code></pre>
+<p>Builds signed integer remainder (<code>srem</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>left</code> — the left operand</li>
+<li><code>right</code> — the right operand, of the same type</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the result</li>
+</ul>
+<h4 id="unsigned_remainder"><a class="header" href="#unsigned_remainder">unsigned_remainder</a></h4>
+<pre><code class="language-pepper">unsigned_remainder(left: Value, right: Value, name: String = ""): Value
+</code></pre>
+<p>Builds unsigned integer remainder (<code>urem</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>left</code> — the left operand</li>
+<li><code>right</code> — the right operand, of the same type</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the result</li>
+</ul>
+<h4 id="float_add"><a class="header" href="#float_add">float_add</a></h4>
+<pre><code class="language-pepper">float_add(left: Value, right: Value, name: String = ""): Value
+</code></pre>
+<p>Builds floating-point addition (<code>fadd</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>left</code> — the left operand</li>
+<li><code>right</code> — the right operand, of the same type</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the result</li>
+</ul>
+<h4 id="float_sub"><a class="header" href="#float_sub">float_sub</a></h4>
+<pre><code class="language-pepper">float_sub(left: Value, right: Value, name: String = ""): Value
+</code></pre>
+<p>Builds floating-point subtraction (<code>fsub</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>left</code> — the left operand</li>
+<li><code>right</code> — the right operand, of the same type</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the result</li>
+</ul>
+<h4 id="float_mul"><a class="header" href="#float_mul">float_mul</a></h4>
+<pre><code class="language-pepper">float_mul(left: Value, right: Value, name: String = ""): Value
+</code></pre>
+<p>Builds floating-point multiplication (<code>fmul</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>left</code> — the left operand</li>
+<li><code>right</code> — the right operand, of the same type</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the result</li>
+</ul>
+<h4 id="float_divide"><a class="header" href="#float_divide">float_divide</a></h4>
+<pre><code class="language-pepper">float_divide(left: Value, right: Value, name: String = ""): Value
+</code></pre>
+<p>Builds floating-point division (<code>fdiv</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>left</code> — the left operand</li>
+<li><code>right</code> — the right operand, of the same type</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the result</li>
+</ul>
+<h4 id="float_remainder"><a class="header" href="#float_remainder">float_remainder</a></h4>
+<pre><code class="language-pepper">float_remainder(left: Value, right: Value, name: String = ""): Value
+</code></pre>
+<p>Builds floating-point remainder (<code>frem</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>left</code> — the left operand</li>
+<li><code>right</code> — the right operand, of the same type</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the result</li>
+</ul>
+<h4 id="shift_left"><a class="header" href="#shift_left">shift_left</a></h4>
+<pre><code class="language-pepper">shift_left(left: Value, right: Value, name: String = ""): Value
+</code></pre>
+<p>Builds a left shift (<code>shl</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>left</code> — the left operand</li>
+<li><code>right</code> — the right operand, of the same type</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the result</li>
+</ul>
+<h4 id="logical_shift_right"><a class="header" href="#logical_shift_right">logical_shift_right</a></h4>
+<pre><code class="language-pepper">logical_shift_right(left: Value, right: Value, name: String = ""): Value
+</code></pre>
+<p>Builds a right shift that fills with zeros (<code>lshr</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>left</code> — the left operand</li>
+<li><code>right</code> — the right operand, of the same type</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the result</li>
+</ul>
+<h4 id="arithmetic_shift_right"><a class="header" href="#arithmetic_shift_right">arithmetic_shift_right</a></h4>
+<pre><code class="language-pepper">arithmetic_shift_right(left: Value, right: Value, name: String = ""): Value
+</code></pre>
+<p>Builds a right shift that copies the sign bit (<code>ashr</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>left</code> — the left operand</li>
+<li><code>right</code> — the right operand, of the same type</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the result</li>
+</ul>
+<h4 id="bit_and"><a class="header" href="#bit_and">bit_and</a></h4>
+<pre><code class="language-pepper">bit_and(left: Value, right: Value, name: String = ""): Value
+</code></pre>
+<p>Builds a bitwise and (<code>and</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>left</code> — the left operand</li>
+<li><code>right</code> — the right operand, of the same type</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the result</li>
+</ul>
+<h4 id="bit_or"><a class="header" href="#bit_or">bit_or</a></h4>
+<pre><code class="language-pepper">bit_or(left: Value, right: Value, name: String = ""): Value
+</code></pre>
+<p>Builds a bitwise or (<code>or</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>left</code> — the left operand</li>
+<li><code>right</code> — the right operand, of the same type</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the result</li>
+</ul>
+<h4 id="bit_xor"><a class="header" href="#bit_xor">bit_xor</a></h4>
+<pre><code class="language-pepper">bit_xor(left: Value, right: Value, name: String = ""): Value
+</code></pre>
+<p>Builds a bitwise exclusive or (<code>xor</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>left</code> — the left operand</li>
+<li><code>right</code> — the right operand, of the same type</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the result</li>
+</ul>
+<h4 id="nsw_add"><a class="header" href="#nsw_add">nsw_add</a></h4>
+<pre><code class="language-pepper">nsw_add(left: Value, right: Value, name: String = ""): Value
+</code></pre>
+<p>Builds integer addition that cannot overflow as signed (<code>add nsw</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>left</code> — the left operand</li>
+<li><code>right</code> — the right operand, of the same type</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the result</li>
+</ul>
+<h4 id="nsw_sub"><a class="header" href="#nsw_sub">nsw_sub</a></h4>
+<pre><code class="language-pepper">nsw_sub(left: Value, right: Value, name: String = ""): Value
+</code></pre>
+<p>Builds integer subtraction that cannot overflow as signed (<code>sub nsw</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>left</code> — the left operand</li>
+<li><code>right</code> — the right operand, of the same type</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the result</li>
+</ul>
+<h4 id="nsw_mul"><a class="header" href="#nsw_mul">nsw_mul</a></h4>
+<pre><code class="language-pepper">nsw_mul(left: Value, right: Value, name: String = ""): Value
+</code></pre>
+<p>Builds integer multiplication that cannot overflow as signed (<code>mul nsw</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>left</code> — the left operand</li>
+<li><code>right</code> — the right operand, of the same type</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the result</li>
+</ul>
+<h4 id="negate"><a class="header" href="#negate">negate</a></h4>
+<pre><code class="language-pepper">negate(value: Value, name: String = ""): Value
+</code></pre>
+<p>Builds integer negation (<code>sub 0, value</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the operand</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the result</li>
+</ul>
+<h4 id="float_negate"><a class="header" href="#float_negate">float_negate</a></h4>
+<pre><code class="language-pepper">float_negate(value: Value, name: String = ""): Value
+</code></pre>
+<p>Builds floating-point negation (<code>fneg</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the operand</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the result</li>
+</ul>
+<h4 id="bit_not"><a class="header" href="#bit_not">bit_not</a></h4>
+<pre><code class="language-pepper">bit_not(value: Value, name: String = ""): Value
+</code></pre>
+<p>Builds a bitwise not (<code>xor value, -1</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the operand</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the result</li>
+</ul>
+<h4 id="compare"><a class="header" href="#compare">compare</a></h4>
+<pre><code class="language-pepper">compare(predicate: IntPredicate, left: Value, right: Value, name: String = ""): Value
+</code></pre>
+<p>Builds an integer or pointer comparison (<code>icmp</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>predicate</code> — the comparison</li>
+<li><code>left</code> — the left operand</li>
+<li><code>right</code> — the right operand, of the same type</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>an <code>i1</code></li>
+</ul>
+<h4 id="float_compare"><a class="header" href="#float_compare">float_compare</a></h4>
+<pre><code class="language-pepper">float_compare(predicate: RealPredicate, left: Value, right: Value, name: String = ""): Value
+</code></pre>
+<p>Builds a floating-point comparison (<code>fcmp</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>predicate</code> — the comparison</li>
+<li><code>left</code> — the left operand</li>
+<li><code>right</code> — the right operand, of the same type</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>an <code>i1</code></li>
+</ul>
+<h4 id="select"><a class="header" href="#select">select</a></h4>
+<pre><code class="language-pepper">select(condition: Value, then_value: Value, else_value: Value, name: String = ""): Value
+</code></pre>
+<p>Builds <code>select</code>: <code>then_value</code> when <code>condition</code> is true, else <code>else_value</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>condition</code> — an <code>i1</code> value</li>
+<li><code>then_value</code> — the result when true</li>
+<li><code>else_value</code> — the result when false, of the same type</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the result</li>
+</ul>
+<h4 id="truncate"><a class="header" href="#truncate">truncate</a></h4>
+<pre><code class="language-pepper">truncate(value: Value, value_type: Type, name: String = ""): Value
+</code></pre>
+<p>Converts an integer to a narrower integer type (<code>trunc</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the value to convert</li>
+<li><code>value_type</code> — the type to convert to</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the converted value</li>
+</ul>
+<h4 id="zero_extend"><a class="header" href="#zero_extend">zero_extend</a></h4>
+<pre><code class="language-pepper">zero_extend(value: Value, value_type: Type, name: String = ""): Value
+</code></pre>
+<p>Converts an integer to a wider type, filling with zeros (<code>zext</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the value to convert</li>
+<li><code>value_type</code> — the type to convert to</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the converted value</li>
+</ul>
+<h4 id="sign_extend"><a class="header" href="#sign_extend">sign_extend</a></h4>
+<pre><code class="language-pepper">sign_extend(value: Value, value_type: Type, name: String = ""): Value
+</code></pre>
+<p>Converts an integer to a wider type, copying the sign bit (<code>sext</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the value to convert</li>
+<li><code>value_type</code> — the type to convert to</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the converted value</li>
+</ul>
+<h4 id="float_to_unsigned"><a class="header" href="#float_to_unsigned">float_to_unsigned</a></h4>
+<pre><code class="language-pepper">float_to_unsigned(value: Value, value_type: Type, name: String = ""): Value
+</code></pre>
+<p>Converts a floating-point value to an unsigned integer (<code>fptoui</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the value to convert</li>
+<li><code>value_type</code> — the type to convert to</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the converted value</li>
+</ul>
+<h4 id="float_to_signed"><a class="header" href="#float_to_signed">float_to_signed</a></h4>
+<pre><code class="language-pepper">float_to_signed(value: Value, value_type: Type, name: String = ""): Value
+</code></pre>
+<p>Converts a floating-point value to a signed integer (<code>fptosi</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the value to convert</li>
+<li><code>value_type</code> — the type to convert to</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the converted value</li>
+</ul>
+<h4 id="unsigned_to_float"><a class="header" href="#unsigned_to_float">unsigned_to_float</a></h4>
+<pre><code class="language-pepper">unsigned_to_float(value: Value, value_type: Type, name: String = ""): Value
+</code></pre>
+<p>Converts an unsigned integer to floating point (<code>uitofp</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the value to convert</li>
+<li><code>value_type</code> — the type to convert to</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the converted value</li>
+</ul>
+<h4 id="signed_to_float"><a class="header" href="#signed_to_float">signed_to_float</a></h4>
+<pre><code class="language-pepper">signed_to_float(value: Value, value_type: Type, name: String = ""): Value
+</code></pre>
+<p>Converts a signed integer to floating point (<code>sitofp</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the value to convert</li>
+<li><code>value_type</code> — the type to convert to</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the converted value</li>
+</ul>
+<h4 id="float_truncate"><a class="header" href="#float_truncate">float_truncate</a></h4>
+<pre><code class="language-pepper">float_truncate(value: Value, value_type: Type, name: String = ""): Value
+</code></pre>
+<p>Converts a floating-point value to a narrower type (<code>fptrunc</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the value to convert</li>
+<li><code>value_type</code> — the type to convert to</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the converted value</li>
+</ul>
+<h4 id="float_extend"><a class="header" href="#float_extend">float_extend</a></h4>
+<pre><code class="language-pepper">float_extend(value: Value, value_type: Type, name: String = ""): Value
+</code></pre>
+<p>Converts a floating-point value to a wider type (<code>fpext</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the value to convert</li>
+<li><code>value_type</code> — the type to convert to</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the converted value</li>
+</ul>
+<h4 id="pointer_to_int"><a class="header" href="#pointer_to_int">pointer_to_int</a></h4>
+<pre><code class="language-pepper">pointer_to_int(value: Value, value_type: Type, name: String = ""): Value
+</code></pre>
+<p>Converts a pointer to an integer (<code>ptrtoint</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the value to convert</li>
+<li><code>value_type</code> — the type to convert to</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the converted value</li>
+</ul>
+<h4 id="int_to_pointer"><a class="header" href="#int_to_pointer">int_to_pointer</a></h4>
+<pre><code class="language-pepper">int_to_pointer(value: Value, value_type: Type, name: String = ""): Value
+</code></pre>
+<p>Converts an integer to a pointer (<code>inttoptr</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the value to convert</li>
+<li><code>value_type</code> — the type to convert to</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the converted value</li>
+</ul>
+<h4 id="bit_cast"><a class="header" href="#bit_cast">bit_cast</a></h4>
+<pre><code class="language-pepper">bit_cast(value: Value, value_type: Type, name: String = ""): Value
+</code></pre>
+<p>Converts a value to another type of the same size, keeping its bits (<code>bitcast</code>).</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the value to convert</li>
+<li><code>value_type</code> — the type to convert to</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the converted value</li>
+</ul>
+<h4 id="alloca"><a class="header" href="#alloca">alloca</a></h4>
+<pre><code class="language-pepper">alloca(value_type: Type, name: String = ""): Value
+</code></pre>
+<p>Builds <code>alloca</code>: stack space for one <code>type</code> in the current function.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value_type</code> — the type to make room for</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the address</li>
+</ul>
+<h4 id="load"><a class="header" href="#load">load</a></h4>
+<pre><code class="language-pepper">load(value_type: Type, pointer: Value, name: String = ""): Value
+</code></pre>
+<p>Builds <code>load</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value_type</code> — the type to load</li>
+<li><code>pointer</code> — the address</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the loaded value</li>
+</ul>
+<h4 id="store"><a class="header" href="#store">store</a></h4>
+<pre><code class="language-pepper">store(value: Value, pointer: Value): Value
+</code></pre>
+<p>Builds <code>store</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the value to store</li>
+<li><code>pointer</code> — the address</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the instruction</li>
+</ul>
+<h4 id="element_pointer"><a class="header" href="#element_pointer">element_pointer</a></h4>
+<pre><code class="language-pepper">element_pointer( value_type: Type, pointer: Value, indices: Value[], in_bounds: bool = true, name: String = "" ): Value
+</code></pre>
+<p>Builds <code>getelementptr</code>: the address of an element inside <code>pointer</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value_type</code> — the type <code>pointer</code> points to, which the indices step through</li>
+<li><code>pointer</code> — the base address</li>
+<li><code>indices</code> — the indices, the first stepping over whole <code>type</code>s</li>
+<li><code>in_bounds</code> — whether the result stays inside the same object (<code>inbounds</code>)</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the address</li>
+</ul>
+<h4 id="field_pointer"><a class="header" href="#field_pointer">field_pointer</a></h4>
+<pre><code class="language-pepper">field_pointer(value_type: Type, pointer: Value, index: uint, name: String = ""): Value
+</code></pre>
+<p>Builds the address of a struct's field.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value_type</code> — the struct type</li>
+<li><code>pointer</code> — the struct's address</li>
+<li><code>index</code> — the field's position</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the address</li>
+</ul>
+<h4 id="global_string"><a class="header" href="#global_string">global_string</a></h4>
+<pre><code class="language-pepper">global_string(text: String, name: String = ""): Value
+</code></pre>
+<p>Builds a private global holding <code>text</code> and a NUL byte, and returns
+its address.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>text</code> — the string</li>
+<li><code>name</code> — the global's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the address</li>
+</ul>
+<h4 id="extract_value"><a class="header" href="#extract_value">extract_value</a></h4>
+<pre><code class="language-pepper">extract_value(aggregate: Value, index: uint, name: String = ""): Value
+</code></pre>
+<p>Builds <code>extractvalue</code>: an element of a struct or array value.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>aggregate</code> — the struct or array</li>
+<li><code>index</code> — the element's position</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the element</li>
+</ul>
+<h4 id="insert_value"><a class="header" href="#insert_value">insert_value</a></h4>
+<pre><code class="language-pepper">insert_value(aggregate: Value, element: Value, index: uint, name: String = ""): Value
+</code></pre>
+<p>Builds <code>insertvalue</code>: a copy of a struct or array value with one
+element replaced.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>aggregate</code> — the struct or array</li>
+<li><code>element</code> — the new element</li>
+<li><code>index</code> — the element's position</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the new aggregate</li>
+</ul>
+<h4 id="call"><a class="header" href="#call">call</a></h4>
+<pre><code class="language-pepper">call(function_type: Type, function: Value, arguments: Value[], name: String = ""): Value
+</code></pre>
+<p>Builds <code>call</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>function_type</code> — the callee's function type</li>
+<li><code>function</code> — the function to call (a function, or a pointer to one)</li>
+<li><code>arguments</code> — the arguments</li>
+<li><code>name</code> — the result's name; leave it empty when the function returns <code>void</code></li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the call's result</li>
+</ul>
+<h4 id="phi"><a class="header" href="#phi">phi</a></h4>
+<pre><code class="language-pepper">phi(value_type: Type, name: String = ""): Value
+</code></pre>
+<p>Builds an empty <code>phi</code>; add its edges with <code>Value.add_incoming</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value_type</code> — the value's type</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the phi</li>
+</ul>
+<h4 id="position_before"><a class="header" href="#position_before">position_before</a></h4>
+<pre><code class="language-pepper">position_before(instruction: Value)
+</code></pre>
+<p>Makes later instructions go just before <code>instruction</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>instruction</code> — the instruction to insert before</li>
+</ul>
+<h4 id="atomic_rmw"><a class="header" href="#atomic_rmw">atomic_rmw</a></h4>
+<pre><code class="language-pepper">atomic_rmw(op: int, pointer: Value, value: Value, ordering: int): Value
+</code></pre>
+<p>Builds <code>atomicrmw</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>op</code> — the operation (<code>LLVMAtomicRMWBinOp</code>: 0 xchg, 1 add, 2 sub, 3 and, 4 nand, 5 or, 6 xor, 7 max, 8 min, 9 umax, 10 umin)</li>
+<li><code>pointer</code> — the address</li>
+<li><code>value</code> — the operand</li>
+<li><code>ordering</code> — the ordering (<code>LLVMAtomicOrdering</code>: 2 monotonic, 4 acquire, 5 release, 6 acq_rel, 7 seq_cst)</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the old value</li>
+</ul>
+<h4 id="compare_exchange"><a class="header" href="#compare_exchange">compare_exchange</a></h4>
+<pre><code class="language-pepper">compare_exchange(pointer: Value, expected: Value, replacement: Value, success: int, failure: int): Value
+</code></pre>
+<p>Builds <code>cmpxchg</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>pointer</code> — the address</li>
+<li><code>expected</code> — the value expected there</li>
+<li><code>replacement</code> — the value to store</li>
+<li><code>success</code> — the ordering on success</li>
+<li><code>failure</code> — the ordering on failure</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the <code>{ old, succeeded }</code> pair</li>
+</ul>
+<h4 id="fence"><a class="header" href="#fence">fence</a></h4>
+<pre><code class="language-pepper">fence(ordering: int, name: String = ""): Value
+</code></pre>
+<p>Builds <code>fence</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>ordering</code> — the ordering</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the instruction</li>
+</ul>
+<h4 id="memory_copy"><a class="header" href="#memory_copy">memory_copy</a></h4>
+<pre><code class="language-pepper">memory_copy(destination: Value, destination_align: uint, source: Value, source_align: uint, size: Value): Value
+</code></pre>
+<p>Builds a call to <code>llvm.memcpy</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>destination</code> — the destination</li>
+<li><code>destination_align</code> — its alignment</li>
+<li><code>source</code> — the source</li>
+<li><code>source_align</code> — its alignment</li>
+<li><code>size</code> — the byte count</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the call</li>
+</ul>
+<h4 id="memory_move"><a class="header" href="#memory_move">memory_move</a></h4>
+<pre><code class="language-pepper">memory_move(destination: Value, destination_align: uint, source: Value, source_align: uint, size: Value): Value
+</code></pre>
+<p>Builds a call to <code>llvm.memmove</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>destination</code> — the destination</li>
+<li><code>destination_align</code> — its alignment</li>
+<li><code>source</code> — the source</li>
+<li><code>source_align</code> — its alignment</li>
+<li><code>size</code> — the byte count</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the call</li>
+</ul>
+<h4 id="memory_set"><a class="header" href="#memory_set">memory_set</a></h4>
+<pre><code class="language-pepper">memory_set(pointer: Value, value: Value, length: Value, align: uint): Value
+</code></pre>
+<p>Builds a call to <code>llvm.memset</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>pointer</code> — the destination</li>
+<li><code>value</code> — the byte</li>
+<li><code>length</code> — the byte count</li>
+<li><code>align</code> — the destination's alignment</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the call</li>
+</ul>
+<h4 id="extract_element"><a class="header" href="#extract_element">extract_element</a></h4>
+<pre><code class="language-pepper">extract_element(vector: Value, index: Value, name: String = ""): Value
+</code></pre>
+<p>Builds <code>extractelement</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>vector</code> — the vector</li>
+<li><code>index</code> — the lane</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the lane's value</li>
+</ul>
+<h4 id="insert_element"><a class="header" href="#insert_element">insert_element</a></h4>
+<pre><code class="language-pepper">insert_element(vector: Value, element: Value, index: Value, name: String = ""): Value
+</code></pre>
+<p>Builds <code>insertelement</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>vector</code> — the vector</li>
+<li><code>element</code> — the new lane value</li>
+<li><code>index</code> — the lane</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the new vector</li>
+</ul>
+<h4 id="shuffle_vector"><a class="header" href="#shuffle_vector">shuffle_vector</a></h4>
+<pre><code class="language-pepper">shuffle_vector(left: Value, right: Value, mask: Value, name: String = ""): Value
+</code></pre>
+<p>Builds <code>shufflevector</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>left</code> — the first vector</li>
+<li><code>right</code> — the second vector</li>
+<li><code>mask</code> — the constant lane mask</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the new vector</li>
+</ul>
+<h4 id="is_null"><a class="header" href="#is_null">is_null</a></h4>
+<pre><code class="language-pepper">is_null(value: Value, name: String = ""): Value
+</code></pre>
+<p>Builds a test that a pointer is null.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the pointer</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>an <code>i1</code></li>
+</ul>
+<h4 id="is_not_null"><a class="header" href="#is_not_null">is_not_null</a></h4>
+<pre><code class="language-pepper">is_not_null(value: Value, name: String = ""): Value
+</code></pre>
+<p>Builds a test that a pointer is not null.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the pointer</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>an <code>i1</code></li>
+</ul>
+<h4 id="int_cast"><a class="header" href="#int_cast">int_cast</a></h4>
+<pre><code class="language-pepper">int_cast(value: Value, value_type: Type, name: String = ""): Value
+</code></pre>
+<p>Builds a signed integer cast: truncates or sign-extends <code>value</code> to
+<code>value_type</code>, or returns it when it already has that type.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>value</code> — the integer</li>
+<li><code>value_type</code> — the integer type</li>
+<li><code>name</code> — the result's name</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the result</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="module.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="context.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="module.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="context.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>

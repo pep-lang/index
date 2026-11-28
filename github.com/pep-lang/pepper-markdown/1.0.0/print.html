@@ -1,0 +1,661 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>markdown</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">markdown</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <!-- Generated from pep.toml by `pep-doc package`. Do not edit. -->
+<h1 id="markdown-100"><a class="header" href="#markdown-100">markdown 1.0.0</a></h1>
+<p>CommonMark and GFM Markdown: HTML rendering, a tree and an event walk, in pure Pepper</p>
+<h2 id="pages"><a class="header" href="#pages">Pages</a></h2>
+<ul>
+<li><a href="module.html">markdown</a>: Markdown: CommonMark 0.31.2 and the GitHub Flavored Markdown extensions (tables, task lists, strikethrough, extended autolinks), parsed into a tree of <code>Node</code>s and rendered as HTML.</li>
+<li><a href="autolink.html">autolink.pep</a>: GFM's extended autolinks: <code>www.</code> addresses, <code>http://</code>, <code>https://</code> and <code>ftp://</code> URLs, and email addresses in text become links without <code>&lt;&gt;</code>.</li>
+<li><a href="characters.html">characters.pep</a>: Character classes and text transforms that both parsers and the HTML renderer use: escaping, entities, label normalization and URL encoding.</li>
+<li><a href="html.html">html.pep</a>: Rendering HTML: <code>render_html</code> writes a parsed tree as HTML, and <code>to_html</code> parses and renders in one step.</li>
+<li><a href="inlines.html">inlines.pep</a>: The inline parser: code spans, emphasis, links, images, autolinks, raw HTML, entities and line breaks, from a block's text; and the link reference definitions at the start of a paragraph.</li>
+<li><a href="node.html">node.pep</a>: The tree <code>parse</code> builds: a <code>Node</code> for each block and inline element, and <code>Event</code>, one step of a walk over it.</li>
+<li><a href="parse.html">parse.pep</a>: Parsing: <code>Options</code>, and <code>parse</code>, which reads Markdown into a tree of <code>Node</code>s.</li>
+<li><a href="tables.html">tables.pep</a>: Tables the parser looks things up in: HTML's named character references, Unicode case folding, and Unicode punctuation.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from module.pep by `pep-doc package`. Do not edit. -->
+<h1 id="markdown"><a class="header" href="#markdown">markdown</a></h1>
+<p>Markdown: CommonMark 0.31.2 and the GitHub Flavored Markdown extensions
+(tables, task lists, strikethrough, extended autolinks), parsed into a
+tree of <code>Node</code>s and rendered as HTML.</p>
+<p>Bring it in with <code>import markdown</code>. It is pure Pepper. Any text is
+Markdown, so nothing here fails; text is always escaped in the HTML, and
+<code>Options(safe = true)</code> also drops raw HTML and <code>javascript:</code> links, for
+Markdown from writers you do not trust.</p>
+<ul>
+<li><code>to_html</code>: Markdown to HTML in one step</li>
+<li><code>parse</code>, <code>Node</code>, <code>NodeKind</code>, <code>Alignment</code>: the tree, for other
+renderers or for reading a document's structure</li>
+<li><code>Node.events</code>, <code>Event</code>: a walk over the tree as enter and leave events</li>
+<li><code>render_html</code>: a tree to HTML</li>
+<li><code>Options</code>: GFM on or off, and safe mode</li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import markdown;
+
+main(): int {
+    var html = markdown.to_html("| a | b |\n| - | - |\n| ~~1~~ | 2 |\n");
+    assert(html.contains("&lt;td&gt;&lt;del&gt;1&lt;/del&gt;&lt;/td&gt;"), "a GFM table");
+    print(markdown.to_html("Hello, *world*!\n"));   # &lt;p&gt;Hello, &lt;em&gt;world&lt;/em&gt;!&lt;/p&gt;
+    return 0;
+}
+</code></pre>
+<p>Source: <code>module.pep</code></p>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from autolink.pep by `pep-doc package`. Do not edit. -->
+<h1 id="autolinkpep"><a class="header" href="#autolinkpep">autolink.pep</a></h1>
+<p>GFM's extended autolinks: <code>www.</code> addresses, <code>http://</code>, <code>https://</code> and
+<code>ftp://</code> URLs, and email addresses in text become links without <code>&lt;&gt;</code>.</p>
+<p>Source: <code>autolink.pep</code></p>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from characters.pep by `pep-doc package`. Do not edit. -->
+<h1 id="characterspep"><a class="header" href="#characterspep">characters.pep</a></h1>
+<p>Character classes and text transforms that both parsers and the HTML
+renderer use: escaping, entities, label normalization and URL encoding.</p>
+<p>Source: <code>characters.pep</code></p>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from html.pep by `pep-doc package`. Do not edit. -->
+<h1 id="htmlpep"><a class="header" href="#htmlpep">html.pep</a></h1>
+<p>Rendering HTML: <code>render_html</code> writes a parsed tree as HTML, and
+<code>to_html</code> parses and renders in one step.</p>
+<p>Source: <code>html.pep</code></p>
+<h2 id="to_html"><a class="header" href="#to_html">to_html</a></h2>
+<pre><code class="language-pepper">to_html(markdown: String, options: Options = Options()): String
+</code></pre>
+<p>Converts Markdown to HTML: <code>render_html(parse(markdown, options), options)</code>.</p>
+<p>Text is escaped, so <code>&lt;</code>, <code>&amp;</code> and <code>"</code> in it never become markup. Raw
+HTML passes through as the spec says (with GFM on, the tag filter
+escapes <code>&lt;script&gt;</code>, <code>&lt;iframe&gt;</code> and the like), unless <code>options.safe</code> is
+set, which drops it and empties dangerous link URLs.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>markdown</code> — the text to convert</li>
+<li><code>options</code> — the extensions to use, and whether to make the HTML safe</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the HTML, a line ending after each block</li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import markdown;
+
+main(): int {
+    print(markdown.to_html("# Title\n\nSome *emphasis* and `code`.\n"));
+    # &lt;h1&gt;Title&lt;/h1&gt;
+    # &lt;p&gt;Some &lt;em&gt;emphasis&lt;/em&gt; and &lt;code&gt;code&lt;/code&gt;.&lt;/p&gt;
+    var safe = markdown.Options(safe = true);
+    assert(markdown.to_html("&lt;b&gt;hi&lt;/b&gt; [x](javascript:alert(1))\n", safe) == "&lt;p&gt;hi &lt;a href=\"\"&gt;x&lt;/a&gt;&lt;/p&gt;\n", "no raw HTML");
+    return 0;
+}
+</code></pre>
+<h2 id="render_html"><a class="header" href="#render_html">render_html</a></h2>
+<pre><code class="language-pepper">render_html(root: Node, options: Options = Options()): String
+</code></pre>
+<p>Renders a tree from <code>parse</code> (or one built by hand) as HTML, as
+commonmark.js and cmark-gfm do.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>root</code> — the node to render, usually a <code>Document</code></li>
+<li><code>options</code> — <code>gfm</code> turns the tag filter on, and <code>safe</code> drops raw HTML and dangerous URLs</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the HTML</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from inlines.pep by `pep-doc package`. Do not edit. -->
+<h1 id="inlinespep"><a class="header" href="#inlinespep">inlines.pep</a></h1>
+<p>The inline parser: code spans, emphasis, links, images, autolinks, raw
+HTML, entities and line breaks, from a block's text; and the link
+reference definitions at the start of a paragraph.</p>
+<p>Source: <code>inlines.pep</code></p>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from node.pep by `pep-doc package`. Do not edit. -->
+<h1 id="nodepep"><a class="header" href="#nodepep">node.pep</a></h1>
+<p>The tree <code>parse</code> builds: a <code>Node</code> for each block and inline element,
+and <code>Event</code>, one step of a walk over it.</p>
+<p>Source: <code>node.pep</code></p>
+<h2 id="nodekind"><a class="header" href="#nodekind">NodeKind</a></h2>
+<pre><code class="language-pepper">enum NodeKind
+</code></pre>
+<p>What a <code>Node</code> is.</p>
+<h3 id="cases"><a class="header" href="#cases">Cases</a></h3>
+<h4 id="document"><a class="header" href="#document">Document</a></h4>
+<pre><code class="language-pepper">Document
+</code></pre>
+<p>The root; its children are the top-level blocks.</p>
+<h4 id="blockquote"><a class="header" href="#blockquote">BlockQuote</a></h4>
+<pre><code class="language-pepper">BlockQuote
+</code></pre>
+<p>A block quote (<code>&gt; ...</code>); its children are blocks.</p>
+<h4 id="list"><a class="header" href="#list">List</a></h4>
+<pre><code class="language-pepper">List
+</code></pre>
+<p>A bullet or ordered list; its children are <code>Item</code>s.</p>
+<h4 id="item"><a class="header" href="#item">Item</a></h4>
+<pre><code class="language-pepper">Item
+</code></pre>
+<p>A list item; its children are blocks.</p>
+<h4 id="codeblock"><a class="header" href="#codeblock">CodeBlock</a></h4>
+<pre><code class="language-pepper">CodeBlock
+</code></pre>
+<p>A fenced or indented code block; <code>literal</code> is its text and <code>info</code>
+its info string.</p>
+<h4 id="htmlblock"><a class="header" href="#htmlblock">HtmlBlock</a></h4>
+<pre><code class="language-pepper">HtmlBlock
+</code></pre>
+<p>A block of raw HTML; <code>literal</code> is its text.</p>
+<h4 id="paragraph"><a class="header" href="#paragraph">Paragraph</a></h4>
+<pre><code class="language-pepper">Paragraph
+</code></pre>
+<p>A paragraph; its children are inlines.</p>
+<h4 id="heading"><a class="header" href="#heading">Heading</a></h4>
+<pre><code class="language-pepper">Heading
+</code></pre>
+<p>An ATX (<code># ...</code>) or setext heading of <code>level</code> 1 to 6; its children
+are inlines.</p>
+<h4 id="thematicbreak"><a class="header" href="#thematicbreak">ThematicBreak</a></h4>
+<pre><code class="language-pepper">ThematicBreak
+</code></pre>
+<p>A thematic break (<code>***</code>).</p>
+<h4 id="table"><a class="header" href="#table">Table</a></h4>
+<pre><code class="language-pepper">Table
+</code></pre>
+<p>A GFM table; its children are <code>TableRow</code>s, the header row first.</p>
+<h4 id="tablerow"><a class="header" href="#tablerow">TableRow</a></h4>
+<pre><code class="language-pepper">TableRow
+</code></pre>
+<p>A row of a table; <code>header</code> says whether it is the header row, and
+its children are <code>TableCell</code>s.</p>
+<h4 id="tablecell"><a class="header" href="#tablecell">TableCell</a></h4>
+<pre><code class="language-pepper">TableCell
+</code></pre>
+<p>A cell of a table row, aligned as <code>alignment</code> says; its children
+are inlines.</p>
+<h4 id="text"><a class="header" href="#text">Text</a></h4>
+<pre><code class="language-pepper">Text
+</code></pre>
+<p>Text; <code>literal</code> is the text, with escapes and entities resolved.</p>
+<h4 id="softbreak"><a class="header" href="#softbreak">SoftBreak</a></h4>
+<pre><code class="language-pepper">SoftBreak
+</code></pre>
+<p>A line ending inside a paragraph that is not a hard break.</p>
+<h4 id="linebreak"><a class="header" href="#linebreak">LineBreak</a></h4>
+<pre><code class="language-pepper">LineBreak
+</code></pre>
+<p>A hard line break (two spaces or <code>\</code> before a line ending).</p>
+<h4 id="code"><a class="header" href="#code">Code</a></h4>
+<pre><code class="language-pepper">Code
+</code></pre>
+<p>A code span; <code>literal</code> is its text.</p>
+<h4 id="htmlinline"><a class="header" href="#htmlinline">HtmlInline</a></h4>
+<pre><code class="language-pepper">HtmlInline
+</code></pre>
+<p>Raw inline HTML (a tag, comment, ...); <code>literal</code> is its text.</p>
+<h4 id="emphasis"><a class="header" href="#emphasis">Emphasis</a></h4>
+<pre><code class="language-pepper">Emphasis
+</code></pre>
+<p>Emphasis (<code>*a*</code>); its children are inlines.</p>
+<h4 id="strong"><a class="header" href="#strong">Strong</a></h4>
+<pre><code class="language-pepper">Strong
+</code></pre>
+<p>Strong emphasis (<code>**a**</code>); its children are inlines.</p>
+<h4 id="strikethrough"><a class="header" href="#strikethrough">Strikethrough</a></h4>
+<pre><code class="language-pepper">Strikethrough
+</code></pre>
+<p>GFM strikethrough (<code>~~a~~</code>); its children are inlines.</p>
+<h4 id="link"><a class="header" href="#link">Link</a></h4>
+<pre><code class="language-pepper">Link
+</code></pre>
+<p>A link to <code>destination</code>, with <code>title</code>; its children are the link
+text.</p>
+<h4 id="image"><a class="header" href="#image">Image</a></h4>
+<pre><code class="language-pepper">Image
+</code></pre>
+<p>An image of <code>destination</code>, with <code>title</code>; its children are the
+description, which the HTML renders as the <code>alt</code> text.</p>
+<h2 id="alignment"><a class="header" href="#alignment">Alignment</a></h2>
+<pre><code class="language-pepper">enum Alignment
+</code></pre>
+<p>How a table cell's text is aligned.</p>
+<h3 id="cases-1"><a class="header" href="#cases-1">Cases</a></h3>
+<h4 id="none"><a class="header" href="#none">None</a></h4>
+<pre><code class="language-pepper">None
+</code></pre>
+<p>No alignment was given (<code>---</code>).</p>
+<h4 id="left"><a class="header" href="#left">Left</a></h4>
+<pre><code class="language-pepper">Left
+</code></pre>
+<p>Aligned left (<code>:--</code>).</p>
+<h4 id="center"><a class="header" href="#center">Center</a></h4>
+<pre><code class="language-pepper">Center
+</code></pre>
+<p>Centered (<code>:-:</code>).</p>
+<h4 id="right"><a class="header" href="#right">Right</a></h4>
+<pre><code class="language-pepper">Right
+</code></pre>
+<p>Aligned right (<code>--:</code>).</p>
+<h2 id="node"><a class="header" href="#node">Node</a></h2>
+<pre><code class="language-pepper">struct Node
+</code></pre>
+<p>A block or inline element of a parsed document.</p>
+<p>One struct holds every kind; <code>kind</code> says which, and only the fields that
+kind describes are set (the others keep their defaults). A renderer of
+its own walks <code>children</code> recursively or uses <code>events()</code>.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import markdown;
+
+main(): int {
+    var doc = markdown.parse("# Hi *there*\n");
+    var heading = doc.children[0];
+    assert(heading.kind == markdown.NodeKind.Heading &amp;&amp; heading.level == 1, "a level 1 heading");
+    assert(heading.children[1].kind == markdown.NodeKind.Emphasis, "then emphasis");
+    return 0;
+}
+</code></pre>
+<h3 id="fields"><a class="header" href="#fields">Fields</a></h3>
+<h4 id="kind"><a class="header" href="#kind">kind</a></h4>
+<pre><code class="language-pepper">var kind: NodeKind
+</code></pre>
+<p>What this node is.</p>
+<h4 id="children"><a class="header" href="#children">children</a></h4>
+<pre><code class="language-pepper">var children: Array&lt;Node&gt;
+</code></pre>
+<p>The child nodes, in order.</p>
+<h4 id="literal"><a class="header" href="#literal">literal</a></h4>
+<pre><code class="language-pepper">var literal: String
+</code></pre>
+<p>The text of a <code>Text</code>, <code>Code</code>, <code>CodeBlock</code>, <code>HtmlBlock</code> or
+<code>HtmlInline</code>.</p>
+<h4 id="info"><a class="header" href="#info">info</a></h4>
+<pre><code class="language-pepper">var info: String
+</code></pre>
+<p>The info string of a fenced <code>CodeBlock</code> (<code>rust</code> in <code>```rust</code>),
+with escapes and entities resolved; empty for an indented one.</p>
+<h4 id="destination"><a class="header" href="#destination">destination</a></h4>
+<pre><code class="language-pepper">var destination: String
+</code></pre>
+<p>The URL of a <code>Link</code> or <code>Image</code>, percent-encoded.</p>
+<h4 id="title"><a class="header" href="#title">title</a></h4>
+<pre><code class="language-pepper">var title: String
+</code></pre>
+<p>The title of a <code>Link</code> or <code>Image</code>; empty when it has none.</p>
+<h4 id="level"><a class="header" href="#level">level</a></h4>
+<pre><code class="language-pepper">var level: int
+</code></pre>
+<p>The level of a <code>Heading</code>, 1 to 6.</p>
+<h4 id="ordered"><a class="header" href="#ordered">ordered</a></h4>
+<pre><code class="language-pepper">var ordered: bool
+</code></pre>
+<p>Whether a <code>List</code> is ordered (<code>1.</code>) rather than bulleted (<code>-</code>).</p>
+<h4 id="start"><a class="header" href="#start">start</a></h4>
+<pre><code class="language-pepper">var start: int
+</code></pre>
+<p>The number of an ordered <code>List</code>'s first item.</p>
+<h4 id="tight"><a class="header" href="#tight">tight</a></h4>
+<pre><code class="language-pepper">var tight: bool
+</code></pre>
+<p>Whether a <code>List</code> is tight: no blank line separates its items or
+their blocks, so its paragraphs render without <code>&lt;p&gt;</code>.</p>
+<h4 id="task"><a class="header" href="#task">task</a></h4>
+<pre><code class="language-pepper">var task: bool
+</code></pre>
+<p>Whether an <code>Item</code> is a GFM task list item (<code>- [ ] ...</code>).</p>
+<h4 id="checked"><a class="header" href="#checked">checked</a></h4>
+<pre><code class="language-pepper">var checked: bool
+</code></pre>
+<p>Whether a task list <code>Item</code> is checked (<code>- [x] ...</code>).</p>
+<h4 id="header"><a class="header" href="#header">header</a></h4>
+<pre><code class="language-pepper">var header: bool
+</code></pre>
+<p>Whether a <code>TableRow</code> is the table's header row.</p>
+<h4 id="alignment-1"><a class="header" href="#alignment-1">alignment</a></h4>
+<pre><code class="language-pepper">var alignment: Alignment
+</code></pre>
+<p>The alignment of a <code>TableCell</code>.</p>
+<h3 id="constructor"><a class="header" href="#constructor">Constructor</a></h3>
+<h4 id="node-1"><a class="header" href="#node-1">Node()</a></h4>
+<pre><code class="language-pepper">construct(kind: NodeKind)
+</code></pre>
+<p>Makes a node of <code>kind</code> with no children.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>kind</code> — what the node is</li>
+</ul>
+<h3 id="methods"><a class="header" href="#methods">Methods</a></h3>
+<h4 id="events"><a class="header" href="#events">events</a></h4>
+<pre><code class="language-pepper">events(): Array&lt;Event&gt;
+</code></pre>
+<p>Lists the steps of a depth-first walk over this node and its
+descendants: an entering event for each node, then its children's
+events, then a leaving event. A node with no children (a <code>Text</code>,
+say) has an entering event and a leaving one too.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the events, the first entering this node</li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import markdown;
+
+main(): int {
+    var words = 0;
+    for (var event in markdown.parse("a *b* c\n").events()) {
+        if (event.entering &amp;&amp; event.node.kind == markdown.NodeKind.Text) {
+            words += 1;
+        }
+    }
+    assert(words == 3, "three text nodes");
+    return 0;
+}
+</code></pre>
+<h2 id="event"><a class="header" href="#event">Event</a></h2>
+<pre><code class="language-pepper">struct Event
+</code></pre>
+<p>One step of a walk over a tree of <code>Node</code>s: entering a node, or leaving
+it after its children.</p>
+<h3 id="fields-1"><a class="header" href="#fields-1">Fields</a></h3>
+<h4 id="entering"><a class="header" href="#entering">entering</a></h4>
+<pre><code class="language-pepper">var entering: bool
+</code></pre>
+<p>Whether the walk enters <code>node</code> (true) or leaves it (false).</p>
+<h4 id="node-2"><a class="header" href="#node-2">node</a></h4>
+<pre><code class="language-pepper">var node: Node
+</code></pre>
+<p>The node entered or left.</p>
+<h3 id="constructor-1"><a class="header" href="#constructor-1">Constructor</a></h3>
+<h4 id="event-1"><a class="header" href="#event-1">Event()</a></h4>
+<pre><code class="language-pepper">construct(entering: bool, node: Node)
+</code></pre>
+<p>Makes an event.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>entering</code> — whether the walk enters <code>node</code></li>
+<li><code>node</code> — the node entered or left</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from parse.pep by `pep-doc package`. Do not edit. -->
+<h1 id="parsepep"><a class="header" href="#parsepep">parse.pep</a></h1>
+<p>Parsing: <code>Options</code>, and <code>parse</code>, which reads Markdown into a tree of
+<code>Node</code>s. The block structure is read line by line, as the CommonMark
+spec describes, and then each paragraph's, heading's and table cell's
+text is parsed into inlines.</p>
+<p>Source: <code>parse.pep</code></p>
+<h2 id="options"><a class="header" href="#options">Options</a></h2>
+<pre><code class="language-pepper">struct Options
+</code></pre>
+<p>What <code>parse</code>, <code>render_html</code> and <code>to_html</code> do beyond CommonMark.</p>
+<h3 id="fields-2"><a class="header" href="#fields-2">Fields</a></h3>
+<h4 id="gfm"><a class="header" href="#gfm">gfm</a></h4>
+<pre><code class="language-pepper">var gfm: bool
+</code></pre>
+<p>Whether the GitHub Flavored Markdown extensions are on: tables, task
+list items, strikethrough, extended autolinks (<code>www.</code>, <code>https://</code>,
+emails), and the tag filter, which escapes the <code>&lt;</code> of tags such as
+<code>&lt;script&gt;</code> and <code>&lt;iframe&gt;</code> in raw HTML.</p>
+<h4 id="safe"><a class="header" href="#safe">safe</a></h4>
+<pre><code class="language-pepper">var safe: bool
+</code></pre>
+<p>Whether the HTML is safe to show from an untrusted writer: raw HTML
+is dropped, and a link or image to a <code>javascript:</code>, <code>vbscript:</code>,
+<code>file:</code> or (other than an image's) <code>data:</code> URL gets an empty URL.</p>
+<h3 id="constructor-2"><a class="header" href="#constructor-2">Constructor</a></h3>
+<h4 id="options-1"><a class="header" href="#options-1">Options()</a></h4>
+<pre><code class="language-pepper">construct(gfm: bool = true, safe: bool = false)
+</code></pre>
+<p>Makes options.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>gfm</code> — whether the GFM extensions are on</li>
+<li><code>safe</code> — whether raw HTML and dangerous URLs are dropped</li>
+</ul>
+<h2 id="parse"><a class="header" href="#parse">parse</a></h2>
+<pre><code class="language-pepper">parse(markdown: String, options: Options = Options()): Node
+</code></pre>
+<p>Parses <code>markdown</code> into a tree: a <code>Document</code> node whose children are the
+top-level blocks. Any text is Markdown, so parsing never fails.</p>
+<p>Link reference definitions are resolved, so links that use them carry
+their destination; the definitions themselves leave no node.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>markdown</code> — the text to parse</li>
+<li><code>options</code> — the extensions to use</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the document's root</li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import markdown;
+
+main(): int {
+    var doc = markdown.parse("- [x] done\n- [ ] to do\n");
+    var list = doc.children[0];
+    assert(list.kind == markdown.NodeKind.List &amp;&amp; list.tight, "a tight list");
+    assert(list.children[0].task &amp;&amp; list.children[0].checked, "a checked task");
+    return 0;
+}
+</code></pre>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated from tables.pep by `pep-doc package`. Do not edit. -->
+<h1 id="tablespep"><a class="header" href="#tablespep">tables.pep</a></h1>
+<p>Tables the parser looks things up in: HTML's named character
+references, Unicode case folding, and Unicode punctuation. Generated by
+<code>scripts/tables.py</code> from the WHATWG <code>entities.json</code> and Python's
+<code>unicodedata</code> (Unicode 15.0.0).</p>
+<p>Source: <code>tables.pep</code></p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+
+    </div>
+    </body>
+</html>

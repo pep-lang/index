@@ -1,0 +1,452 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>reader.pep - zip</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">zip</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <i class="fa fa-spinner fa-spin"></i>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <!-- Generated from reader.pep by `pep-doc package`. Do not edit. -->
+<h1 id="readerpep"><a class="header" href="#readerpep">reader.pep</a></h1>
+<p><code>Archive</code> and <code>EntryReader</code>: reading a zip archive from a file or from
+memory, listing its entries, reading them, and extracting it safely.</p>
+<p>Source: <code>reader.pep</code></p>
+<h2 id="entryreader"><a class="header" href="#entryreader">EntryReader</a></h2>
+<pre><code class="language-pepper">struct EntryReader
+</code></pre>
+<p>Reads one entry's contents as a stream, decompressing them as they are
+read, so a large entry need not be in memory. It is an <code>io.Reader</code>.</p>
+<p>At the end of the contents it checks their length and CRC-32 against
+the central directory: a mismatch is an <code>is_invalid_input()</code> error
+naming the archive and the entry
+(<code>release.zip: entry 'lib/a.pep': CRC mismatch</code>).</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import io;
+import zip;
+
+var archive = zip.Archive.open("logs.zip").value();
+var reader = archive.open_entry(archive.find("today.log").value()).value();
+for (var line in reader.lines()) {
+    print(line.value());
+}
+</code></pre>
+<h3 id="properties"><a class="header" href="#properties">Properties</a></h3>
+<h4 id="entry"><a class="header" href="#entry">entry</a></h4>
+<pre><code class="language-pepper">var entry: Entry { get; }
+</code></pre>
+<p>The entry being read.</p>
+<h3 id="constructor"><a class="header" href="#constructor">Constructor</a></h3>
+<h4 id="entryreader-1"><a class="header" href="#entryreader-1">EntryReader()</a></h4>
+<pre><code class="language-pepper">construct(inner: io.Reader, entry: Entry, archive: String)
+</code></pre>
+<p>Makes a reader that passes on the bytes of <code>inner</code> and checks them
+against <code>entry</code>. <code>Archive.open_entry</code> makes one; this is for reading
+contents found some other way.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>inner</code> — the entry's uncompressed contents</li>
+<li><code>entry</code> — the entry, whose <code>size</code> and <code>crc32</code> the contents must match</li>
+<li><code>archive</code> — the archive's name in messages</li>
+</ul>
+<h3 id="methods"><a class="header" href="#methods">Methods</a></h3>
+<h4 id="read"><a class="header" href="#read">read</a></h4>
+<pre><code class="language-pepper">read(buffer: u8[], max: ulong): io.IoResult&lt;ulong&gt;
+</code></pre>
+<p>Reads up to <code>max</code> more bytes of the contents and appends them to
+<code>buffer</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>buffer</code> — the array the bytes are appended to</li>
+<li><code>max</code> — the most bytes to read</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the number of bytes appended, 0 at the end of the contents; an <code>is_invalid_input()</code> error when the contents are damaged, their length or CRC-32 does not match the central directory, or the archive is truncated, or the error reading the file</li>
+</ul>
+<h4 id="read_all"><a class="header" href="#read_all">read_all</a></h4>
+<pre><code class="language-pepper">read_all(): io.IoResult&lt;u8[]&gt;
+</code></pre>
+<p>Reads the rest of the contents.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the bytes not read yet; an error as for <code>read</code></li>
+</ul>
+<h2 id="archive"><a class="header" href="#archive">Archive</a></h2>
+<pre><code class="language-pepper">struct Archive
+</code></pre>
+<p>A zip archive opened for reading: its entries, listed from the central
+directory when it is opened, and their contents, read on demand.</p>
+<p>It reads stored and DEFLATE entries, ZIP64 archives (over 4 GiB, or
+over 65,535 entries), names in UTF-8 or code page 437, and archives with
+data before them, such as self-extracting programs. Entries compressed
+another way (bzip2, LZMA, zstd) or encrypted are listed, and reading one
+is an error naming it and the method, rather than the whole archive
+failing. Archives split across several files are not supported.</p>
+<p>Every error names the archive, and the entry when there is one
+(<code>release.zip: entry 'lib/a.pep': CRC mismatch</code>); a damaged archive is
+an <code>is_invalid_input()</code> error.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">import zip;
+
+main(): int {
+    var opened = zip.Archive.open("release.zip");
+    if (opened.is_err()) {
+        print(opened.error().message);
+        return 1;
+    }
+    var archive = opened.value();
+    for (var entry in archive.entries()) {
+        print($"{entry.name}: {entry.size} bytes");
+    }
+    archive.extract_all("out").value();
+    return 0;
+}
+</code></pre>
+<h3 id="fields"><a class="header" href="#fields">Fields</a></h3>
+<h4 id="name"><a class="header" href="#name">name</a></h4>
+<pre><code class="language-pepper">var name: String
+</code></pre>
+<p>The archive's name in messages: the path it was opened from, or the
+name given to <code>from_bytes</code>.</p>
+<h4 id="comment"><a class="header" href="#comment">comment</a></h4>
+<pre><code class="language-pepper">var comment: String
+</code></pre>
+<p>The archive's comment; usually empty.</p>
+<h3 id="properties-1"><a class="header" href="#properties-1">Properties</a></h3>
+<h4 id="count"><a class="header" href="#count">count</a></h4>
+<pre><code class="language-pepper">var count: ulong { get; }
+</code></pre>
+<p>The number of entries.</p>
+<h3 id="constructor-1"><a class="header" href="#constructor-1">Constructor</a></h3>
+<h4 id="archive-1"><a class="header" href="#archive-1">Archive()</a></h4>
+<pre><code class="language-pepper">construct()
+</code></pre>
+<p>Makes an empty archive in memory, with no entries. <code>open</code> and
+<code>from_bytes</code> read real ones.</p>
+<h3 id="static-methods"><a class="header" href="#static-methods">Static methods</a></h3>
+<h4 id="open"><a class="header" href="#open">open</a></h4>
+<pre><code class="language-pepper">static open(path: io.Path): io.IoResult&lt;Archive&gt;
+</code></pre>
+<p>Opens the archive at <code>path</code> and reads its central directory. The file
+stays open, for reading entries, until <code>close()</code>.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>path</code> — the archive's path</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the archive; the error opening the file, or an <code>is_invalid_input()</code> error when it is not a zip archive or its central directory is damaged</li>
+</ul>
+<h4 id="from_bytes"><a class="header" href="#from_bytes">from_bytes</a></h4>
+<pre><code class="language-pepper">static from_bytes(data: u8[], name: String = "archive.zip"): io.IoResult&lt;Archive&gt;
+</code></pre>
+<p>Reads an archive held in memory, such as a download.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>data</code> — the bytes of the archive</li>
+<li><code>name</code> — the archive's name in messages</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the archive; an <code>is_invalid_input()</code> error when <code>data</code> is not a zip archive or its central directory is damaged</li>
+</ul>
+<p><strong>Example</strong></p>
+<pre><code class="language-pepper">var archive = zip.Archive.from_bytes(response.body, "download.zip").value();
+</code></pre>
+<h3 id="methods-1"><a class="header" href="#methods-1">Methods</a></h3>
+<h4 id="entries"><a class="header" href="#entries">entries</a></h4>
+<pre><code class="language-pepper">entries(): Entry[]
+</code></pre>
+<p>The entries, in the order of the central directory.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the entries</li>
+</ul>
+<h4 id="find"><a class="header" href="#find">find</a></h4>
+<pre><code class="language-pepper">find(name: String): Entry?
+</code></pre>
+<p>Finds the entry named <code>name</code>, the first one when several have it.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>name</code> — the entry's path in the archive</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the entry, or none</li>
+</ul>
+<h4 id="open_entry"><a class="header" href="#open_entry">open_entry</a></h4>
+<pre><code class="language-pepper">open_entry(entry: Entry): io.IoResult&lt;EntryReader&gt;
+</code></pre>
+<p>Opens <code>entry</code> for reading its contents as a stream.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>entry</code> — an entry of this archive</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>a reader of the contents; an <code>is_invalid_input()</code> error when the entry is encrypted, uses a method other than stored or DEFLATE, or its local header is damaged</li>
+</ul>
+<h4 id="read-1"><a class="header" href="#read-1">read</a></h4>
+<pre><code class="language-pepper">read(entry: Entry): io.IoResult&lt;u8[]&gt;
+</code></pre>
+<p>Reads all of <code>entry</code>'s contents into memory, checking their length
+and CRC-32.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>entry</code> — an entry of this archive</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>the contents; an error as for <code>open_entry</code> and <code>EntryReader.read</code></li>
+</ul>
+<h4 id="extract_all"><a class="header" href="#extract_all">extract_all</a></h4>
+<pre><code class="language-pepper">extract_all(target: io.Path, strip_components: ulong = 0): io.IoResult&lt;void&gt;
+</code></pre>
+<p>Extracts every entry into the directory <code>target</code>, creating it and the
+directories the entries need, and checking each entry's CRC-32.</p>
+<p>Every entry's name is checked with <code>archive.safe_components</code> before
+anything is written, so that no archive can write outside <code>target</code>
+("zip slip"): an absolute path, a <code>..</code> component, a <code>\</code> or a <code>:</code> (a
+Windows drive) is an <code>is_invalid_input()</code> error. Files are written, replacing a file
+already there; symbolic links are skipped, as are permission bits and
+modification times.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>target</code> — the directory to extract into</li>
+<li><code>strip_components</code> — how many leading path components to drop from each entry, as tar's <code>--strip-components</code> does; an entry with no components left is skipped</li>
+</ul>
+<p><strong>Returns</strong></p>
+<ul>
+<li>an Ok result once every entry is extracted; an <code>is_invalid_input()</code> error for an unsafe name or a damaged entry, or the error of a file that could not be written</li>
+</ul>
+<h4 id="close"><a class="header" href="#close">close</a></h4>
+<pre><code class="language-pepper">close(): io.IoResult&lt;void&gt;
+</code></pre>
+<p>Closes the archive's file. Reading entries afterwards fails; an
+archive read from memory has nothing to close.</p>
+<p><strong>Returns</strong></p>
+<ul>
+<li>an Ok result; the error closing the file</li>
+</ul>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="entry.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="writer.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="entry.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="writer.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+
+    </div>
+    </body>
+</html>
